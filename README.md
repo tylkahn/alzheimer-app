@@ -2,22 +2,35 @@
 
 
 # dev notes
-- requirements: python 3.7+, pip, pipenv
-- always run `pipenv shell` before doing any backend stuff
-- backend must be started before frontend, or the frontend will complain
+
+## prerequisites
+(anything later than these versions should be fine)
+- python 3.9.7
+- node 17.0.1
+- pip 21.3.1
+- pipenv 2021.5.29
+- **if someone is using an older version of any of the above requirements and the app works fine, then please update the version numbers!**
+
+-----------------
+
 ## initial setup
+### backend
 - `cd backend`
 - `pipenv shell`
 - `pipenv install`
 
------------------
-
+### frontend
 - `cd frontend`
 - `npm install`
 
+-----------------
+
 ## start backend
+- backend must be started before frontend, or the frontend will complain
+- depending on how your env is set up, you may have a different alias for python 3
 - `cd backend`
 - `pipenv shell`
+  - always run `pipenv shell` before doing any backend stuff
 - `python manage.py runserver`
 
 ## start frontend
