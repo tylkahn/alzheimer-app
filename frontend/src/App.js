@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Modal from "./components/Modal";
 import axios from "axios";
 import logo from './logo.svg';
+import Gametab from "./components/game/Gametab";
 import './App.css';
 
 const BASE_URL = 'http://localhost:8000'
@@ -79,21 +80,9 @@ function App() {
     }
   };
 
-  const deleteItem = (item) => {
-    axios
-      .delete(BASE_URL+`/api/todos/${item.id}/`)
-      .then(() => refreshList());
-  };
-
   const createItem = () => {
     const item = { title: "", description: "", completed: false };
     setActiveItem(item);
-    toggle();
-  };
-
-  const editItem = (item) => {
-    setActiveItem(item);
-    console.log(item);
     toggle();
   };
 
@@ -125,37 +114,11 @@ function App() {
   };
 
   const renderItems = () => {
-    const newItems = todoList.filter(
-      (item) => item.completed == viewCompleted
-    );
-
-    return newItems.map((item) => (
-      <li
-        key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <span
-          className={`todo-title mr-2 ${viewCompleted ? "completed-todo" : ""}`}
-          title={item.description}
-        >
-          {item.title}
-        </span>
-        <span>
-          <button
-            className="btn btn-secondary mr-2"
-            onClick={() => editItem(item)}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => deleteItem(item)}
-          >
-            Delete
-          </button>
-        </span>
-      </li>
-    ));
+    return (
+      <div className="tab">
+        {!viewCompleted && <Gametab />}
+      </div>
+    )
   };
 
   return (
