@@ -1,17 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 
 class Card extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: false,
-            matched: false,
-        }
-    }
-
     render() {
+        const style = this.props.status ? "matching" : (this.props.active ? "game-active" : "gamecard");
         return (
-            <button className="gamecard" onClick={this.props.onClick}>
+            <button className={style} onClick={this.props.onClick}>
                 {this.props.value}
             </button>
         );

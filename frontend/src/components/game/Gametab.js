@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Board from './Board'
 
 class Gametab extends React.Component {
@@ -6,6 +6,7 @@ class Gametab extends React.Component {
         super(props);
         this.state = {
             isGameMode: false,
+            difficulty: "easy",
         };
         this.handleStartGame = this.handleStartGame.bind(this);
         this.handleEndGame = this.handleEndGame.bind(this);
@@ -23,16 +24,35 @@ class Gametab extends React.Component {
         });
     }
 
+    handleChange(event) {
+        this.setState ({
+            difficulty: event.target.value,
+        });
+    }
+
     render() {
         return (
           <div className="game">
-            {this.state.isGameMode
-              ? <button className="GameButton" onClick={this.handleEndGame}>End Game</button>
-              : <button className="GameButton" onClick={this.handleStartGame}>Start Game</button>
-            }
-            <div className="game-board">
-              {this.state.isGameMode && <Board />}
+            <div className="game-init">
+                {!this.state.isGameMode &&
+                <form onSubmit={this.handleStartGame}>
+                    <label>
+                    Select Difficulty:&nbsp;
+                    <select difficulty={this.state.difficulty} onChange={this.handleChange}>
+                        <option difficulty="easy">Easy</option>
+                        <option difficulty="medium">Medium</option>
+                        <option difficulty="hard">hard</option>
+                    </select>
+                    </label>
+                    &nbsp;
+                    <input type="submit" value="Start Game" />
+                </form>}
             </div>
+            {this.state.isGameMode && 
+            <div className="game-board">
+              <Board />
+              <button className="button" onClick={this.handleEndGame}>End Game</button>
+            </div>}
             <div className="game-info">
               <div>{/* status */}</div>
               <ol>{/* TODO */}</ol>

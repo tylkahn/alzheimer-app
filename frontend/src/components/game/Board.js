@@ -9,6 +9,7 @@ class Board extends React.Component {
       active1: null,
       active2: null,
       matched: Array(12).fill(false),
+      score: 0,
     };
   }
 
@@ -17,9 +18,8 @@ class Board extends React.Component {
   }
 
   handleClick(i) {
-    console.log(this.state);
-    if (this.state.active1 == i) {
-      
+    if (this.state.active1 === i || this.state.matched[i]) {
+
     } else if (this.state.active1 != null && this.state.active2 != null) {
       if (this.checkMatch()) {
         const newState = [...this.state.matched];
@@ -37,12 +37,13 @@ class Board extends React.Component {
       this.setState({
         active2: i,
       })
+      this.state.score++;
     } else {
       this.setState({
         active1: i,
       })
+      this.state.score++;
     }
-    console.log(this.state);
   }
 
   renderSquare(i) {
@@ -50,12 +51,15 @@ class Board extends React.Component {
       return <Card 
         value={val}
         onClick={() => this.handleClick(i)}
+        status={this.state.matched[i]}
+        active={this.state.active1===i || this.state.active2===i}
       />;
   }
 
   render() {
       return (
           <div>
+            Flips: {this.state.score} (lower is better)
           <div className="board-row">
             {this.renderSquare(0)}
             {this.renderSquare(1)}
