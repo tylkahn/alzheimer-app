@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Modal from './components/Modal';
 import axios from 'axios';
+import Modal from './components/Modal';
 import logo from './logo.svg';
 import './App.css';
 
@@ -45,7 +45,7 @@ function App() {
 
   const refreshList = () => {
     axios
-      .get(BASE_URL + '/api/todos')
+      .get(`${BASE_URL}/api/todos`)
       .then((res) => {
         console.log(res);
         setTodoList(res.data);
@@ -68,15 +68,15 @@ function App() {
     // NOTE: let it be known that I very much dislike using axios.put and axios.delete
     if (item.id) {
       axios
-        .put(BASE_URL + `/api/todos/${item.id}/`, item)
+        .put(`${BASE_URL}/api/todos/${item.id}/`, item)
         .then(() => refreshList());
     } else {
-      axios.post(BASE_URL + '/api/todos/', item).then(() => refreshList());
+      axios.post(`${BASE_URL}/api/todos/`, item).then(() => refreshList());
     }
   };
 
   const deleteItem = (item) => {
-    axios.delete(BASE_URL + `/api/todos/${item.id}/`).then(() => refreshList());
+    axios.delete(`${BASE_URL}/api/todos/${item.id}/`).then(() => refreshList());
   };
 
   const createItem = () => {

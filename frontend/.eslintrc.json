@@ -7,7 +7,7 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "airbnb",
-        "plugin:prettier/recommended" // must always be last in this array
+        "prettier" // should be last
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -20,5 +20,9 @@
         "react"
     ],
     "rules": {
+        // if rules are added here, you'll need to run
+        // npx eslint-config-prettier path/to/main.js
+        // for a few files (ideally every file but that's too much work)
+        // in the workspace to ensure that no rules conflict with prettier
     }
 }

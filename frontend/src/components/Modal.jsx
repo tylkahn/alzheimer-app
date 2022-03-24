@@ -33,7 +33,7 @@ export default function CustomModal(props) {
   }, [props, activeItem]);
 
   return (
-    <Modal isOpen={true} toggle={toggle}>
+    <Modal isOpen toggle={toggle}>
       <ModalHeader toggle={toggle}>Todo Item</ModalHeader>
       <ModalBody>
         <Form>
