@@ -50,8 +50,7 @@ class Gametab extends React.Component {
             </div>
             {this.state.isGameMode && 
             <div className="game-board">
-              <Board />
-              <button className="button" onClick={this.handleEndGame}>End Game</button>
+              <Board onEnd={this.handleEndGame}/>
             </div>}
             <div className="game-info">
               <div>{/* status */}</div>

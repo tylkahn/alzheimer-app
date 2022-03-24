@@ -86,6 +86,7 @@ class Board extends React.Component {
               {this.renderSquare(11)}
             </div>
           </div>
+          <button className="button" onClick={this.props.onEnd}>End Game</button>
         </div>
       );
   }
