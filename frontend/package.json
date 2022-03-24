@@ -25,7 +25,8 @@
     "lint": "eslint src/**/*.{js,jsx} && echo 'Lint complete.'",
     "lint:fix": "eslint src/**/*.{js,jsx} --fix && echo 'Lint complete.'",
     "prettify": "prettier src/**/* --check --ignore-unknown && echo 'Prettify complete.'",
-    "prettify:fix": "prettier src/**/* --write --ignore-unknown && echo 'Prettify complete.'"
+    "prettify:fix": "prettier src/**/* --write --ignore-unknown && echo 'Prettify complete.'",
+    "precommit": "lint-staged --debug"
   },
   "eslintConfig": {
     "extends": [
@@ -58,7 +59,7 @@
     "prettier": "2.6.0"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*": "prettier --write --ignore-unknown",
+    "*.{js,jsx}": "eslint --cache --fix"
   }
 }

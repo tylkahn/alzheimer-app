@@ -6,6 +6,8 @@ import './App.css';
 
 const BASE_URL = 'http://localhost:8000';
 
+// TODO: DELETE THIS LINE
+
 // const todoItems = [
 //   {
 //     id: 1,
