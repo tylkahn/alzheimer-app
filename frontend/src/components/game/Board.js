@@ -47,7 +47,7 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
-      const val = (this.state.active1 == i)|| (this.state.active2 == i) || this.state.matched[i] ? this.state.cards[i] % 6 : 'X';
+      const val = (this.state.active1 == i)|| (this.state.active2 == i) || this.state.matched[i] ? this.state.cards[i] % 6 : '?';
       return <Card 
         value={val}
         onClick={() => this.handleClick(i)}
@@ -56,27 +56,35 @@ class Board extends React.Component {
       />;
   }
 
+  promptNext() {
+
+  }
+
   render() {
+      const completed = isComplete(this.state.matched);
       return (
-          <div>
-            Flips: {this.state.score} (lower is better)
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-            {this.renderSquare(3)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(8)}
-            {this.renderSquare(9)}
-            {this.renderSquare(10)}
-            {this.renderSquare(11)}
+          <div className="gameBoard">
+            {completed && this.promptNext}
+            <div>
+              Flips: {this.state.score} (lower is better)
+            <div className="board-row">
+              {this.renderSquare(0)}
+              {this.renderSquare(1)}
+              {this.renderSquare(2)}
+              {this.renderSquare(3)}
+            </div>
+            <div className="board-row">
+              {this.renderSquare(4)}
+              {this.renderSquare(5)}
+              {this.renderSquare(6)}
+              {this.renderSquare(7)}
+            </div>
+            <div className="board-row">
+              {this.renderSquare(8)}
+              {this.renderSquare(9)}
+              {this.renderSquare(10)}
+              {this.renderSquare(11)}
+            </div>
           </div>
         </div>
       );
@@ -85,7 +93,7 @@ class Board extends React.Component {
 
 function isComplete(matched) {
   for (let i=0; i < matched.length; i++) {
-    if (matched[i]) {
+    if (!matched[i]) {
       return false
     }
   }
