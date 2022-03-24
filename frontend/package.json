@@ -9,6 +9,7 @@
     "axios": "^0.26.0",
     "bootstrap": "^4.6.0",
     "http-proxy-middleware": "^2.0.4",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -19,7 +20,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "cd .. && husky install frontend/.husky",
+    "lint": "eslint src/**/*.{js,jsx} && echo 'Lint complete.'",
+    "lint:fix": "eslint src/**/*.{js,jsx} --fix && echo 'Lint complete.'",
+    "prettify": "prettier src/**/* --check --ignore-unknown && echo 'Prettify complete.'",
+    "prettify:fix": "prettier src/**/* --write --ignore-unknown && echo 'Prettify complete.'",
+    "precommit": "lint-staged --debug"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +45,21 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
+    "prettier": "2.6.0"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown",
+    "*.{js,jsx}": "eslint --cache --fix"
   }
 }

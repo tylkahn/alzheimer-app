@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import Modal from "./components/Modal";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Modal from './components/Modal';
 import logo from './logo.svg';
 import './App.css';
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://localhost:8000';
+
+// TODO: DELETE THIS LINE
 
 // const todoItems = [
 //   {
@@ -37,20 +39,18 @@ function App() {
   const [viewCompleted, setViewCompleted] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const [modal, setModal] = useState(false);
-  const [activeItem, setActiveItem] = useState(
-    {
-      title: "",
-      description: "",
-      completed: false,
-    }
-  );
+  const [activeItem, setActiveItem] = useState({
+    title: '',
+    description: '',
+    completed: false,
+  });
 
   const refreshList = () => {
     axios
-      .get(BASE_URL+"/api/todos")
+      .get(`${BASE_URL}/api/todos`)
       .then((res) => {
         console.log(res);
-        setTodoList(res.data)
+        setTodoList(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -60,7 +60,7 @@ function App() {
   }, []);
 
   const toggle = () => {
-    setModal(!modal)
+    setModal(!modal);
   };
 
   const handleSubmit = (item) => {
@@ -70,23 +70,19 @@ function App() {
     // NOTE: let it be known that I very much dislike using axios.put and axios.delete
     if (item.id) {
       axios
-        .put(BASE_URL+`/api/todos/${item.id}/`, item)
+        .put(`${BASE_URL}/api/todos/${item.id}/`, item)
         .then(() => refreshList());
     } else {
-      axios
-        .post(BASE_URL+"/api/todos/", item)
-        .then(() => refreshList());
+      axios.post(`${BASE_URL}/api/todos/`, item).then(() => refreshList());
     }
   };
 
   const deleteItem = (item) => {
-    axios
-      .delete(BASE_URL+`/api/todos/${item.id}/`)
-      .then(() => refreshList());
+    axios.delete(`${BASE_URL}/api/todos/${item.id}/`).then(() => refreshList());
   };
 
   const createItem = () => {
-    const item = { title: "", description: "", completed: false };
+    const item = { title: '', description: '', completed: false };
     setActiveItem(item);
     toggle();
   };
@@ -103,19 +99,19 @@ function App() {
     } else {
       setViewCompleted(false);
     }
-  }
+  };
 
   const renderTabList = () => {
     return (
       <div className="nav nav-tabs">
         <span
-          className={viewCompleted ? "nav-link active" : "nav-link"}
+          className={viewCompleted ? 'nav-link active' : 'nav-link'}
           onClick={() => displayCompleted(true)}
         >
           Complete
         </span>
         <span
-          className={viewCompleted ? "nav-link" : "nav-link active"}
+          className={viewCompleted ? 'nav-link' : 'nav-link active'}
           onClick={() => displayCompleted(false)}
         >
           Incomplete
@@ -125,9 +121,7 @@ function App() {
   };
 
   const renderItems = () => {
-    const newItems = todoList.filter(
-      (item) => item.completed == viewCompleted
-    );
+    const newItems = todoList.filter((item) => item.completed == viewCompleted);
 
     return newItems.map((item) => (
       <li
@@ -135,7 +129,7 @@ function App() {
         className="list-group-item d-flex justify-content-between align-items-center"
       >
         <span
-          className={`todo-title mr-2 ${viewCompleted ? "completed-todo" : ""}`}
+          className={`todo-title mr-2 ${viewCompleted ? 'completed-todo' : ''}`}
           title={item.description}
         >
           {item.title}
@@ -147,10 +141,7 @@ function App() {
           >
             Edit
           </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => deleteItem(item)}
-          >
+          <button className="btn btn-danger" onClick={() => deleteItem(item)}>
             Delete
           </button>
         </span>
@@ -165,10 +156,7 @@ function App() {
         <div className="col-md-6 col-sm-10 mx-auto p-0">
           <div className="card p-3">
             <div className="mb-4">
-              <button
-                className="btn btn-primary"
-                onClick={createItem}
-              >
+              <button className="btn btn-primary" onClick={createItem}>
                 Add task
               </button>
             </div>
@@ -180,11 +168,7 @@ function App() {
         </div>
       </div>
       {modal ? (
-        <Modal
-          activeItem={activeItem}
-          toggle={toggle}
-          onSave={handleSubmit}
-        />
+        <Modal activeItem={activeItem} toggle={toggle} onSave={handleSubmit} />
       ) : null}
     </main>
   );
