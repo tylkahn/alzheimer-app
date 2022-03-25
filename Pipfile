@@ -10,6 +10,7 @@ django-cors-headers = "*"
 black = "*"
 flake8 = "*"
 bandit = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

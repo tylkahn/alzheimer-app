@@ -9,15 +9,24 @@
 - node 17.0.1
 - pip 21.3.1
 - pipenv 2021.5.29
+- postgres 14
 - **if someone is using an older version of any of the above requirements and the app works fine, then please update the version numbers!**
 
 -----------------
 
 ## initial setup
+
+### database
+- install postgres v14 (see [postgres documentation](https://www.postgresql.org/docs/14/install-binaries.html) for more details)
+- be sure to install command line tools if using a GUI installer
+- superuser name/password can be whatever, just make sure you remember it
+- test that your postgres installation is working by running `psql --version` and then `psql postgres`
+- in psql, run `CREATE USER django CREATEDB`
 ### backend
 - `cd backend`
 - `pipenv shell`
 - `pipenv install`
+- `python manage.py migrate`
 
 ### frontend
 - `cd frontend`
