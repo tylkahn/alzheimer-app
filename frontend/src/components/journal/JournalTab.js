@@ -8,6 +8,34 @@ class JournalTab extends React.Component {
                 "lastUpdated": 0, "tagList": []}
         };
     }
+    setJournalLastUpdated(time){
+        this.setState(
+            { lastUpdated: time }
+        );
+    }
+
+    modifyTitle(t){
+        this.setState(
+            { title: t }
+        );
+    }
+
+    modifyDescription(desc){
+        this.setState(
+            { description: desc }
+        );
+    }
+
+    modifyImageList(action, jpg){
+        if (action === "addImage"){
+            this.setState(
+                { images: [...jpg] }
+            );
+        }
+        else if (action === "removeImage"){
+
+        }
+    }
 
     render() {
         return (
