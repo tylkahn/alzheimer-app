@@ -21,7 +21,10 @@
 - be sure to install command line tools if using a GUI installer
 - superuser name/password can be whatever, just make sure you remember it
 - test that your postgres installation is working by running `psql --version` and then `psql postgres`
-- in psql, run `CREATE USER django CREATEDB`
+- in psql, run
+  - `CREATE USER django CREATEDB;`
+  - `CREATE DATABASE django;`
+  - `CREATE DATABASE alzheimers_assistance_app OWNER django;`
 ### backend
 - `cd backend`
 - `pipenv shell`
