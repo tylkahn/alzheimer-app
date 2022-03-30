@@ -43,8 +43,8 @@ function App() {
       <div className="journaltab">
         {viewCompleted && <JournalTab entries={
           [
-            {id:"0", title:"title1", description:"desc1"}, 
-            {id:"1", title:"title2", description:"desc2"},
+            {id:nanoid(), title:"title1", description:"desc1"}, 
+            {id:nanoid(), title:"title2", description:"desc2"},
           ]
         }/>}
       </div>

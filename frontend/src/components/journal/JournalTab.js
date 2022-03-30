@@ -1,6 +1,6 @@
 import React from "react";
-import {useState} from 'react';
 import Entry from './Entry'
+import {nanoid} from 'nanoid';
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -81,10 +81,18 @@ class JournalTab extends React.Component {
               
               <div className="entry-list">
               <this.createJournalEntry/>
-                My hard-coded list: 
-                <Entry id={"0"} title={"The Title"} description={"The description"}/>
-                <Entry id={"1"} title={"The 2nd Title"} description={"The 2rd description"}/>
-                <Entry id={"2"} title={"The 3rd Title"} description={"The 3rd description"}/>
+                My NON-hard-coded list: 
+                {this.state.entryList.map((entry) => (
+                    <Entry
+                        id={entry.id}
+                        title={entry.title}
+                        description={entry.description}
+                    />
+                ))}
+                My HARD-CODED list:
+                <Entry id={nanoid()} title={"The Title"} description={"The description"}/>
+                <Entry id={nanoid()} title={"The 2nd Title"} description={"The 2rd description"}/>
+                <Entry id={nanoid()} title={"The 3rd Title"} description={"The 3rd description"}/>
               </div>
               
           </div>
