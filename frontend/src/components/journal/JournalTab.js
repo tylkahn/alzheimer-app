@@ -1,4 +1,6 @@
 import React from "react";
+import EntryList from './EntryList'
+import {useState} from 'react';
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -8,6 +10,7 @@ class JournalTab extends React.Component {
                 "lastUpdated": 0, "tagList": []}
         };
     }
+    
     setJournalLastUpdated(time){
         this.setState(
             { lastUpdated: time }
@@ -40,10 +43,11 @@ class JournalTab extends React.Component {
     render() {
         return (
           <div className="journal">
-            Journal Stuff goes here! 
+            Journal tab stuff here:
+            <EntryList />
           </div>
         );
-      }
+    }
 }
 
 export default JournalTab;

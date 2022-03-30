@@ -1,5 +1,5 @@
 import React from "react";
-
+/*
 class Entry extends React.Component { //extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
@@ -19,11 +19,24 @@ class Entry extends React.Component { //extend this journal entry from a generic
 
     render() {
         return (
-          <div className="journal">
-            Journal Stuff goes here! 
+          <div className="entry">
+            Entry information goes here! ?
           </div>
         );
       }
 }
+*/
 
-export default JournalTab;
+//i think this function only does rendering, so to transfer it into what we have, just have it be under the class's render() function
+//entry-footer will contain the Edit button (inside the small tag)
+const Entry = () => {
+  return (
+  <div className='entry'>
+    <span>This is an entry!</span>
+    <div className="entry-footer">
+      <small>Edit</small>
+    </div>
+  </div>
+  )
+}
+export default Entry;
