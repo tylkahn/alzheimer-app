@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import ReminderModal from "./components/ReminderModal";
 import axios from "axios";
+import ReminderModal from "./components/ReminderModal";
 // import logo from './logo.svg';
 import './App.css';
 import ReminderTab from './components/reminder/ReminderTab'
@@ -56,7 +56,6 @@ function App() {
       <div className="remindertab">
         {viewTab == "reminder" && <ReminderTab /> && 
         <main className="container">
-        <h1 className="text-white text-uppercase text-center my-4">Reminder app</h1>
         <div className="row">
           <button
             className="btn btn-primary"
@@ -77,6 +76,8 @@ function App() {
         ) : null}
       </main>
         }
+        {viewTab == "journal" && <div> Put JournalTab here </div>}
+        {viewTab == "game" && <div> Put GameTab here </div>}
       </div>
     )
   };
