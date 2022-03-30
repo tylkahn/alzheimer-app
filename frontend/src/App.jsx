@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Modal from "./components/Modal";
 import axios from "axios";
 import JournalTab from "./components/journal/JournalTab";
+import Gametab from "./components/game/Gametab";
 import './App.css';
 import { nanoid } from 'nanoid';
-
-const BASE_URL = 'http://localhost:8000';
 
 // TODO: DELETE THIS LINE
 
 function App() {
-
   const [viewCompleted, setViewCompleted] = useState(false);
 
   const displayCompleted = (status) => {
