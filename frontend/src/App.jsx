@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Gametab from "./components/game/Gametab";
 import './App.css';
 
-const BASE_URL = 'http://localhost:8000'
+// TODO: DELETE THIS LINE
 
 function App() {
   const [viewCompleted, setViewCompleted] = useState(false);
@@ -13,19 +13,19 @@ function App() {
     } else {
       setViewCompleted(false);
     }
-  }
+  };
 
   const renderTabList = () => {
     return (
       <div className="nav nav-tabs">
         <span
-          className={viewCompleted ? "nav-link active" : "nav-link"}
+          className={viewCompleted ? 'nav-link active' : 'nav-link'}
           onClick={() => displayCompleted(true)}
         >
           Complete
         </span>
         <span
-          className={viewCompleted ? "nav-link" : "nav-link active"}
+          className={viewCompleted ? 'nav-link' : 'nav-link active'}
           onClick={() => displayCompleted(false)}
         >
           Incomplete

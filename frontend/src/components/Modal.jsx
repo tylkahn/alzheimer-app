@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Modal,
@@ -9,10 +10,11 @@ import {
   FormGroup,
   Input,
   Label,
-} from "reactstrap";
+} from 'reactstrap';
 
 export default function CustomModal(props) {
-  let [activeItem, setActiveItem] = useState(props.activeItem);
+  const { initActiveItem } = props;
+  const [activeItem, setActiveItem] = useState(initActiveItem);
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -27,11 +29,11 @@ export default function CustomModal(props) {
   const { toggle, onSave } = props;
 
   useEffect(() => {
-    console.log(props, activeItem)
+    console.log(props, activeItem);
   }, [props, activeItem]);
 
   return (
-    <Modal isOpen={true} toggle={toggle}>
+    <Modal isOpen toggle={toggle}>
       <ModalHeader toggle={toggle}>Todo Item</ModalHeader>
       <ModalBody>
         <Form>
@@ -71,13 +73,15 @@ export default function CustomModal(props) {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button
-          color="success"
-          onClick={() => onSave(activeItem)}
-        >
+        <Button color="success" onClick={() => onSave(activeItem)}>
           Save
         </Button>
       </ModalFooter>
     </Modal>
   );
+}
+CustomModal.propTypes = {
+  initActiveItem: PropTypes.element.isRequired,
+  toggle: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
