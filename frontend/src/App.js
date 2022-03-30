@@ -41,7 +41,12 @@ function App() {
   const renderTab = () => {
     return (//entryList will start empty and become filled through addEntry button presses as the end goal
       <div className="journaltab">
-        {viewCompleted && <JournalTab/>}
+        {viewCompleted && <JournalTab entries={
+          [
+            {id:"0", title:"title1", description:"desc1"}, 
+            {id:"1", title:"title2", description:"desc2"},
+          ]
+        }/>}
       </div>
     )
   };

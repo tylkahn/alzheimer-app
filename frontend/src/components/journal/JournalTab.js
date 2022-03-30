@@ -7,30 +7,37 @@ class JournalTab extends React.Component {
         super(props);
         this.state = {
             /* what an entry looks like
-            id: nanoid(),
-            title: "The First Title",
-            description: "The First Description",
-            images: [],
-            lastUpdated: "3/27/2022",
-            tagList: [],
-            },
+            {
+                id: nanoid(),
+                title: "The First Title",
+                description: "The First Description",
+                images: [],
+                lastUpdated: "3/27/2022",
+                tagList: [],
+            }
             */
             entryList: this.props.entries,
-            //entrylist: [],
+            entryText: '',
         };
-        console.log(this.id);
+        console.log(this.state.entryList[1]);
     }
     
     //obtains new entry information and calls save function
-    createJournalEntry(){
-        //const [entryText, setJournalText] = useState('');
+    createJournalEntry(){//addNote.js
         const handleChange = (event) => {
-            //console.log(event.target.value);
-            this.state.description = event;
-            window.alert(this.state.description);
-        }
-        const handleSaveClick = () => {
+            //event.target.value is what was typed into the text area
+            this.setState({
+                entryText: event.target.value
+            });
+            console.log(this.state.entryText);
             
+        }
+
+        const handleSaveClick = () => {
+            this.setState({
+                entryList: [...{id: 7, title: "the 7th title", description: "the 7th description"}],
+                entryText: '',
+            })
         }
         return (
             <div className="entry new">
@@ -38,12 +45,12 @@ class JournalTab extends React.Component {
                     rows='8'
                     cols = '10'
                     placeholder='Type to create the Journal Entry...'
-                    value={entryText}
+                    //value={entryText}
                     onChange={handleChange}
                 ></textarea>
                 <div className="entry-footer">
                     <small>Characters remaining: 100</small>
-                    <button className='save' onClick={handleSaveClick}>Save</button>
+                    <button className='save' >Save</button>
                 </div>
             </div>
         )
@@ -66,10 +73,14 @@ class JournalTab extends React.Component {
     }
 
     render() {
+        //kinda the noteslist.js
+
+        //should loop through this.state.entryList and render each entry from there
         return (
           <div className="journal">
-              <this.createJournalEntry/>
+              
               <div className="entry-list">
+              <this.createJournalEntry/>
                 My hard-coded list: 
                 <Entry id={"0"} title={"The Title"} description={"The description"}/>
                 <Entry id={"1"} title={"The 2nd Title"} description={"The 2rd description"}/>
