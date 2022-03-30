@@ -1,34 +1,48 @@
 import React from "react";
-import EntryList from './EntryList'
 import {useState} from 'react';
+import Entry from './Entry'
 
 class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            entryList: {"id": "", "title": "", "description": "", "images": [],
-                "lastUpdated": 0, "tagList": []}
+            /* what an entry looks like
+            id: nanoid(),
+            title: "The First Title",
+            description: "The First Description",
+            images: [],
+            lastUpdated: "3/27/2022",
+            tagList: [],
+            },
+            */
+            entryList: this.props.entries,
+            //entrylist: [],
         };
+        console.log(this.id);
     }
     
-    setJournalLastUpdated(time){
-        this.setState(
-            { lastUpdated: time }
-        );
+    //obtains new entry information and calls save function
+    createJournalEntry(){
+        return (
+            <div className="journalentry new ">
+                <textarea 
+                    rows='8'
+                    cols = '10'
+                    placeholder='Type to create the Journal Entry...'
+                ></textarea>
+                <div className="journalentry-footer">
+                    <small>Characters remaining: 100</small>
+                    <button className='save'>Save</button>
+                </div>
+            </div>
+        )
     }
+    //this.load(props.id)->which calls create
+    //this.save(props.id)
 
-    modifyTitle(t){
-        this.setState(
-            { title: t }
-        );
-    }
+    
 
-    modifyDescription(desc){
-        this.setState(
-            { description: desc }
-        );
-    }
-
+    //this one is specific to journalentries
     modifyImageList(action, jpg){
         if (action === "addImage"){
             this.setState(
@@ -43,10 +57,21 @@ class JournalTab extends React.Component {
     render() {
         return (
           <div className="journal">
-            Journal tab stuff here:
-            <EntryList />
+              <this.createJournalEntry/>
+              <div className="entry-list">
+                My hard-coded list: 
+                <Entry id={"0"} title={"The Title"} description={"The description"}/>
+                <Entry id={"1"} title={"The 2nd Title"} description={"The 2rd description"}/>
+                <Entry id={"2"} title={"The 3rd Title"} description={"The 3rd description"}/>
+              </div>
+              
           </div>
+          
+          
         );
+        /*The rest: 
+                {entryList.map(() => (
+                ))}*/
     }
 }
 
