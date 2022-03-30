@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Modal from "./components/Modal";
+import axios from "axios";
+import JournalTab from "./components/journal/JournalTab";
 import Gametab from "./components/game/Gametab";
 import './App.css';
+import { nanoid } from 'nanoid';
 
 // TODO: DELETE THIS LINE
 
@@ -13,7 +17,7 @@ function App() {
     } else {
       setViewCompleted(false);
     }
-  };
+  }
 
   const renderTabList = () => {
     return (
@@ -22,22 +26,27 @@ function App() {
           className={viewCompleted ? 'nav-link active' : 'nav-link'}
           onClick={() => displayCompleted(true)}
         >
-          Complete
+          Journal
         </span>
         <span
           className={viewCompleted ? 'nav-link' : 'nav-link active'}
           onClick={() => displayCompleted(false)}
         >
-          Incomplete
+          Game
         </span>
       </div>
     );
   };
 
   const renderTab = () => {
-    return (
-      <div className="tab">
-        {!viewCompleted && <Gametab />}
+    return (//entryList will start empty and become filled through addEntry button presses as the end goal
+      <div className="journaltab">
+        {viewCompleted && <JournalTab entries={
+          [
+            { id: nanoid(4), title: "title1", description: "desc1" },
+            { id: nanoid(4), title: "title2", description: "desc2" },
+          ]
+        } />}
       </div>
     )
   };
