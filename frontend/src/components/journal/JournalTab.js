@@ -19,7 +19,8 @@ class JournalTab extends React.Component {
             entryList: this.props.entries,
             entryText: '',
         };
-        console.log(this.state.entryList[1]);
+        this.createJournalEntry.bind(this);
+        //console.log(this.state.entryList[1]);
     }
     
     //obtains new entry information and calls save function
@@ -29,7 +30,7 @@ class JournalTab extends React.Component {
             this.setState({
                 entryText: event.target.value
             });
-            console.log(this.state.entryText);
+            //console.log(this.state.entryText);
             
         }
 
@@ -45,7 +46,7 @@ class JournalTab extends React.Component {
                     rows='8'
                     cols = '10'
                     placeholder='Type to create the Journal Entry...'
-                    //value={entryText}
+                    //value={entryText} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                     onChange={handleChange}
                 ></textarea>
                 <div className="entry-footer">
@@ -75,10 +76,9 @@ class JournalTab extends React.Component {
     render() {
         //kinda the noteslist.js
 
-        //should loop through this.state.entryList and render each entry from there
+        //render every entry from entrylist
         return (
-          <div className="journal">
-              
+          <div className="journal">              
               <div className="entry-list">
               <this.createJournalEntry/>
                 My NON-hard-coded list: 
@@ -87,12 +87,13 @@ class JournalTab extends React.Component {
                         id={entry.id}
                         title={entry.title}
                         description={entry.description}
+                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
                     />
                 ))}
                 My HARD-CODED list:
-                <Entry id={nanoid()} title={"The Title"} description={"The description"}/>
-                <Entry id={nanoid()} title={"The 2nd Title"} description={"The 2rd description"}/>
-                <Entry id={nanoid()} title={"The 3rd Title"} description={"The 3rd description"}/>
+                <Entry id={nanoid(4)} title={"The Title"} description={"The description"}/>
+                <Entry id={nanoid(4)} title={"The 2nd Title"} description={"The 2rd description"}/>
+                <Entry id={nanoid(4)} title={"The 3rd Title"} description={"The 3rd description"}/>
               </div>
               
           </div>
