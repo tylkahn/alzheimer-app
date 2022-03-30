@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -10,11 +9,10 @@ import {
   FormGroup,
   Input,
   Label,
-} from 'reactstrap';
+} from "reactstrap";
 
 export default function CustomModal(props) {
-  const { initActiveItem } = props;
-  const [activeItem, setActiveItem] = useState(initActiveItem);
+  let [activeItem, setActiveItem] = useState(props.activeItem);
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -29,12 +27,12 @@ export default function CustomModal(props) {
   const { toggle, onSave } = props;
 
   useEffect(() => {
-    console.log(props, activeItem);
+    console.log(props, activeItem)
   }, [props, activeItem]);
 
   return (
-    <Modal isOpen toggle={toggle}>
-      <ModalHeader toggle={toggle}>Todo Item</ModalHeader>
+    <Modal isOpen={true} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup>
@@ -47,6 +45,45 @@ export default function CustomModal(props) {
               onChange={handleChange}
               placeholder="Enter Reminder Title"
             />
+          </FormGroup>
+          <FormGroup>
+            <Label for="reminder-type">Reminder Type</Label>
+            <Input
+              type="select"
+              id="reminder-type"
+              value={activeItem.reinderType}
+              onChange={handleChange}
+            >
+              <option> Medicine </option>
+              <option> Appointment </option>
+              <option> Other </option>
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label for="reminder-date">Date and Time</Label>
+            <Input
+              type="datetime-local"
+              id="reminder-date"
+              name="date"
+              value={activeItem.date}
+              onChange={handleChange}
+              placeholder="Enter Date and Time"
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="reminder-repeating">Repeating</Label>
+            <Input
+              type="select"
+              id="reminder-repeating"
+              value={activeItem.reinderType}
+              onChange={handleChange}
+            >
+              <option> Daily </option>
+              <option> Weekly </option>
+              <option> Monthly </option>
+              <option> Other </option>
+              {/* add some option for n number of days/weeks/etc */}
+            </Input>
           </FormGroup>
           <FormGroup>
             <Label for="reminder-description">Description</Label>
@@ -73,15 +110,13 @@ export default function CustomModal(props) {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="success" onClick={() => onSave(activeItem)}>
+        <Button
+          color="success"
+          onClick={() => onSave(activeItem)}
+        >
           Save
         </Button>
       </ModalFooter>
     </Modal>
   );
-}
-CustomModal.propTypes = {
-  initActiveItem: PropTypes.element.isRequired,
-  toggle: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };

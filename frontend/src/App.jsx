@@ -3,7 +3,8 @@ import axios from "axios";
 import ReminderModal from "./components/ReminderModal";
 import Gametab from "./components/game/Gametab"
 import './App.css';
-import ReminderTab from './components/reminder/ReminderTab'
+import ReminderTab from './components/reminder/ReminderTab';
+import JournalTab from './components/journal/JournalTab';
 
 const BASE_URL = 'http://localhost:8000'
 
