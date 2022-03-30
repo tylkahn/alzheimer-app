@@ -7,6 +7,9 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+black = "*"
+flake8 = "*"
+bandit = "*"
 
 [dev-packages]
 
