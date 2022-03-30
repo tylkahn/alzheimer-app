@@ -23,16 +23,27 @@ class JournalTab extends React.Component {
     
     //obtains new entry information and calls save function
     createJournalEntry(){
+        //const [entryText, setJournalText] = useState('');
+        const handleChange = (event) => {
+            //console.log(event.target.value);
+            this.state.description = event;
+            window.alert(this.state.description);
+        }
+        const handleSaveClick = () => {
+            
+        }
         return (
-            <div className="journalentry new ">
+            <div className="entry new">
                 <textarea 
                     rows='8'
                     cols = '10'
                     placeholder='Type to create the Journal Entry...'
+                    value={entryText}
+                    onChange={handleChange}
                 ></textarea>
-                <div className="journalentry-footer">
+                <div className="entry-footer">
                     <small>Characters remaining: 100</small>
-                    <button className='save'>Save</button>
+                    <button className='save' onClick={handleSaveClick}>Save</button>
                 </div>
             </div>
         )
@@ -69,11 +80,6 @@ class JournalTab extends React.Component {
           
           
         );
-        /*The rest: 
-                {entryList.map(() => (
-
-
-                ))}*/
     }
 }
 
