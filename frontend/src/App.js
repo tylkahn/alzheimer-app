@@ -9,55 +9,6 @@ const BASE_URL = 'http://localhost:8000'
 
 function App() {
 
-
-
-
-/* I think this should be in the journaltab.js file but idk how to get it in there without an error 
-  const [entryList, setEntryList] = useState([
-    {
-    id: nanoid(),
-    title: "The First Title",
-    description: "The First Description",
-    images: [],
-    lastUpdated: "3/27/2022",
-    tagList: [],
-    },
-
-    {
-      id: nanoid(),
-      title: "The 2nd Title",
-      description: "The 2nd Description",
-      images: [],
-      lastUpdated: "3/28/2022",
-      tagList: [],
-    },
-
-    {
-      id: nanoid(),
-      title: "The 3rd Title",
-      description: "The 3rd Description",
-      images: [],
-      lastUpdated: "3/29/2022",
-      tagList: [],
-    },
-
-    {
-      id: nanoid(),
-      title: "The 4th Title",
-      description: "The 4th Description",
-      images: [],
-      lastUpdated: "3/30/2022",
-      tagList: [],
-    },
-    
-  
-  ]);
-
-*/
-
-
-
-
   const [viewCompleted, setViewCompleted] = useState(false);
 
   const displayCompleted = (status) => {
@@ -88,9 +39,9 @@ function App() {
   };
 
   const renderTab = () => {
-    return (
+    return (//entryList will start empty and become filled through addEntry button presses as the end goal
       <div className="journaltab">
-        {viewCompleted && <JournalTab />}
+        {viewCompleted && <JournalTab/>}
       </div>
     )
   };
