@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import Modal from "./components/Modal";
+import ReminderModal from "./components/ReminderModal";
 import axios from "axios";
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import ReminderTab from './components/reminder/ReminderTab'
 
 const BASE_URL = 'http://localhost:8000'
 
 function App() {
-  const [viewCompleted, setViewCompleted] = useState(false);
-  // const [todoList, setTodoList] = useState([]);
+  const [viewTab, setViewTab] = useState("");
   const [reminderList, setReminderList] = useState([]);
   const [modal, setModal] = useState(false);
   const [activeItem, setActiveItem] = useState(
@@ -22,24 +22,65 @@ function App() {
     }
   );
 
-  const refreshList = () => {
-    axios
-      .get(BASE_URL+"/api/reminders")
-      .then((res) => {
-        console.log(res);
-        setReminderList(res.data)
-      })
-      .catch((err) => console.log(err));
+  const displayTab = (tabName) => {
+    setViewTab(tabName);
+  }
+  
+  const renderTabList = () => {
+      return (
+      <div className="nav nav-tabs">
+        <span
+          className={viewTab ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("reminder")}
+        >
+          Reminder
+        </span>
+        <span
+          className={viewTab ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("journal")}
+        >
+          Journal
+        </span>
+        <span
+          className={viewTab ? "nav-link" : "nav-link active"}
+          onClick={() => displayTab("game")}
+        >
+          Game
+        </span>
+      </div>
+    );
   };
 
-  useEffect(() => {
-    refreshList();
-  }, []);
-
-  const toggle = () => {
-    setModal(!modal)
+  const renderTab = () => {
+    return (
+      <div className="remindertab">
+        {viewTab == "reminder" && <ReminderTab /> && 
+        <main className="container">
+        <h1 className="text-white text-uppercase text-center my-4">Reminder app</h1>
+        <div className="row">
+          <button
+            className="btn btn-primary"
+            onClick={createItem}
+          >
+            Add task
+          </button>
+        </div>
+        <ul className="list-group list-group-flush border-top-0">
+          {renderItems()}
+        </ul>
+        {modal ? (
+          <ReminderModal
+            activeItem={activeItem}
+            toggle={toggle}
+            onSave={handleSubmit}
+          />
+        ) : null}
+      </main>
+        }
+      </div>
+    )
   };
-
+  
   const handleSubmit = (item) => {
     console.log("handleSubmit");
     toggle();
@@ -56,7 +97,7 @@ function App() {
         .then(() => refreshList());
     }
   };
-
+  
   const deleteItem = (item) => {
     axios
       .delete(BASE_URL+`/api/reminders/${item.id}/`)
@@ -75,34 +116,25 @@ function App() {
     console.log(item);
     toggle();
   };
-
-  const displayCompleted = (status) => {
-    if (status) {
-      setViewCompleted(true);
-    } else {
-      setViewCompleted(false);
-    }
-  }
-
-  const renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <span
-          className={viewCompleted ? "nav-link active" : "nav-link"}
-          onClick={() => displayCompleted(true)}
-        >
-          Complete
-        </span>
-        <span
-          className={viewCompleted ? "nav-link" : "nav-link active"}
-          onClick={() => displayCompleted(false)}
-        >
-          Incomplete
-        </span>
-      </div>
-    );
+  
+  const refreshList = () => {
+    axios
+      .get(BASE_URL+"/api/reminders")
+      .then((res) => {
+        console.log(res);
+        setReminderList(res.data)
+      })
+      .catch((err) => console.log(err));
   };
 
+  useEffect(() => {
+    refreshList();
+  }, []);
+
+  const toggle = () => {
+    setModal(!modal)
+  };
+  
   const renderItems = () => {
     const newItems = reminderList.filter(
       (item) => item.completed == viewCompleted
@@ -139,53 +171,19 @@ function App() {
 
   return (
     <main className="container">
-      <h1 className="text-white text-uppercase text-center my-4">Reminder app</h1>
+      <h1 className="text-white text-uppercase text-center my-4">Alzheimer's Assistance App</h1>
       <div className="row">
         <div className="col-md-6 col-sm-10 mx-auto p-0">
           <div className="card p-3">
-            <div className="mb-4">
-              <button
-                className="btn btn-primary"
-                onClick={createItem}
-              >
-                Add task
-              </button>
-            </div>
             {renderTabList()}
             <ul className="list-group list-group-flush border-top-0">
-              {renderItems()}
+              {renderTab()}
             </ul>
           </div>
         </div>
       </div>
-      {modal ? (
-        <Modal
-          activeItem={activeItem}
-          toggle={toggle}
-          onSave={handleSubmit}
-        />
-      ) : null}
     </main>
   );
-
-  // return (
-  //   <div className="App">
-  //     <header className="App-header">
-  //       <img src={logo} className="App-logo" alt="logo" />
-  //       <p>
-  //         Edit <code>src/App.js</code> and save to reload.
-  //       </p>
-  //       <a
-  //         className="App-link"
-  //         href="https://reactjs.org"
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //       >
-  //         Learn React
-  //       </a>
-  //     </header>
-  //   </div>
-  // );
 }
 
 export default App;
