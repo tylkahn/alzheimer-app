@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier" // should be last
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    // if rules are added here, you'll need to run
+    // npx eslint-config-prettier path/to/main.js
+    // for a few files (ideally every file but that's too much work)
+    // in the workspace to ensure that no rules conflict with prettier
+  }
+}
