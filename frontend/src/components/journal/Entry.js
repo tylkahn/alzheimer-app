@@ -44,6 +44,10 @@ class Entry extends React.Component { //extend this journal entry from a generic
     render() {
         return (
           //entry-footer will contain the Edit button (inside the small tag)
+
+          /*<div onSubmit={this.onFormSubmit}>
+                <input type="file" name="file" onChange={(e) => this.onChange(e)}/>
+              </div>*/
           <div className='entry'>
             <span>
               <div className="entry-title">

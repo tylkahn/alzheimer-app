@@ -13,7 +13,6 @@ code {
 }
 
 .journal{
-  max-width: 960px;
   margin-right: auto;
   margin-left: auto;
   padding-right: 15px;
@@ -28,6 +27,7 @@ code {
 
 .entry.new{
   background-color: #a769f7;
+  grid-gap: 1rem;
 }
 
 textarea{
@@ -76,8 +76,8 @@ textarea:focus{
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
 .entry-footer{
   display: flex;
-  text-align: right; 
-  /*something with spacebetween*/
+  align-items: center;
+  justify-content: space-between;
 }
 
 .search{
