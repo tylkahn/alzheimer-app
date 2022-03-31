@@ -3,7 +3,6 @@ import Modal from "./components/Modal";
 import axios from "axios";
 import JournalTab from "./components/journal/JournalTab";
 import './App.css';
-import {nanoid} from 'nanoid';
 
 // TODO: DELETE THIS LINE
 

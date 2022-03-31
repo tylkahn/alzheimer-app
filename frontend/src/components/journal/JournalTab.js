@@ -1,6 +1,7 @@
 import React from "react";
 import Entry from './Entry'
 import {nanoid} from 'nanoid';
+//import { MdSearch } from 'react-icons/md';
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -17,9 +18,10 @@ class JournalTab extends React.Component {
             }
             */
             entryList: this.props.entries,
-            displayList: [],
+            //displayList: this.props.entries,
             entryTitle: '',
             entryDescription: '',
+            searchText: '',
         };
     }
 
@@ -38,24 +40,41 @@ class JournalTab extends React.Component {
     }
 
     addEntry = () => {
-        this.state.entryList.push({
-            id: nanoid(4), 
-            //eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
-            title: `Entry ${this.state.entryList.length+1}`,
-            description: this.state.entryDescription,
+        if (this.state.entryDescription.trim().length > 0){
+            this.state.entryList.push({
+                id: nanoid(4), 
+                //eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
+                title: `Entry ${this.state.entryList.length+1}`,
+                description: this.state.entryDescription,
+            });
+            
+            this.setState({///////////////////reset contents of entryDescription
+                entryDescription: ''
+            });
+            this.forceUpdate();
+        }
+
+    }
+
+    Search = (event) => {
+        this.setState({
+            searchText: event.target.value,
+            //displayList: this.state.entryList.filter(
+            //    (entry)=>entry.state.title.toLowerCase().includes(searchText)
+            //),
         });
-        this.forceUpdate();
+        console.log(this.state.searchText);
     }
 
     handleChange = (event) => {
         //event.target.value is what was typed into the text area
         this.setState({
-            entryDescription: event.target.value
+            entryDescription: event.target.value,
         });
         console.log(this.state.entryDescription);
     }
 
-    render() {
+    render = () => {
         //kinda the noteslist.js
 
         return (
@@ -67,9 +86,13 @@ class JournalTab extends React.Component {
           //probably need one package to save the image as some datatype
           //look up react library where I can input an image and save it
             //can probably just look up "Add File" (figure out how to limit it to jpg)
-          
+          //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching, might have to do an annoying installation to have access to the react-icons 
           
           <div className="journal">    
+
+            <div className='search'>
+                <input onChange={this.Search} type="text" placeholder='type to search...'/>
+            </div>
 
             <div className="entry new">
                 <textarea 
@@ -87,16 +110,19 @@ class JournalTab extends React.Component {
 
               <div className="entry-list">
                 My NON-hard-coded list: 
-                {this.state.entryList.map((entry) => (
-
+                {this.state.entryList.filter((e) => e.state.entryDescription.toLowerCase().includes(this.state.searchText))
+                    .map(entry => (
                     <Entry
                         id={entry.id}
                         title={entry.title}
                         description={entry.description}
                         key={nanoid(8)} //each entry needs a unique id for rendering, not just db
                     />
-                ))}
+                    )
+                )}
               </div>
+
+              
               
           </div>
         );
