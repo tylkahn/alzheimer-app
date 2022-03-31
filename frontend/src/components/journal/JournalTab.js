@@ -108,19 +108,19 @@ class JournalTab extends React.Component {
                 </div>
             </div>
 
-              <div className="entry-list">
-                My NON-hard-coded list: 
-                {this.state.entryList.filter((e) => e.state.entryDescription.toLowerCase().includes(this.state.searchText))
-                    .map(entry => (
-                    <Entry
-                        id={entry.id}
-                        title={entry.title}
-                        description={entry.description}
-                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                    />
-                    )
-                )}
-              </div>
+            <div className="entry-list">
+            My NON-hard-coded list: 
+            
+            {this.state.entryList.filter((e) => (e.description).toLowerCase().includes(this.state.searchText)).map(entry => (
+                <Entry
+                    id={entry.id}
+                    title={entry.title}
+                    description={entry.description}
+                    key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                />
+                )
+            )}
+            </div>
 
               
               
