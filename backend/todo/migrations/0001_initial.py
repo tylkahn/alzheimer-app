@@ -11,11 +11,23 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # migrations.CreateModel(
+        #     name='Todo',
+        #     fields=[
+        #         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('title', models.CharField(max_length=120)),
+        #         ('description', models.TextField()),
+        #         ('completed', models.BooleanField(default=False)),
+        #     ],
+        # ),
         migrations.CreateModel(
-            name='Todo',
+            name='Reminder',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=120)),
+                ('reminderType', models.CharField(max_length=120)),
+                ('date', models.DateTimeField()),
+                ('repeating', models.CharField(max_length=120)),
                 ('description', models.TextField()),
                 ('completed', models.BooleanField(default=False)),
             ],

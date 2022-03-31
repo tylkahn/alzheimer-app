@@ -11,3 +11,62 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.journal{
+  max-width: 960px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.entry-list{
+  display: grid;
+  grid-gap: 1rem; /*space between entries*/
+  grid-template-columns: repeat(1, minmax(200px, 1fr)); /*only 1 column and that column must be > 500px but < 1fr*/
+}
+
+.entry.new{
+  background-color: #a769f7;
+}
+
+textarea{
+  border: none;
+  resize: none;
+  background-color: #a769f7;
+}
+
+textarea:focus{
+  outline: none;
+}
+
+.save{
+  background-color: aquamarine;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.save:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
+}
+
+.entry{
+  background-color: #69f775;
+  border-radius: 10px;
+  padding: 1rem;
+  min-height: 170px;
+
+  /*put the edit button to be in the very bottom*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
+.entry-footer{
+  display: flex;
+  text-align: right; 
+  /*something with spacebetween*/
+}
