@@ -41,7 +41,7 @@ class JournalTab extends React.Component {
                 images: ["./images/journal.jpg"],//default every image to have the journal image
             });
             
-            this.setState({///////////////////reset contents of entryDescription, doesnt work
+            this.setState({///////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
                 entryDescription: ''
             });
             this.forceUpdate();
