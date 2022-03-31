@@ -5,6 +5,7 @@ import Gametab from "./components/game/Gametab"
 import './App.css';
 import ReminderTab from './components/reminder/ReminderTab';
 import JournalTab from './components/journal/JournalTab';
+import { nanoid } from 'nanoid';
 
 const BASE_URL = 'http://localhost:8000'
 
