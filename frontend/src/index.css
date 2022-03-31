@@ -53,7 +53,7 @@ textarea:focus{
 }
 
 .entry{
-  background-color: #69f775;
+  background-color: #c085c0;
   border-radius: 10px;
   padding: 1rem;
   min-height: 170px;
@@ -63,10 +63,37 @@ textarea:focus{
   flex-direction: column;
   justify-content: space-between;
 }
+.entry-title{
+  font-size: 40px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.entry-description{
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+}
 
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
 .entry-footer{
   display: flex;
   text-align: right; 
   /*something with spacebetween*/
+}
+
+.search{
+  display: flex;
+  align-items: center;
+  background-color: rgb(230, 230, 230);
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 1.5em;
+}
+
+.search input{
+  border: none;
+  background-color: rgb(230, 230, 230);
+}
+
+.search input:focus{
+  outline: none;
 }

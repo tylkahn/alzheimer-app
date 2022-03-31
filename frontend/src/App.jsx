@@ -56,12 +56,7 @@ function App() {
     return (
       <div className="tabs">
         {viewTab == "journal" && <div className="journaltab">
-          <JournalTab entries={
-            [
-              { id: nanoid(4), title: "title1", description: "desc1" },
-              { id: nanoid(4), title: "title2", description: "desc2" },
-            ]
-          } />
+          <JournalTab entries={[]} />
         </div>}
         {viewTab == "reminder" && <div className="remindertab">
           <ReminderTab />
