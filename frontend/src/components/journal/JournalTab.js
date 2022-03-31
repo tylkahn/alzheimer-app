@@ -18,7 +18,7 @@ class JournalTab extends React.Component {
             }
             */
             entryList: this.props.entries,
-            entryTitle: '',
+            entryTitle: `Entry Title ${this.props.entries.length+1}`,
             entryDescription: '',
             searchText: '',
         };
@@ -70,10 +70,14 @@ class JournalTab extends React.Component {
 
     handleTitleChange = (event) => {
         //event.target.value is what was typed into the text area
-        this.setState({
-            entryTitle: event.target.value,
-        });
-        console.log(this.state.entryTitle);
+        //////in the title: putting a bunch of spaces, typing a character, and deleting the character, 
+            //will add an entry that is titled that deleted character
+        if (event.target.value.trim().length > 0){
+            this.setState({
+                entryTitle: event.target.value,
+            
+            });
+        }
     }
 
     render = () => {
