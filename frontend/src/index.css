@@ -63,6 +63,15 @@ textarea:focus{
   flex-direction: column;
   justify-content: space-between;
 }
+.entry-title{
+  font-size: 40px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.entry-description{
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+}
 
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
 .entry-footer{

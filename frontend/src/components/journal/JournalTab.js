@@ -44,7 +44,8 @@ class JournalTab extends React.Component {
             this.state.entryList.push({
                 id: nanoid(4), 
                 //eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
-                title: `Entry ${this.state.entryList.length+1}`,
+                title: this.state.entryTitle,
+                
                 description: this.state.entryDescription,
             });
             
@@ -66,12 +67,20 @@ class JournalTab extends React.Component {
         console.log(this.state.searchText);
     }
 
-    handleChange = (event) => {
+    handleDescriptionChange = (event) => {
         //event.target.value is what was typed into the text area
         this.setState({
             entryDescription: event.target.value,
         });
         console.log(this.state.entryDescription);
+    }
+
+    handleTitleChange = (event) => {
+        //event.target.value is what was typed into the text area
+        this.setState({
+            entryTitle: event.target.value,
+        });
+        console.log(this.state.entryTitle);
     }
 
     render = () => {
@@ -95,12 +104,18 @@ class JournalTab extends React.Component {
             </div>
 
             <div className="entry new">
-                <textarea 
+                <textarea className= "entry-title"
+                    rows='1'
+                    cols = '10'
+                    placeholder='Enter title...'
+                    onChange={this.handleTitleChange}
+                ></textarea>
+                <textarea className= "entry-description"
                     rows='8'
                     cols = '10'
                     placeholder='Type to create the Journal Entry...'
                     //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                    onChange={this.handleChange}
+                    onChange={this.handleDescriptionChange}
                 ></textarea>
                 <div className="entry-footer">
                     <small>Characters remaining: 100</small>
@@ -111,7 +126,7 @@ class JournalTab extends React.Component {
             <div className="entry-list">
             My NON-hard-coded list: 
             
-            {this.state.entryList.filter((e) => (e.description).toLowerCase().includes(this.state.searchText)).map(entry => (
+            {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
                 <Entry
                     id={entry.id}
                     title={entry.title}
