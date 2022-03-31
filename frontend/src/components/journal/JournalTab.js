@@ -7,7 +7,7 @@ class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* what an entry looks like
+            /* what an ENTRY looks like
             {
                 id: nanoid(),
                 title: "The First Title",
@@ -18,25 +18,17 @@ class JournalTab extends React.Component {
             }
             */
             entryList: this.props.entries,
-            //displayList: this.props.entries,
             entryTitle: '',
             entryDescription: '',
             searchText: '',
         };
     }
 
-    //this.load(props.id)->which calls create
-
     //this one is specific to journalentries
-    modifyImageList(action, jpg){
-        if (action === "addImage"){
-            this.setState(
-                { images: [...jpg] }
-            );
-        }
-        else if (action === "removeImage"){
-
-        }
+    addImage = (jpg) => {
+        this.setState({
+            images: [...jpg],
+        });
     }
 
     addEntry = () => {
@@ -47,9 +39,10 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 
                 description: this.state.entryDescription,
+                images: ["./images/journal.jpg"],//default every image to have the journal image
             });
             
-            this.setState({///////////////////reset contents of entryDescription
+            this.setState({///////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
                 entryDescription: ''
             });
             this.forceUpdate();
@@ -131,13 +124,13 @@ class JournalTab extends React.Component {
                     id={entry.id}
                     title={entry.title}
                     description={entry.description}
+                    images={entry.images}
                     key={nanoid(8)} //each entry needs a unique id for rendering, not just db
                 />
-                )
+                ),
+                
             )}
-            </div>
-
-              
+            </div>           
               
           </div>
         );

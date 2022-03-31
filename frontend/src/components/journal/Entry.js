@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import React from "react";
 
 class Entry extends React.Component { //extend this journal entry from a generic entry class
@@ -7,7 +8,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
             id: this.props.id,
             title: this.props.title,
             description: this.props.description,
-            images: [],
+            images: this.props.images,
             lastUpdated: 0,
             tagList: [],//since im storing on the frontend, this stuff isnt useful yet
         };
@@ -44,10 +45,16 @@ class Entry extends React.Component { //extend this journal entry from a generic
                 {this.state.description}<br/>
               </div>
             </span>
+            
+            Hard coded Image:  
+            {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
+            
             <div className="entry-footer">
               <small>Edit</small>
             </div>
+
           </div>
+          
         );
     }
 }
