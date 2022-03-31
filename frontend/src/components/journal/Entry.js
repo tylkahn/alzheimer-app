@@ -33,9 +33,21 @@ class Entry extends React.Component { //extend this journal entry from a generic
         );
     }
 
+    /*
+    onChange(e){
+      let files = e.target.files;
+      let reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      console.log(reader.result);
+    }*/
+
     render() {
         return (
           //entry-footer will contain the Edit button (inside the small tag)
+
+          /*<div onSubmit={this.onFormSubmit}>
+                <input type="file" name="file" onChange={(e) => this.onChange(e)}/>
+              </div>*/
           <div className='entry'>
             <span>
               <div className="entry-title">
