@@ -12,7 +12,8 @@ import {
 } from "reactstrap";
 
 export default function CustomModal(props) {
-  let [activeItem, setActiveItem] = useState(props.activeItem);
+  // let [activeItem, setActiveItem] = useState(props.activeItem);
+  const { activeItem, setActiveItem, toggle, onSave } = props;
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -24,8 +25,6 @@ export default function CustomModal(props) {
     setActiveItem({ ...activeItem, [name]: value });
   };
 
-  const { toggle, onSave } = props;
-
   useEffect(() => {
     console.log(props, activeItem)
   }, [props, activeItem]);
@@ -34,7 +33,7 @@ export default function CustomModal(props) {
     <Modal isOpen={true} toggle={toggle}>
       <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
       <ModalBody>
-        <Form>
+        <Form onSubmit={() => onSave(tempActiveItem)}>
           <FormGroup>
             <Label for="reminder-title">Title</Label>
             <Input
@@ -49,6 +48,7 @@ export default function CustomModal(props) {
           <FormGroup>
             <Label for="reminder-type">Reminder Type</Label>
             <Input
+              name="reminderType"
               type="select"
               id="reminder-type"
               value={activeItem.reinderType}
@@ -73,6 +73,7 @@ export default function CustomModal(props) {
           <FormGroup>
             <Label for="reminder-repeating">Repeating</Label>
             <Input
+              name="repeating"
               type="select"
               id="reminder-repeating"
               value={activeItem.reinderType}

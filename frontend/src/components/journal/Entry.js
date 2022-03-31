@@ -58,7 +58,6 @@ class Entry extends React.Component { //extend this journal entry from a generic
               </div>
             </span>
             
-            Hard coded Image:  
             {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
             
             <div className="entry-footer">

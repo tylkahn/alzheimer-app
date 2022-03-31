@@ -59,7 +59,7 @@ function App() {
           <JournalTab entries={[]} />
         </div>}
         {viewTab == "reminder" && <div className="remindertab">
-          <ReminderTab />
+          <ReminderTab entries={[activeItem]}/>
           <main className="container">
             <h1 className="text-white text-uppercase text-center my-4">Reminder app</h1>
             <div className="row">
@@ -78,6 +78,7 @@ function App() {
                 activeItem={activeItem}
                 toggle={toggle}
                 onSave={handleSubmit}
+                setActiveItem={setActiveItem}
               />
             ) : null}
           </main>
@@ -91,10 +92,22 @@ function App() {
   const handleSubmit = (item) => {
     console.log("handleSubmit");
     toggle();
-    console.log(item);
+    console.log("Item", item);
+    setActiveItem(item);
+    /*setActiveItem({
+        title: item.title,
+        reminderType: item.reminderType,
+        date: item.date,
+        repeating: item.repeating,
+        description: item.description,
+        completed: item.completed,
+    });*/
+    
+    console.log("Active Item: ");
+    console.log(activeItem);
 
     // NOTE: let it be known that I very much dislike using axios.put and axios.delete
-    if (item.id) {
+    /*if (item.id) {
       axios
         .put(BASE_URL + `/api/reminders/${item.id}/`, item)
         .then(() => refreshList());
@@ -103,6 +116,7 @@ function App() {
         .post(BASE_URL + "/api/reminders/", item)
         .then(() => refreshList());
     }
+    */
   };
 
   const deleteItem = (item) => {
