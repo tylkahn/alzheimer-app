@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Modal from "./components/Modal";
 import axios from "axios";
 import JournalTab from "./components/journal/JournalTab";
-import Gametab from "./components/game/Gametab";
 import './App.css';
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
 
 // TODO: DELETE THIS LINE
 
@@ -41,12 +40,7 @@ function App() {
   const renderTab = () => {
     return (//entryList will start empty and become filled through addEntry button presses as the end goal
       <div className="journaltab">
-        {viewCompleted && <JournalTab entries={
-          [
-            { id: nanoid(4), title: "title1", description: "desc1" },
-            { id: nanoid(4), title: "title2", description: "desc2" },
-          ]
-        } />}
+        {viewCompleted && <JournalTab entries={[]} />}
       </div>
     )
   };

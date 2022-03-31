@@ -37,7 +37,6 @@ class Entry extends React.Component { //extend this journal entry from a generic
           //entry-footer will contain the Edit button (inside the small tag)
           <div className='entry'>
             <span>
-              This is an entry!<br/>
               myid: {this.state.id}<br/>
               title: {this.state.title}<br/>
               description: {this.state.description}<br/>
