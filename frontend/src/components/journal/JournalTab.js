@@ -1,7 +1,11 @@
 import React from "react";
 import Entry from './Entry'
 import {nanoid} from 'nanoid';
-//import { MdSearch } from 'react-icons/md';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faFloppyDisk);
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -111,13 +115,11 @@ class JournalTab extends React.Component {
                     onChange={this.handleDescriptionChange}
                 ></textarea>
                 <div className="entry-footer">
-                    <small>Characters remaining: 100</small>
-                    <button onClick={() => {this.addEntry()}} className='save' >Save</button>
+                    <button onClick={() => {this.addEntry()}} className='save' ><FontAwesomeIcon icon="floppy-disk" /></button>
                 </div>
             </div>
 
-            <div className="entry-list">
-            My NON-hard-coded list: 
+            <div className="entry-list"> 
             
             {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
                 <Entry

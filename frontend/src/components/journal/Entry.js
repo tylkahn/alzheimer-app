@@ -1,6 +1,11 @@
 import { nanoid } from "nanoid";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
+library.add(faTrashCan);
+library.add(faPenToSquare);
 class Entry extends React.Component { //extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
@@ -33,6 +38,9 @@ class Entry extends React.Component { //extend this journal entry from a generic
         );
     }
 
+    deleteEntry(){
+
+    }
     render() {
         return (
           //entry-footer will contain the Edit button (inside the small tag)
@@ -50,7 +58,9 @@ class Entry extends React.Component { //extend this journal entry from a generic
             {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
             
             <div className="entry-footer">
-              <small>Edit</small>
+                <FontAwesomeIcon icon="pen-to-square" />
+                <button className='delete' ><FontAwesomeIcon icon="trash-can" /></button>
+                
             </div>
 
           </div>
