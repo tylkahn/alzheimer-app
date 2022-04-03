@@ -1,3 +1,7 @@
 {
-  "*": "echo REPLACE_THIS"
+  "*.py": [
+    "black",
+    "bandit",
+    "flake8"
+  ]
 }

@@ -16,10 +16,17 @@ class ReminderTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            entryList: {"id": "", "title": "", "reminderType": "", "date": "", 
+            entryList: this.props.entries,
+            /*{"id": "", "title": "", "reminderType": "", "date": "", 
                 "repeating": "", "description": "", "images": [],
-                "lastUpdated": 0, "tagList": []}
+                "lastUpdated": 0, "tagList": []}*/
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.entries !== prevProps.entries) {
+            this.state.entryList = this.props.entries;
+        }
     }
 
     setReminderLastUpdated(time){
@@ -58,11 +65,16 @@ class ReminderTab extends React.Component {
         );
     }
 
-    render() {
+    render = () =>{
 
         return (
-            <div className="reminder">
-                Reminder Stuff Here:      
+            <div className="reminder" onChange="">
+                title: {this.state.entryList[0].title}<br/>
+                reminderType: {this.state.entryList[0].reminderType} <br/>
+                description: {this.state.entryList[0].description}<br/>
+                completed: {this.state.entryList[0].completed.toString()}<br/>
+                date: {this.state.entryList[0].date}<br/>
+                repeating: {this.state.entryList[0].repeating}<br/>
             </div>
           );
       }
