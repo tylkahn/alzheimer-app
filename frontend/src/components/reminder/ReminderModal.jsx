@@ -10,10 +10,25 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import {nanoid} from 'nanoid';
 
 export default function CustomModal(props) {
   // let [activeItem, setActiveItem] = useState(props.activeItem);
-  const { activeItem, setActiveItem, toggle, onSave } = props;
+  // const { activeItem, setActiveItem, toggle, onSave } = props;
+  const [activeItem, setActiveItem] = useState(
+    {
+      id: nanoid(),
+      title: "",
+      reminderType: "",
+      date: "",
+      repeating: "",
+      description: "",
+    }
+  );
+  // const activeReminder = new Reminder;
+  const { toggle, onSave } = props;
+  // let toggle = props.toggle;
+  // let onSave = props.onSave;
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -51,7 +66,7 @@ export default function CustomModal(props) {
               name="reminderType"
               type="select"
               id="reminder-type"
-              value={activeItem.reinderType}
+              value={activeItem.reminderType}
               onChange={handleChange}
             >
               <option> Medicine </option>
@@ -76,9 +91,10 @@ export default function CustomModal(props) {
               name="repeating"
               type="select"
               id="reminder-repeating"
-              value={activeItem.reinderType}
+              value={activeItem.repeating}
               onChange={handleChange}
             >
+              <option> None </option>
               <option> Daily </option>
               <option> Weekly </option>
               <option> Monthly </option>
@@ -96,17 +112,6 @@ export default function CustomModal(props) {
               onChange={handleChange}
               placeholder="Enter Reminder Description"
             />
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="checkbox"
-                name="completed"
-                checked={activeItem.completed}
-                onChange={handleChange}
-              />
-              Completed
-            </Label>
           </FormGroup>
         </Form>
       </ModalBody>

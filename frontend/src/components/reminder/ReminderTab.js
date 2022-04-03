@@ -1,83 +1,99 @@
 import React, {useState, useEffect} from 'react';
-// import {
-//     Button,
-//     Modal,
-//     ModalHeader,
-//     ModalBody,
-//     ModalFooter,
-//     Form,
-//     FormGroup,
-//     Input,
-//     Label,
-//   } from "reactstrap";
-import EntryList from './EntryList';
+import {nanoid} from 'nanoid';
+// import EntryList from './EntryList';
+// import ReminderList from './ReminderList';
+import Reminder from './Reminder';
+import ReminderModal from './ReminderModal'
 
 class ReminderTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            entryList: this.props.entries,
+            entryList: [],
             /*{"id": "", "title": "", "reminderType": "", "date": "", 
                 "repeating": "", "description": "", "images": [],
                 "lastUpdated": 0, "tagList": []}*/
+            activeEntry: '',
+            searchText: '',
+            modal: false,
         };
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.entries !== prevProps.entries) {
-            this.state.entryList = this.props.entries;
-        }
+    addEntry(entry){
+        this.state.entryList.push(entry);
+        this.setState( {activeEntry: entry} );
+        this.forceUpdate();
     }
 
-    setReminderLastUpdated(time){
-        this.setState(
-            { lastUpdated: time }
-        );
-    }
+    toggle = () => {
+        this.setState( {modal: !this.state.modal})
+    };
+    
+    handleSubmit = (item) => {
+        console.log("handleSubmit");
+        console.log("item:", item);
 
-    modifyTitle(t){
-        this.setState(
-            { title: t }
-        );
-    }
+        this.toggle();
 
-    modifyReminderType(t){
-        this.setState(
-            { reminderType: t }
-        );
-    }
-
-    modifyDate(d){
-        this.setState(
-            { date: d }
-        );
-    }
-
-    modifyRepeating(r){
-        this.setState(
-            { repeating: r }
-        );
-    }
-
-    modifyDescription(desc){
-        this.setState(
-            { description: desc }
-        );
+        this.state.entryList.push(item);
+        console.log("entryList:",this.state.entryList);
+    };
+    
+    Search = (event) => {
+        this.setState({
+            searchText: event.target.value,
+            //displayList: this.state.entryList.filter(
+            //    (entry)=>entry.state.title.toLowerCase().includes(searchText)
+            //),
+        });
+        console.log(this.state.searchText);
     }
 
     render = () =>{
 
         return (
             <div className="reminder" onChange="">
-                title: {this.state.entryList[0].title}<br/>
-                reminderType: {this.state.entryList[0].reminderType} <br/>
-                description: {this.state.entryList[0].description}<br/>
-                completed: {this.state.entryList[0].completed.toString()}<br/>
-                date: {this.state.entryList[0].date}<br/>
-                repeating: {this.state.entryList[0].repeating}<br/>
+                <div className='search'>
+                    <input onChange={this.Search} type="text" placeholder='type to search...'/>
+                </div>
+                <main className="container">
+                    <button
+                        className="btn add-task"
+                        // onClick={this.addEntry}
+                        onClick={this.toggle}
+                    >
+                        Add task
+                    </button>
+                    {/* <ul className="list-group list-group-flush border-top-0">
+                    {renderItems()}
+                    </ul> */}
+                    {this.state.modal ? (
+                    <ReminderModal
+                        // activeItem={new Reminder}
+                        toggle={this.toggle}
+                        onSave={this.handleSubmit}
+                        // setActiveItem={setActiveItem}
+                    />
+                    ) : null}
+                </main>
+
+                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                    <Reminder
+                        id={entry.id}
+                        title={entry.title} 
+                        reminderType={entry.reminderType}
+                        date={entry.date}
+                        repeating={entry.repeating}
+                        description={entry.description}
+                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                    />
+                    ),
+                    
+                )}
             </div>
           );
-      }
+    }
 }
 
 export default ReminderTab;
