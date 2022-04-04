@@ -1,31 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReminderModal from "./components/ReminderModal";
-import Gametab from "./components/game/Gametab"
-import './App.css';
-import ReminderTab from './components/reminder/ReminderTab';
-import JournalTab from './components/journal/JournalTab';
+import Gametab from "./components/game/Gametab";
+import "./App.css";
+import ReminderTab from "./components/reminder/ReminderTab";
+import JournalTab from "./components/journal/JournalTab";
+import AuthModule from "./components/auth/AuthModule";
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = "http://localhost:8000";
 
 function App() {
   const [viewTab, setViewTab] = useState("");
   const [reminderList, setReminderList] = useState([]);
   const [modal, setModal] = useState(false);
-  const [activeItem, setActiveItem] = useState(
-    {
-      title: "",
-      reminderType: "",
-      date: "",
-      repeating: "",
-      description: "",
-      completed: false,
-    }
-  );
+  const [activeItem, setActiveItem] = useState({
+    title: "",
+    reminderType: "",
+    date: "",
+    repeating: "",
+    description: "",
+    completed: false,
+  });
+  const [authInfo, setAuthInfo] = useState({
+    isLoggedIn: false,
+  });
 
   const displayTab = (tabName) => {
     setViewTab(tabName);
-  }
+  };
 
   const renderTabList = () => {
     return (
@@ -52,21 +54,22 @@ function App() {
     );
   };
 
-  const renderTab = () => {
-    return (
-      <div className="tabs">
-        {viewTab == "journal" && <div className="journaltab">
+  const renderTab = () => (
+    <div className="tabs">
+      {viewTab == "journal" && (
+        <div className="journaltab">
           <JournalTab entries={[]} />
-        </div>}
-        {viewTab == "reminder" && <div className="remindertab">
-          <ReminderTab entries={[activeItem]}/>
+        </div>
+      )}
+      {viewTab == "reminder" && (
+        <div className="remindertab">
+          <ReminderTab entries={[activeItem]} />
           <main className="container">
-            <h1 className="text-white text-uppercase text-center my-4">Reminder app</h1>
+            <h1 className="text-white text-uppercase text-center my-4">
+              Reminder app
+            </h1>
             <div className="row">
-              <button
-                className="btn btn-primary"
-                onClick={createItem}
-              >
+              <button className="btn btn-primary" onClick={createItem}>
                 Add task
               </button>
             </div>
@@ -82,12 +85,11 @@ function App() {
               />
             ) : null}
           </main>
-        </div>}
-        {viewTab == "game" && <Gametab />}
-      </div>
-
-    )
-  };
+        </div>
+      )}
+      {viewTab == "game" && <Gametab />}
+    </div>
+  );
 
   const handleSubmit = (item) => {
     console.log("handleSubmit");
@@ -102,7 +104,7 @@ function App() {
         description: item.description,
         completed: item.completed,
     });*/
-    
+
     console.log("Active Item: ");
     console.log(activeItem);
 
@@ -112,9 +114,7 @@ function App() {
         .put(BASE_URL + `/api/reminders/${item.id}/`, item)
         .then(() => refreshList());
     } else {
-      axios
-        .post(BASE_URL + "/api/reminders/", item)
-        .then(() => refreshList());
+      axios.post(BASE_URL + "/api/reminders/", item).then(() => refreshList());
     }
     */
   };
@@ -126,8 +126,15 @@ function App() {
   };
 
   const createItem = () => {
-    const item = { title: "", reminderType: "", date: "", repeating: "", description: "", completed: false };
-    console.log("created item")
+    const item = {
+      title: "",
+      reminderType: "",
+      date: "",
+      repeating: "",
+      description: "",
+      completed: false,
+    };
+    console.log("created item");
     setActiveItem(item);
     toggle();
   };
@@ -143,7 +150,7 @@ function App() {
       .get(BASE_URL + "/api/reminders")
       .then((res) => {
         console.log(res);
-        setReminderList(res.data)
+        setReminderList(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -153,7 +160,7 @@ function App() {
   }, []);
 
   const toggle = () => {
-    setModal(!modal)
+    setModal(!modal);
   };
 
   const renderItems = () => {
@@ -167,7 +174,9 @@ function App() {
         className="list-group-item d-flex justify-content-between align-items-center"
       >
         <span
-          className={`reminder-title mr-2 ${viewCompleted ? "completed-reminder" : ""}`}
+          className={`reminder-title mr-2 ${
+            viewCompleted ? "completed-reminder" : ""
+          }`}
           title={item.description}
         >
           {item.title}
@@ -179,10 +188,7 @@ function App() {
           >
             Edit
           </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => deleteItem(item)}
-          >
+          <button className="btn btn-danger" onClick={() => deleteItem(item)}>
             Delete
           </button>
         </span>
@@ -192,17 +198,23 @@ function App() {
 
   return (
     <main className="container">
-      <h1 className="text-white text-uppercase text-center my-4">Alzheimer's Assistance App</h1>
-      <div className="row">
-        <div className="col-md-6 col-sm-10 mx-auto p-0">
-          <div className="card p-3">
-            {renderTabList()}
-            <ul className="list-group list-group-flush border-top-0">
-              {renderTab()}
-            </ul>
+      <h1 className="text-white text-uppercase text-center my-4">
+        Alzheimer's Assistance App
+      </h1>
+      {authInfo.isLoggedIn ? (
+        <div className="row">
+          <div className="col-md-6 col-sm-10 mx-auto p-0">
+            <div className="card p-3">
+              {renderTabList()}
+              <ul className="list-group list-group-flush border-top-0">
+                {renderTab()}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <AuthModule authInfo={authInfo} setAuthInfo={setAuthInfo} />
+      )}
     </main>
   );
 }
