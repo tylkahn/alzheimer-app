@@ -14,6 +14,7 @@ class ReminderTab extends React.Component {
                 "repeating": "", "description": "", "images": [],
                 "lastUpdated": 0, "tagList": []}*/
             activeEntry: '',
+            searchType: '',
             searchText: '',
             modal: false,
         };
@@ -57,7 +58,11 @@ class ReminderTab extends React.Component {
         this.state.entryList.push(item);
         console.log("entryList:",this.state.entryList);
     };
-    
+
+    // handleSearchTypeChange(event) {
+    //     this.setState({searchType: event.target.value});
+    // }
+        
     Search = (event) => {
         this.setState({
             searchText: event.target.value,
@@ -72,6 +77,12 @@ class ReminderTab extends React.Component {
 
         return (
             <div className="reminder" onChange="">
+                {/* <div className='search-type'>
+                    <select value={this.state.searchType} onChange={this.handleSearchTypeChange}>
+                        <option value="title"> Title </option>
+                        <option value="reminderType"> Type </option>
+                    </select>
+                </div> */}
                 <div className='search'>
                     <input onChange={this.Search} type="text" placeholder='type to search...'/>
                 </div>
@@ -95,7 +106,7 @@ class ReminderTab extends React.Component {
                     ) : null}
                 </main>
 
-                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                {this.state.entryList.filter((e) => (e.title).toLowerCase().concat((e.reminderType).toLowerCase()).includes(this.state.searchText)).map(entry => (
                     <div> 
                         <Reminder
                             id={entry.id}

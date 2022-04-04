@@ -69,6 +69,7 @@ export default function CustomModal(props) {
               value={activeItem.reminderType}
               onChange={handleChange}
             >
+              <option>  </option>
               <option> Medicine </option>
               <option> Appointment </option>
               <option> Other </option>
