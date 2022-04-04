@@ -52,8 +52,22 @@
 
 
 # TODO list
-- switch from sqlite to postgres
 - come up with a standardized file hierarchy
 - figure out how to not use put/delete/update
 - Clean up code: remove unnecessary files and lines, add documentation
 - Immplement Reminder function/update Reminder display to include datetime
+
+
+# Troubleshooting
+- `django.db.utils.ProgrammingError: table "foo" does not exist`
+  - for me, this was caused by Django's internal representation of the database going out of sync with the actual database as it exists on my local system
+  - first off, if you've made any changes to the models and you're sure they're correct, save them by running:
+  - `python manage.py makemigrations`
+  - now you can try to fix the problem by running the following:
+  - `python manage.py migrate <app> zero` where app is the Django application name
+    - if you don't know it, run `manage.py migrate` and look for the migration file that is throwing the error (files are of the form `app.####_desc`)
+  - `python manage.py migrate`
+  - if it still fails, run with `--fake`
+    - `python manage.py migrate <app> zero --fake`
+    - `python manage.py migrate`
+  - you may have to restart the backend to see the changes in the Django GUI
