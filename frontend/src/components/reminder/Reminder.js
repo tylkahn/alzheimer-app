@@ -11,8 +11,7 @@ class Reminder extends Entry {
             date: this.props.date,
             repeating: this.props.repeating,
             description: this.props.description,
-            // lastUpdated: 0,
-            // tagList: [],
+            modal: false,
         };
         this.setTitle = this.setTitle.bind(this);
         this.setType = this.setType.bind(this);
@@ -23,24 +22,20 @@ class Reminder extends Entry {
     }
   
     getTitle() {return this.state.title; }
-
     getType() {return this.state.reminderType; }
-    
-    getDate() {return this.state.date; }
-    
+    getDate() {return this.state.date; }  
     getRepeating() {return this.state.repeating; }
-    
     getDescription() {return this.state.description; }
     
     setTitle = (t) => { this.setState( {title: t} ); }
-    
     setType = (t) => { this.setState( {type: t} ); }
-    
     setDate = (d) => { this.setState( {date: d} ); }
-    
     setRepeating = (r) => { this.setState( {repeating: r} ); }
-    
     setDescription = (d) => { this.setState( {description: d} ); }
+    
+    toggle = () => {
+      this.setState( {modal: !this.state.modal})
+    };
   
     render() {
       return (
@@ -57,25 +52,11 @@ class Reminder extends Entry {
           >
             {this.getDate()}
           </h4>
-          <h6
+          <span
             className={`reminder-description mr-2`}
             title={this.getDescription()}
           > 
             {this.getDescription()} 
-          </h6>
-          <span>
-            <button
-              className="btn btn-secondary mr-2"
-              // onClick={() => editItem(item)}
-            >
-              Edit
-            </button>
-            <button
-              className="btn btn-danger"
-              // onClick={() => deleteItem(item)}
-            >
-              Delete
-            </button>
           </span>
         </div>
       );

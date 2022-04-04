@@ -20,11 +20,29 @@ class ReminderTab extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
+    deleteEntry(entry) {
+        let b = false;
+        for (var i = 0; i < this.state.entryList.length; i++) {
+            if (b) break;
+            if (this.state.entryList[i] == entry) {
+                this.state.entryList.splice(i, 1);
+                b = true;
+            }
+        }
+        this.forceUpdate();
+    }
+
     addEntry(entry){
         this.state.entryList.push(entry);
         this.setState( {activeEntry: entry} );
         this.forceUpdate();
     }
+    
+    editEntry(entry){
+        this.deleteEntry(entry);
+        this.toggle();
+        this.forceUpdate();
+    };
 
     toggle = () => {
         this.setState( {modal: !this.state.modal})
@@ -59,8 +77,7 @@ class ReminderTab extends React.Component {
                 </div>
                 <main className="container">
                     <button
-                        className="btn add-task"
-                        // onClick={this.addEntry}
+                        className="btn btn-primary"
                         onClick={this.toggle}
                     >
                         Add task
@@ -79,15 +96,32 @@ class ReminderTab extends React.Component {
                 </main>
 
                 {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
-                    <Reminder
-                        id={entry.id}
-                        title={entry.title} 
-                        reminderType={entry.reminderType}
-                        date={entry.date}
-                        repeating={entry.repeating}
-                        description={entry.description}
-                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                    />
+                    <div> 
+                        <Reminder
+                            id={entry.id}
+                            title={entry.title} 
+                            reminderType={entry.reminderType}
+                            date={entry.date}
+                            repeating={entry.repeating}
+                            description={entry.description}
+                            key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                        />
+                        <span>
+                          <button
+                            className="btn btn-secondary mr-2"
+                            onClick={() => this.editEntry(entry)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => this.deleteEntry(entry)}
+                          >
+                            Delete
+                          </button>
+                        </span>
+                    </div>
+                    
                     ),
                     
                 )}
