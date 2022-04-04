@@ -83,10 +83,11 @@ class ReminderTab extends React.Component {
                         <option value="reminderType"> Type </option>
                     </select>
                 </div> */}
+                <br/>
                 <div className='search'>
                     <input onChange={this.Search} type="text" placeholder='type to search...'/>
                 </div>
-                <main className="container">
+                <div className="container">
                     <button
                         className="btn btn-primary"
                         onClick={this.toggle}
@@ -104,10 +105,10 @@ class ReminderTab extends React.Component {
                         // setActiveItem={setActiveItem}
                     />
                     ) : null}
-                </main>
+                </div> <br/>
 
                 {this.state.entryList.filter((e) => (e.title).toLowerCase().concat((e.reminderType).toLowerCase()).includes(this.state.searchText)).map(entry => (
-                    <div> 
+                    <div className='reminder-entry'> 
                         <Reminder
                             id={entry.id}
                             title={entry.title} 
@@ -116,7 +117,7 @@ class ReminderTab extends React.Component {
                             repeating={entry.repeating}
                             description={entry.description}
                             key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                        />
+                        /><br/>
                         <span>
                           <button
                             className="btn btn-secondary mr-2"

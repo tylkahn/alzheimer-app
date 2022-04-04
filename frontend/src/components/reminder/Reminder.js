@@ -46,18 +46,18 @@ class Reminder extends Entry {
           >
             {this.getTitle()}
           </h2>
-          <h4
+          <h6
             className={`reminder-date mr-2`}
             title={this.getDate()}
           >
             Date: {this.getDate()} 
-          </h4>
-          <h4
+          </h6>
+          <h6
             className={`reminder-repeating mr-2`}
             title={this.getRepeating()}
           >
             Repeating: {this.getRepeating()} 
-          </h4>
+          </h6>
           <span
             className={`reminder-description mr-2`}
             title={this.getDescription()}
