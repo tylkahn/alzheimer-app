@@ -25,6 +25,7 @@ code {
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
+  grid-gap: 1rem;
 }
 
 .row {
@@ -36,8 +37,10 @@ code {
 
 .entry-list{
   display: grid;
-  grid-gap: 2rem; /*space between entries*/
+  grid-gap: 1rem; /*space between entries in entryList*/
   grid-template-columns: repeat(1, minmax(200px, 1fr)); /*only 1 column and that column must be > 500px but < 1fr*/
+  padding-top: 6rem;
+  padding-left: 2rem;
 }
 
 .entry.new{
@@ -100,7 +103,7 @@ textarea:focus{
   background-color: rgb(230, 230, 230);
   border-radius: 10px;
   padding: 5px;
-  margin-bottom: 1.5em;
+  margin-bottom: .5em;
 }
 
 .search input{
