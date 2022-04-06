@@ -116,49 +116,51 @@ class JournalTab extends React.Component {
             //can probably just look up "Add File" (figure out how to limit it to jpg)
           //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching
           
-          <div className="journal">    
+            <div className="journal">   
+                <div className='row'>
+                    <div className='column'>
+                        Search
+                        <div className='search'>
+                            <input onChange={this.Search} type="text" placeholder='type to search...'/>
+                        </div>
+                    </div>
 
-            <div className='search'>
-                <input onChange={this.Search} type="text" placeholder='type to search...'/>
-            </div>
-
-            <div className="entry new">
-                <textarea className= "entry-title"
-                    rows='1'
-                    cols = '10'
-                    placeholder='Enter title...'
-                    onChange={this.handleTitleChange}
-                ></textarea>
-                <textarea className= "entry-description"
-                    rows='8'
-                    cols = '10'
-                    placeholder='Type to create the Journal Entry...'
-                    //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                    onChange={this.handleDescriptionChange}
-                ></textarea>
-                <div className="entry-footer">
-                    <button onClick={() => {this.addEntry()}} className='save' ><FontAwesomeIcon icon="floppy-disk" /></button>
+                    <div className='column'>
+                        <div className="entry new">
+                            <textarea className= "entry-title"
+                                rows='1'
+                                cols = '10'
+                                placeholder='Enter title...'
+                                onChange={this.handleTitleChange}
+                            ></textarea>
+                            <textarea className= "entry-description"
+                                rows='8'
+                                cols = '10'
+                                placeholder='Type to create the Journal Entry...'
+                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                                onChange={this.handleDescriptionChange}
+                            ></textarea>
+                            <div className="entry-footer">
+                                <button onClick={() => {this.addEntry()}} className='save' ><FontAwesomeIcon icon="floppy-disk" /></button>
+                            </div>
+                        </div>
+                    
+                        <div className="entry-list"> 
+                        
+                        {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                            <Entry
+                                id={entry.id}
+                                title={entry.title}
+                                description={entry.description}
+                                images={entry.images}
+                                key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                            />
+                            ),
+                        )}
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div className="entry-list"> 
-            
-            {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
-                <Entry
-                    id={entry.id}
-                    title={entry.title}
-                    description={entry.description}
-                    images={entry.images}
-                    key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                    handleDeleteEntry = {this.deleteEntry}
-                />
-                ),
-                
-            )}
-            
-            </div>           
-              
-          </div>
         );
     }
 }
