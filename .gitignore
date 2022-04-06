@@ -17,9 +17,9 @@ frontend/build
 .env.development.local
 .env.test.local
 .env.production.local
+.vscode
 
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/*.eslintcache
-frontend/node_modules*
