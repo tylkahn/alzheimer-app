@@ -61,11 +61,11 @@ class Entry extends React.Component { //extend this journal entry from a generic
             
             <div className="entry-footer">
                 <FontAwesomeIcon icon="pen-to-square" />
-                <FontAwesomeIcon 
-                  icon="trash-can" 
-                  className='delete'
+                <button
                   onClick={() => this.state.handleDeleteEntry(this.state.id)}
-                />
+                  className='delete' >
+                  <FontAwesomeIcon icon="trash-can" />
+                </button>
                 
                 
             </div>

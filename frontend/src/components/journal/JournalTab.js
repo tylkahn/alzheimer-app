@@ -141,7 +141,11 @@ class JournalTab extends React.Component {
                                 onChange={this.handleDescriptionChange}
                             ></textarea>
                             <div className="entry-footer">
-                                <button onClick={() => {this.addEntry()}} className='save' ><FontAwesomeIcon icon="floppy-disk" /></button>
+                                <button 
+                                    onClick={() => {this.addEntry()}} 
+                                    className='save' >
+                                    <FontAwesomeIcon icon="floppy-disk" />
+                                </button>
                             </div>
                         </div>
                     
