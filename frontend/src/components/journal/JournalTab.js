@@ -123,9 +123,7 @@ class JournalTab extends React.Component {
                         <div className='search'>
                             <input onChange={this.Search} type="text" placeholder='type to search...'/>
                         </div>
-                    </div>
-
-                    <div className='column'>
+                        
                         <div className="entry new">
                             <textarea className= "entry-title"
                                 rows='1'
@@ -134,7 +132,7 @@ class JournalTab extends React.Component {
                                 onChange={this.handleTitleChange}
                             ></textarea>
                             <textarea className= "entry-description"
-                                rows='8'
+                                rows='4'
                                 cols = '10'
                                 placeholder='Type to create the Journal Entry...'
                                 //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
@@ -148,7 +146,9 @@ class JournalTab extends React.Component {
                                 </button>
                             </div>
                         </div>
-                    
+                    </div>
+
+                    <div className='column'>                    
                         <div className="entry-list"> 
                         
                         {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
