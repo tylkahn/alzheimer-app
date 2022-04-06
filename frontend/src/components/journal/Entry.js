@@ -16,6 +16,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
             images: this.props.images,
             lastUpdated: 0,
             tagList: [],//since im storing on the frontend, this stuff isnt useful yet
+            handleDeleteEntry: this.props.handleDeleteEntry,
         };
     }
     
@@ -38,10 +39,8 @@ class Entry extends React.Component { //extend this journal entry from a generic
         );
     }
 
-    deleteEntry(){
 
-    }
-    render() {
+    render = () => {
         return (
           //entry-footer will contain the Edit button (inside the small tag)
 
@@ -62,7 +61,12 @@ class Entry extends React.Component { //extend this journal entry from a generic
             
             <div className="entry-footer">
                 <FontAwesomeIcon icon="pen-to-square" />
-                <button className='delete' ><FontAwesomeIcon icon="trash-can" /></button>
+                <FontAwesomeIcon 
+                  icon="trash-can" 
+                  className='delete'
+                  onClick={() => this.state.handleDeleteEntry(this.state.id)}
+                />
+                
                 
             </div>
 

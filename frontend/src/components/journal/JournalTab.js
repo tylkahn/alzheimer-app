@@ -54,6 +54,13 @@ class JournalTab extends React.Component {
 
     }
 
+    deleteEntry = (id) => {
+        const newEntries = this.state.entryList.filter((e) => e.id !== id);
+        this.state.entryList = newEntries;
+        this.forceUpdate();
+
+    }
+
     Search = (event) => {
         this.setState({
             searchText: event.target.value,
@@ -143,10 +150,12 @@ class JournalTab extends React.Component {
                     description={entry.description}
                     images={entry.images}
                     key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                    handleDeleteEntry = {this.deleteEntry}
                 />
                 ),
                 
             )}
+            
             </div>           
               
           </div>
