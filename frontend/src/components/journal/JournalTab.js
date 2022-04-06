@@ -154,6 +154,7 @@ class JournalTab extends React.Component {
                                 description={entry.description}
                                 images={entry.images}
                                 key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                                handleDeleteEntry = {this.deleteEntry}
                             />
                             ),
                         )}
