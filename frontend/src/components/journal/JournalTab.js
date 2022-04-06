@@ -57,11 +57,7 @@ class JournalTab extends React.Component {
     Search = (event) => {
         this.setState({
             searchText: event.target.value,
-            //displayList: this.state.entryList.filter(
-            //    (entry)=>entry.state.title.toLowerCase().includes(searchText)
-            //),
         });
-        console.log(this.state.searchText);
     }
 
     handleDescriptionChange = (event) => {
@@ -69,7 +65,7 @@ class JournalTab extends React.Component {
         this.setState({
             entryDescription: event.target.value,
         });
-        console.log(this.state.entryDescription);
+        //console.log(this.state.entryDescription);
     }
 
     handleTitleChange = (event) => {
@@ -84,19 +80,34 @@ class JournalTab extends React.Component {
         }
     }
 
+    //on componentDidMount(), grab everything in localStorage/postgress and set the state
+
+    componentDidMount = () => {
+        const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
+        //if there exist items in the localStorage, save it as our state
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        /*if (savedEntries){ this.setState(savedEntries); //empties the localstorage on each change }*/
+        console.log(savedEntries);
+        console.log("component did mount\n");
+
+        this.forceUpdate();
+    }
+
+    componentDidUpdate(){ //equiv to useEffect
+        localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
+        console.log("component did update\n");
+    }
+
     render = () => {
         //kinda the noteslist.js
 
         return (
-            //when some button is pressed, call makeDisplayList() that 
-            //uses the javascript filter function on entry list to produce display list based on title inputted from text box
-            //onComponentDidMount might be used to initialize displayList to entryList if the page is loaded
-                //react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
+            //react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
           
           //probably need one package to save the image as some datatype
           //look up react library where I can input an image and save it
             //can probably just look up "Add File" (figure out how to limit it to jpg)
-          //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching, might have to do an annoying installation to have access to the react-icons 
+          //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching
           
           <div className="journal">    
 
