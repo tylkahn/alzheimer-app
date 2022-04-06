@@ -165,7 +165,7 @@ function App() {
 
   const renderItems = () => {
     const newItems = reminderList.filter(
-      (item) => item.completed == viewCompleted
+      (item) => item.completed == viewTab
     );
 
     return newItems.map((item) => (
@@ -175,7 +175,7 @@ function App() {
       >
         <span
           className={`reminder-title mr-2 ${
-            viewCompleted ? "completed-reminder" : ""
+            viewTab ? "completed-reminder" : ""
           }`}
           title={item.description}
         >

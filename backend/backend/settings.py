@@ -86,7 +86,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "alzheimers_assistance_app",
         "USER": "django",
-        "PASSWORD": "",
+        "PASSWORD": "richard",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
