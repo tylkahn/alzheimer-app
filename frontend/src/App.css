@@ -119,3 +119,12 @@
   text-align: center;
   width: 34px;
 }
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: #bac2c2;
+}

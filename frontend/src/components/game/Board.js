@@ -4,17 +4,19 @@ import Card from "./Card"
 class Board extends React.Component {
   constructor(props) {
     super(props);
+    this.size = this.props.size * 6
     this.state = {
-      cards: [...Array(12).keys()].sort(() => Math.random() - 0.5),
+      cards: [...Array(this.size).keys()].sort(() => Math.random() - 0.5),
       active1: null,
       active2: null,
-      matched: Array(12).fill(false),
+      matched: Array(this.size).fill(false),
       score: 0,
     };
+    this.promptNext = this.promptNext.bind(this)
   }
 
   checkMatch() {
-    return this.state.cards[this.state.active1] % 6 == this.state.cards[this.state.active2] % 6;
+    return this.state.cards[this.state.active1] % (this.size/2) == this.state.cards[this.state.active2] % (this.size/2);
   }
 
   handleClick(i) {
@@ -47,7 +49,7 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
-      const val = (this.state.active1 == i)|| (this.state.active2 == i) || this.state.matched[i] ? this.state.cards[i] % 6 : '?';
+      const val = (this.state.active1 == i)|| (this.state.active2 == i) || this.state.matched[i] ? (this.state.cards[i] % (this.size/2)) : '?';
       return <Card 
         value={val}
         onClick={() => this.handleClick(i)}
@@ -57,38 +59,42 @@ class Board extends React.Component {
   }
 
   promptNext() {
+    this.props.submit(this.state.score);
+    this.props.onEnd();
+  }
 
+  renderRow(v) {
+    let i = v*6;
+    return (
+      <div className="board-row">
+        {this.renderSquare(i)}
+        {this.renderSquare(i+1)}
+        {this.renderSquare(i+2)}
+        {this.renderSquare(i+3)}
+        {this.renderSquare(i+4)}
+        {this.renderSquare(i+5)}
+      </div>
+    )
   }
 
   render() {
-      const completed = isComplete(this.state.matched);
-      return (
-          <div className="gameBoard">
-            {completed && this.promptNext}
-            <div>
-              Flips: {this.state.score} (lower is better)
-            <div className="board-row">
-              {this.renderSquare(0)}
-              {this.renderSquare(1)}
-              {this.renderSquare(2)}
-              {this.renderSquare(3)}
-            </div>
-            <div className="board-row">
-              {this.renderSquare(4)}
-              {this.renderSquare(5)}
-              {this.renderSquare(6)}
-              {this.renderSquare(7)}
-            </div>
-            <div className="board-row">
-              {this.renderSquare(8)}
-              {this.renderSquare(9)}
-              {this.renderSquare(10)}
-              {this.renderSquare(11)}
-            </div>
-          </div>
+    const completed = isComplete(this.state.matched);
+    console.log(completed);
+    return (
+      <div className="gameBoard">
+        {completed &&
+        <div>
+          <h1>Congratualations</h1>
+          <button className="button" onClick={this.promptNext}>Return</button>
+        </div>}
+        {!completed &&
+        <div>
+          Flips: {this.state.score} (lower is better)
+          {[...Array(this.props.size)].map((_,i) => this.renderRow(i))}
           <button className="button" onClick={this.props.onEnd}>End Game</button>
-        </div>
-      );
+        </div>}
+      </div>
+    );
   }
 }
 

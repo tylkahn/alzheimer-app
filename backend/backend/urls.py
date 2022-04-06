@@ -20,6 +20,8 @@ from todo import views
 
 router = routers.DefaultRouter()
 router.register(r'reminders', views.ReminderView, 'reminder')
+router.register(r'game', views.GameView, 'game')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

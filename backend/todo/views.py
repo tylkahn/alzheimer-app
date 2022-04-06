@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ReminderSerializer
-from .models import Reminder
+from .serializers import ReminderSerializer, GameSerializer
+from .models import Reminder, GameHistory
 
 # Create your views here.
 
@@ -12,3 +12,7 @@ from .models import Reminder
 class ReminderView(viewsets.ModelViewSet):
     serializer_class = ReminderSerializer
     queryset = Reminder.objects.all()
+
+class GameView(viewsets.ModelViewSet):
+    serializer_class = GameSerializer
+    queryset = GameHistory.objects.all()
