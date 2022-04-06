@@ -59,7 +59,8 @@ class Board extends React.Component {
   }
 
   promptNext() {
-    this.props.submit(this.state.score);
+    const finalScore = (5 - this.props.size) * this.state.score;
+    this.props.submit(finalScore);
     this.props.onEnd();
   }
 
@@ -79,12 +80,14 @@ class Board extends React.Component {
 
   render() {
     const completed = isComplete(this.state.matched);
+    const finalScore = (5 - this.props.size) * this.state.score;
     console.log(completed);
     return (
       <div className="gameBoard">
         {completed &&
         <div>
           <h1>Congratualations</h1>
+          <h2>Your final score was {finalScore}</h2>
           <button className="button" onClick={this.promptNext}>Return</button>
         </div>}
         {!completed &&

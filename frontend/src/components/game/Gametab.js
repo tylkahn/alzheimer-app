@@ -1,6 +1,7 @@
 import React from "react";
 import Board from './Board';
 import History from './History';
+import axios from "axios";
 
 class Gametab extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class Gametab extends React.Component {
     this.state = {
       isGameMode: false,
       difficulty: 2,
-      scores: [{player:"test", score: 4, date: Date()}],
+      scores: [{player:"test", score: 4, date: Date()}, {player:"test", score: 12, date: Date()}, {player:"test", score: 8, date: Date()}],
     };
     this.handleStartGame = this.handleStartGame.bind(this);
     this.handleEndGame = this.handleEndGame.bind(this);
@@ -41,6 +42,13 @@ class Gametab extends React.Component {
       difficulty: d,
     });
   }
+
+  test() {
+    const item = { title: "test", reminderType: 'O', repeating: 'O'}
+    axios
+      .post("/api/reminders/", item)
+      .catch((err) => console.log(err));
+  }
   
   render() {
     return (
@@ -59,6 +67,7 @@ class Gametab extends React.Component {
         &nbsp;
         <input type="submit" value="Start Game" />
         </form>
+        <button onClick={this.test}></button>
         <History scores={this.state.scores}/>
         </div>}
         {this.state.isGameMode && 
@@ -70,8 +79,9 @@ class Gametab extends React.Component {
         }
         
         submitScore(s) {
-          const penalty = 5-this.state.difficulty;
-          const item = { player: "tk", score: s*penalty, date: Date() };
+          const item = { player: "tk", score: s, date: Date() };
+          axios
+            .post("/api//", item);
           this.setState({
             scores: [...this.state.scores, item]
           })

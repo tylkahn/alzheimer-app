@@ -1,6 +1,7 @@
 from tkinter import CASCADE
 from django.db import models
 from django.conf import settings
+from datetime import datetime    
 
 # Create your models here.
 
@@ -12,12 +13,12 @@ class Reminder (models.Model):
     REPEATINGTYPES = (('D', 'Daily'), ('W', 'Weekly'), ('O', 'Other'))
     reminderType = models.CharField(max_length=1, choices=REMINDERTYPES)
     repeating = models.CharField(max_length=1, choices=REPEATINGTYPES)
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
     def _str_(self):
         return self.title
 
 class GameHistory (models.Model):
-    player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     score = models.PositiveIntegerField()
-    time = models.DateTimeField()
+    time = models.DateTimeField(default=datetime.now, blank=True)

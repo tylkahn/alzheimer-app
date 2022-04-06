@@ -1,37 +1,43 @@
 import React, {useState} from "react";
+import axios from "axios";
 
 class History extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            scores: [...this.props.scores],
+            scores: [],
             asc: false,
         }
         this.sortScore = this.sortScore.bind(this);
     }
 
-    getScores() {
-        this.setState({
-            scores: 0,
-        })
-    }
+    componentDidMount() {
+        this.getScores();
+      }
+    
+    getScores = () => {
+        axios
+            .get("/api/game/")
+            .then((res) => this.setState({ scores: res.data }))
+            .catch((err) => console.log(err));
+    };
 
     formRow(entry) {
-        const d = new Date(entry.date);
+        const d = new Date(entry.time);
         const day = d.getDate();
         const month = d.getMonth() + 1;
         const year = d.getFullYear();
-        return(<tr><td>{entry.player}</td><td>{entry.score}</td><td>{day}/{month}/{year}</td></tr>)
+        return(<tr><td>{entry.player}</td><td>{entry.score}</td><td>{month}/{day}/{year}</td></tr>)
     }
 
     sortScore(k) {
-        var comp;
+        console.log(this.state)
+        var newScores;
         if (k == 0) {
-            const comp = function(a,b) {return a.score-b.score};
+            newScores = this.state.scores.sort(function(a,b) {return a.score-b.score});
         } else {
-            const comp = function(a,b) {return a.date.getTime()-b.date.getTime()};
+            newScores = this.state.scores.sort(function(a,b) {return (new Date(a.time)).getTime()- (new Date(b.time)).getTime()});
         }
-        let newScores = this.state.scores.sort(comp);
         if (this.state.asc) {
             newScores.reverse();
         }
