@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
+// import 'react-notifications/lib/notifications.css';
 import {nanoid} from 'nanoid';
 // import EntryList from './EntryList';
 // import ReminderList from './ReminderList';
 import Reminder from './Reminder';
 import ReminderModal from './ReminderModal'
+import ReminderPopup from './ReminderPopup';
 
 class ReminderTab extends React.Component {
     constructor(props) {
@@ -30,12 +32,6 @@ class ReminderTab extends React.Component {
                 b = true;
             }
         }
-        this.forceUpdate();
-    }
-
-    addEntry(entry){
-        this.state.entryList.push(entry);
-        this.setState( {activeEntry: entry} );
         this.forceUpdate();
     }
     
@@ -73,70 +69,104 @@ class ReminderTab extends React.Component {
         console.log(this.state.searchText);
     }
 
+    isValidPopup(popup) {
+        let currentDate = new Date();
+        let popupDate = new Date(popup.date)
+        let diffMinute = Math.abs(popupDate - currentDate) / (1000 * 60);
+        console.log("diffMinute:",diffMinute);
+        console.log("currentDate:",currentDate);
+        console.log("popupDate:",popupDate);
+        if (diffMinute < 10) {
+            console.log('valid')
+            return true
+        }
+        else {
+            console.log('invalid')
+            return false
+        }
+    }
+
     render = () =>{
 
         return (
-            <div className="reminder" onChange="">
-                {/* <div className='search-type'>
-                    <select value={this.state.searchType} onChange={this.handleSearchTypeChange}>
-                        <option value="title"> Title </option>
-                        <option value="reminderType"> Type </option>
-                    </select>
-                </div> */}
-                <br/>
-                <div className='search'>
-                    <input onChange={this.Search} type="text" placeholder='type to search...'/>
-                </div>
-                <div className="container">
-                    <button
-                        className="btn btn-primary"
-                        onClick={this.toggle}
-                    >
-                        Add task
-                    </button>
-                    {/* <ul className="list-group list-group-flush border-top-0">
-                    {renderItems()}
-                    </ul> */}
-                    {this.state.modal ? (
-                    <ReminderModal
-                        // activeItem={new Reminder}
-                        toggle={this.toggle}
-                        onSave={this.handleSubmit}
-                        // setActiveItem={setActiveItem}
-                    />
-                    ) : null}
-                </div> <br/>
-
-                {this.state.entryList.filter((e) => (e.title).toLowerCase().concat((e.reminderType).toLowerCase()).includes(this.state.searchText)).map(entry => (
-                    <div className='reminder-entry'> 
-                        <Reminder
-                            id={entry.id}
-                            title={entry.title} 
-                            reminderType={entry.reminderType}
-                            date={entry.date}
-                            repeating={entry.repeating}
-                            description={entry.description}
-                            key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                        /><br/>
-                        <span>
-                          <button
-                            className="btn btn-secondary mr-2"
-                            onClick={() => this.editEntry(entry)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => this.deleteEntry(entry)}
-                          >
-                            Delete
-                          </button>
-                        </span>
+            <div>    
+                <div>
+                    {this.state.entryList.filter((e) => this.isValidPopup(e) ).map(entry => (
+                        <div>
+                            <ReminderPopup
+                                type={entry.reminderType}
+                                title={entry.title}
+                                date={entry.date}
+                                key={nanoid(8)}
+                            />
+                        </div> 
+                        ),
+                        
+                    )}
+                </div>          
+                <div className="reminder" onChange="">
+                    {/* <div className='search-type'>
+                        <select value={this.state.searchType} onChange={this.handleSearchTypeChange}>
+                            <option value="title"> Title </option>
+                            <option value="reminderType"> Type </option>
+                        </select>
+                    </div> */}
+                    <div>
+                    </div> <br/>
+                    <div className='search'>
+                        <input onChange={this.Search} type="text" placeholder='type to search...'/>
                     </div>
+                    <div className="container">
+                        <button
+                            className="btn btn-primary"
+                            onClick={this.toggle}
+                        >
+                            Add task
+                        </button>
+                        {/* <ul className="list-group list-group-flush border-top-0">
+                        {renderItems()}
+                        </ul> */}
+                        {this.state.modal ? (
+                        <ReminderModal
+                            // activeItem={new Reminder}
+                            toggle={this.toggle}
+                            onSave={this.handleSubmit}
+                            // setActiveItem={setActiveItem}
+                        />
+                        ) : null}
+                    </div> <br/>
                     
-                    ),
-                    
-                )}
+                    {this.state.entryList.filter((e) => (e.title).toLowerCase().concat((e.reminderType).toLowerCase()).includes(this.state.searchText)).map(entry => (
+                        <div className='reminder-entry'> 
+                            <Reminder
+                                id={entry.id}
+                                title={entry.title} 
+                                reminderType={entry.reminderType}
+                                date={entry.date}
+                                repeating={entry.repeating}
+                                description={entry.description}
+                                key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                            /><br/>
+                            <span>
+                            <button
+                                className="btn btn-secondary mr-2"
+                                onClick={() => this.editEntry(entry)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => this.deleteEntry(entry)}
+                            >
+                                Delete
+                            </button>
+                            </span>
+                        </div>
+                        
+                        ),
+                        
+                    )}
+                </div>
             </div>
           );
     }

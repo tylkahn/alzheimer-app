@@ -50,7 +50,7 @@ class Reminder extends Entry {
             className={`reminder-date mr-2`}
             title={this.getDate()}
           >
-            Date: {this.getDate()} 
+            Date: {new Date(this.getDate()).toString()} 
           </h6>
           <h6
             className={`reminder-repeating mr-2`}
