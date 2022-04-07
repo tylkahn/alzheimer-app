@@ -62,7 +62,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
             
             <div className="entry-footer">
                 <button
-                  onClick={() => this.state.handleEditEntry(this.state.id, this.state.title, this.state.title)}
+                  onClick={() => this.state.handleEditEntry(this.state.id)}
                   className='edit' >
                   <FontAwesomeIcon icon="pen-to-square" />
                 </button>

@@ -5,24 +5,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
+import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
+library.add(faSquarePlus);
 
 class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* what an ENTRY looks like
-            {
+            /* what an ENTRY looks like{
                 id: nanoid(),
                 title: "The First Title",
                 description: "The First Description",
                 images: [],
                 lastUpdated: "3/27/2022",
                 tagList: [],
-            }
-            */
+            }*/
             entryList: this.props.entries,
             entryTitle: `Entry Title ${this.props.entries.length+1}`,
             entryDescription: '',
@@ -42,17 +41,17 @@ class JournalTab extends React.Component {
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
-                //eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
                 title: this.state.entryTitle,
-                
                 description: this.state.entryDescription,
                 images: ["./images/journal.jpg"],//default every image to have the journal image
             });
             
-            this.setState({///////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
-                entryDescription: '',
+            this.setState({
                 display: 'entryList',
             });
+            this.state.entryDescription = '';
+            console.log("Changing entry Description: ");
+            console.log(this.state.entryDescription);
             this.forceUpdate();
         }
 
@@ -65,15 +64,23 @@ class JournalTab extends React.Component {
 
     }
 
-    editEntry = (id, title, description) => {
+    editEntry = (id) => {
         const entries = this.state.entryList;
         entries.map(entry=>{      
             if(entry.id === id){
-                entry.title = title;
-                entry.decription = description;
+                /*this.setState({
+                    title: entry.title,
+                    description: entry.description,
+                    display: 'editEntry',
+                });*/
+                this.state.title = entry.title;
+                this.state.description = entry.description;
+                this.state.display = 'editEntry';
             }
         })
-        this.state.entryList = entries;
+        console.log("Title, Description, Display");
+        console.log(this.state.title, this.state.description, this.state.display);
+        this.forceUpdate();
     }
 
     Search = (event) => {
@@ -83,15 +90,14 @@ class JournalTab extends React.Component {
     }
 
     handleDescriptionChange = (event) => {
-        //event.target.value is what was typed into the text area
         this.setState({
             entryDescription: event.target.value,
         });
+        this.forceUpdate();
         //console.log(this.state.entryDescription);
     }
 
     handleTitleChange = (event) => {
-        //event.target.value is what was typed into the text area
         //////in the title: putting a bunch of spaces, typing a character, and deleting the character, 
             //will add an entry that is titled that deleted character
         if (event.target.value.trim().length > 0){
@@ -110,27 +116,24 @@ class JournalTab extends React.Component {
         if (savedEntries){ this.state.entryList = savedEntries; }
         /*if (savedEntries){ this.setState(savedEntries); //empties the localstorage on each change }*/
         console.log(savedEntries);
-        console.log("component did mount\n");
 
         this.forceUpdate();
     }
 
     componentDidUpdate(){ //equiv to useEffect
         localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
-        console.log("component did update\n");
     }
 
     editDisplay = () => {
         this.setState({
-            display: 'editEntry',//////////////////////////setState might not work
+            display: 'editEntry',
         });
+        this.forceUpdate();
         
 
     }
 
     render = () => {
-        //kinda the noteslist.js
-
         return (
             //react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
           
@@ -147,10 +150,10 @@ class JournalTab extends React.Component {
                             <input onChange={this.Search} type="text" placeholder='type to search...'/>
                         </div>                        
                         
-                        
-
-                        <button onClick={() => {this.editDisplay}}>
-                            Create new Entry 
+                        <button 
+                            onClick={() => {this.editDisplay()}}
+                            className='save' >
+                            <FontAwesomeIcon icon="square-plus" />
                         </button>
                     </div>
 
@@ -175,12 +178,14 @@ class JournalTab extends React.Component {
                         {this.state.display == "editEntry" && (
                             <div className="entry new">
                                 <textarea className= "entry-title"
+                                    title={this.state.title}
                                     rows='1'
                                     cols = '10'
                                     placeholder='Enter title...'
                                     onChange={this.handleTitleChange}
                                 ></textarea>
                                 <textarea className= "entry-description"
+                                    description={this.state.description}
                                     rows='4'
                                     cols = '10'
                                     placeholder='Type to create the Journal Entry...'
