@@ -10,7 +10,7 @@ import AuthModule from "./components/auth/AuthModule";
 const BASE_URL = "http://localhost:8000";
 
 function App() {
-  const [viewTab, setViewTab] = useState("");
+  const [viewTab, setViewTab] = useState("journal");
   const [reminderList, setReminderList] = useState([]);
   const [modal, setModal] = useState(false);
   const [activeItem, setActiveItem] = useState({
@@ -33,22 +33,24 @@ function App() {
     return (
       <div className="nav nav-tabs">
         <span
-          className={viewTab ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("reminder")}
-        >
-          Reminder
-        </span>
-        <span
-          className={viewTab ? "nav-link active" : "nav-link"}
+          className={viewTab=="journal" ? "nav-link active" : "nav-link"}
           onClick={() => displayTab("journal")}
         >
           Journal
         </span>
+
         <span
-          className={viewTab ? "nav-link" : "nav-link active"}
+          className={viewTab=="reminder" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("reminder")}
+        >
+          Reminders
+        </span>
+
+        <span
+          className={viewTab=="game" ? "nav-link active" : "nav-link"}
           onClick={() => displayTab("game")}
         >
-          Game
+          Memory Game
         </span>
       </div>
     );
