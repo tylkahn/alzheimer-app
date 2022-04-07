@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "todo",
+    "authentication",
 ]
 
 # NOTE: corsMiddleware should go AS HIGH AS POSSIBLE in the list,
