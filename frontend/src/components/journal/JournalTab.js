@@ -49,12 +49,11 @@ class JournalTab extends React.Component {
             });
             
         }
-        console.log("Changing entry Description: " + this.state.entryDescription);
 
         this.setState({
             display: 'entryList',
-            title: '',
-            description: '',
+            entryTitle: `Entry Title ${this.state.entryList.length+1}`,
+            entryDescription: '',
         });
         this.forceUpdate();
     }
@@ -227,9 +226,7 @@ class JournalTab extends React.Component {
                                         </button>
                                     </div>
                                 </div>
-
                             </div>
-                            
                         )}
                     </div>
                 </div>
