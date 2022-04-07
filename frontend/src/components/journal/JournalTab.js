@@ -4,8 +4,10 @@ import {nanoid} from 'nanoid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFloppyDisk);
+library.add(faMagnifyingGlass);
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -59,6 +61,17 @@ class JournalTab extends React.Component {
         this.state.entryList = newEntries;
         this.forceUpdate();
 
+    }
+
+    editEntry = (id, title, description) => {
+        const entries = this.state.entryList;
+        entries.map(entry=>{      
+            if(entry.id === id){
+                entry.title = title;
+                entry.decription = description;
+            }
+        })
+        this.state.entryList = entries;
     }
 
     Search = (event) => {
@@ -119,8 +132,8 @@ class JournalTab extends React.Component {
             <div className="journal">   
                 <div className='row'>
                     <div className='column'>
-                        Search
                         <div className='search'>
+                            <FontAwesomeIcon icon="magnifying-glass" />
                             <input onChange={this.Search} type="text" placeholder='type to search...'/>
                         </div>
                         
@@ -159,6 +172,7 @@ class JournalTab extends React.Component {
                                 images={entry.images}
                                 key={nanoid(8)} //each entry needs a unique id for rendering, not just db
                                 handleDeleteEntry = {this.deleteEntry}
+                                handleEditEntry = {this.editEntry}
                             />
                             ),
                         )}

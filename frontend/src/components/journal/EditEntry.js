@@ -6,7 +6,7 @@ import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faTrashCan);
 library.add(faPenToSquare);
-class Entry extends React.Component { //extend this journal entry from a generic entry class
+class EditEntry extends React.Component { //extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
         this.state = {
@@ -28,16 +28,20 @@ class Entry extends React.Component { //extend this journal entry from a generic
       );
     }
 
-    modifyTitle(t){
-        this.setState(
-            { title: t }
-        );
+    modifyTitle = (event) => {
+        if (event.target.value.trim().length > 0){
+            this.setState({
+                entryTitle: event.target.value,
+            });
+        }
     }
 
-    modifyDescription(desc){
-        this.setState(
-            { description: desc }
-        );
+    modifyDescription(event){
+        if (event.target.value.trim().length > 0){
+            this.setState({
+                entryTitle: event.target.value,
+            });
+        }
     }
 
 
@@ -50,27 +54,25 @@ class Entry extends React.Component { //extend this journal entry from a generic
               </div>*/
           <div className='entry'>
             <span>
-              <div className="entry-title">
-                {this.state.title} <br/>
+              <div className="entryt">
+                <textarea 
+                  type = "text" 
+                  value = {this.state.title}
+                  onChange={(e)=>{this.modifyTitle}}
+                /><br/>
               </div>
-              <div className="entry-description">
-                {this.state.description} <br/>
+              <div className="entryt">
+                <textarea 
+                  type = "text" 
+                  value = {this.state.title}
+                  onChange={(e)=>{this.modifyDescription}}
+                /><br/>
               </div>
             </span>
             
             {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
             
             <div className="entry-footer">
-                <button
-                  onClick={() => this.state.handleEditEntry(this.state.id, this.state.title, this.state.title)}
-                  className='edit' >
-                  <FontAwesomeIcon icon="pen-to-square" />
-                </button>
-                <button
-                  onClick={() => this.state.handleDeleteEntry(this.state.id)}
-                  className='delete' >
-                  <FontAwesomeIcon icon="trash-can" />
-                </button>
                 
                 
             </div>
