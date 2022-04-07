@@ -1,11 +1,9 @@
 import React from "react";
-import Entry from './Entry'
 import {nanoid} from 'nanoid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import Entry from './Entry';
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
@@ -50,8 +48,7 @@ class JournalTab extends React.Component {
                 display: 'entryList',
             });
             this.state.entryDescription = '';
-            console.log("Changing entry Description: ");
-            console.log(this.state.entryDescription);
+            console.log("Changing entry Description: " + this.state.entryDescription);
             this.forceUpdate();
         }
 
@@ -76,10 +73,12 @@ class JournalTab extends React.Component {
                 this.state.title = entry.title;
                 this.state.description = entry.description;
                 this.state.display = 'editEntry';
+                //remove the entry being editted, to add the new entry
+                this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
             }
         })
-        console.log("Title, Description, Display");
-        console.log(this.state.title, this.state.description, this.state.display);
+        console.log("Title, Description, Display: "+ this.state.title + " " + this.state.description + " " + this.state.display);
+        console.log(this.state.entryList);
         this.forceUpdate();
     }
 
@@ -178,7 +177,6 @@ class JournalTab extends React.Component {
                         {this.state.display == "editEntry" && (
                             <div className="entry new">
                                 <textarea className= "entry-title"
-                                    title={this.state.title}
                                     rows='1'
                                     cols = '10'
                                     placeholder='Enter title...'
