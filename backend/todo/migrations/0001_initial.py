@@ -2,6 +2,9 @@
 
 from django.db import migrations, models
 
+def create_data(apps, schema_editor):
+    JournalEntries = apps.get_model('students', 'Student')
+    JournalEntries(entry_id=420, title="Initial DB Title", description="Initial DB Description").save()
 
 class Migration(migrations.Migration):
 

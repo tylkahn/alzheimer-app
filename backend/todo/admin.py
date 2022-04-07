@@ -7,6 +7,9 @@ from .models import Reminder
 class ReminderAdmin(admin.ModelAdmin):
     list_display = ('title', 'reminderType', 'date', 'repeating', 'description', 'completed')
 
+class JournalAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
 # Register your models here.
 
 # admin.site.register(Todo, TodoAdmin)
