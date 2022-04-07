@@ -19,6 +19,6 @@ class Reminder (models.Model):
         return self.title
 
 class GameHistory (models.Model):
-    player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
+    player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
     score = models.PositiveIntegerField()
-    time = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(default=datetime.now, blank=True)

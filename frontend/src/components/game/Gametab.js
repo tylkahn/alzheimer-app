@@ -44,9 +44,9 @@ class Gametab extends React.Component {
   }
 
   test() {
-    const item = { title: "test", reminderType: 'O', repeating: 'O'}
+    const item = { score: 60 }
     axios
-      .post("/api/reminders/", item)
+      .post("/api/game/", item)
       .catch((err) => console.log(err));
   }
   
@@ -79,12 +79,9 @@ class Gametab extends React.Component {
         }
         
         submitScore(s) {
-          const item = { player: "tk", score: s, date: Date() };
+          const item = { score: s};
           axios
-            .post("/api//", item);
-          this.setState({
-            scores: [...this.state.scores, item]
-          })
+            .post("/api/game/", item);
         }
       }
       

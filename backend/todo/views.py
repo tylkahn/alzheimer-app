@@ -18,5 +18,8 @@ class GameView(viewsets.ModelViewSet):
     queryset = GameHistory.objects.all()
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(player=self.request.user)
+        if self.request.user.is_authenticated:
+            query_set = queryset.filter(player=self.request.user)
+        else:
+            query_set = queryset
         return query_set

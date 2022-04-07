@@ -23,7 +23,7 @@ class History extends React.Component {
     };
 
     formRow(entry) {
-        const d = new Date(entry.time);
+        const d = new Date(entry.date);
         const day = d.getDate();
         const month = d.getMonth() + 1;
         const year = d.getFullYear();
@@ -36,7 +36,7 @@ class History extends React.Component {
         if (k == 0) {
             newScores = this.state.scores.sort(function(a,b) {return a.score-b.score});
         } else {
-            newScores = this.state.scores.sort(function(a,b) {return (new Date(a.time)).getTime()- (new Date(b.time)).getTime()});
+            newScores = this.state.scores.sort(function(a,b) {return (new Date(a.date)).getTime()- (new Date(b.date)).getTime()});
         }
         if (this.state.asc) {
             newScores.reverse();
@@ -66,6 +66,7 @@ class History extends React.Component {
                         {this.state.scores.map(entry => this.formRow(entry))}
                     </tbody>
                 </table>
+                <button type="button" onClick={this.getScores}>Refresh</button>
             </div>
         )
     }

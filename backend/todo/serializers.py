@@ -12,7 +12,6 @@ class ReminderSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'reminderType', 'date', 'repeating', 'description', 'completed')
 
 class GameSerializer(serializers.ModelSerializer):
-    time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     class Meta:
         model = GameHistory
-        fields = ('id', 'player', 'score', 'time')
+        fields = ('id', 'player', 'score', 'date')
