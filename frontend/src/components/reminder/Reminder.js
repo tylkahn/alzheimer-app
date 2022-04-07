@@ -1,6 +1,7 @@
 import React from 'react';
 import Entry from './Entry';
 
+// Reminder Class inherits Entry Class
 class Reminder extends Entry {
     constructor(props) {
         super(props);
@@ -13,6 +14,7 @@ class Reminder extends Entry {
             description: this.props.description,
             modal: false,
         };
+        // Bind all setter functions 
         this.setTitle = this.setTitle.bind(this);
         this.setType = this.setType.bind(this);
         this.setDate = this.setDate.bind(this);
@@ -21,22 +23,26 @@ class Reminder extends Entry {
         console.log("Reminder:", this.state);
     }
   
+    // Getter functions
     getTitle() {return this.state.title; }
     getType() {return this.state.reminderType; }
     getDate() {return this.state.date; }  
     getRepeating() {return this.state.repeating; }
     getDescription() {return this.state.description; }
     
+    // Setter functions
     setTitle = (t) => { this.setState( {title: t} ); }
     setType = (t) => { this.setState( {type: t} ); }
     setDate = (d) => { this.setState( {date: d} ); }
     setRepeating = (r) => { this.setState( {repeating: r} ); }
     setDescription = (d) => { this.setState( {description: d} ); }
     
+    // Toggle modal to create a new class in ReminderTab
     toggle = () => {
       this.setState( {modal: !this.state.modal})
     };
   
+    // Display Reminder in ReminderTab
     render() {
       return (
         <div className='Reminder'>

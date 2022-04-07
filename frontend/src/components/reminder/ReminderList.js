@@ -1,6 +1,7 @@
 import React from 'react';
 import Reminder from './Reminder';
 
+// Class to hold Reminders, to be used in database
 class ReminderList extends React.Component {
     constructor(props) {
         super(props);

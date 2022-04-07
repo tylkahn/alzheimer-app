@@ -19,6 +19,7 @@ function App() {
     setViewTab(tabName);
   };
 
+  // Displays all tabs at top of page (Reminder, Journal, Game)
   const renderTabList = () => {
     return (
       <div className="nav nav-tabs">
@@ -44,6 +45,7 @@ function App() {
     );
   };
 
+  // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
       {viewTab == "journal" && 
@@ -58,6 +60,7 @@ function App() {
 
     )
 
+  // TODO: Connect to backend/database
   // const refreshList = () => {
   //   axios
   //     .get(BASE_URL + "/api/reminders")

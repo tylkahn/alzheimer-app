@@ -12,9 +12,8 @@ import {
 } from "reactstrap";
 import {nanoid} from 'nanoid';
 
+// Modal interactive popup used to create a new Reminder object
 export default function CustomModal(props) {
-  // let [activeItem, setActiveItem] = useState(props.activeItem);
-  // const { activeItem, setActiveItem, toggle, onSave } = props;
   const [activeItem, setActiveItem] = useState(
     {
       id: nanoid(),
@@ -25,11 +24,9 @@ export default function CustomModal(props) {
       description: "",
     }
   );
-  // const activeReminder = new Reminder;
   const { toggle, onSave } = props;
-  // let toggle = props.toggle;
-  // let onSave = props.onSave;
 
+  // Saves information into activeItem
   const handleChange = (e) => {
     let { name, value } = e.target;
 

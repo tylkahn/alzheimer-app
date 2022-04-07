@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Popup reminds users of reminders within 10 minutes of their specified time
 class ReminderPopup extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +14,7 @@ class ReminderPopup extends React.Component {
     console.log("ReminderPopup:", this.state);
   };
 
+  // Used for exit button on reminder
   toggle() {
     this.setState( {toggle: !this.state.toggle} )
   }
