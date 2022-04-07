@@ -13,44 +13,54 @@ class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* what an ENTRY looks like{
+            /* ENTRY Parameters {
                 id: nanoid(),
-                title: "The First Title",
-                description: "The First Description",
+                title: "",
+                description: "",
                 images: [],
+
+                //to be implemented in the future
                 lastUpdated: "3/27/2022",
                 tagList: [],
             }*/
             entryList: this.props.entries,
+            //TODO: base the default entry title off of a counter, not the length
             entryTitle: `Entry Title ${this.props.entries.length+1}`,
             entryDescription: '',
             searchText: '',
-            display: 'entryList', //either entrylist or editEntry
+            display: 'entryList', //valued at either entrylist or editEntry
             titleChecked: false,
             dateChecked: false,
         };
     }
 
-    //this one is specific to journalentries
+    //specific to journalentries
     addImage = (jpg) => {
         this.setState({
             images: [...jpg],
         });
     }
 
+    //occurs either when creating a new entry or when finished editting one
     onSave = () => {
+        //empty title box so default it
+        if (!this.state.entryTitle){
+            this.setState({
+                entryTitle: `Entry Title ${this.state.entryList.length+1}`,
+            })
+        }
+
+        //if there exists a description, add it to the list of entries
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 images: ["./images/journal.jpg"],//default every image to have the journal image
-                //taglist: [],
-            });
-            
+            });            
         }
-        console.log("Changing entry Description: " + this.state.entryDescription);
 
+        //empty out the current state because it was saved
         this.setState({
             display: 'entryList',
             title: '',
@@ -59,50 +69,49 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    //remove an entry given its id
     deleteEntry = (id) => {
         const newEntries = this.state.entryList.filter((e) => e.id !== id);
         this.state.entryList = newEntries;
         this.forceUpdate();
     }
 
+    //edit an entry given its id
     editEntry = (id) => {
         const entries = this.state.entryList;
         entries.map(entry=>{      
             if(entry.id === id){
-                /*this.setState({
+                this.setState({
                     title: entry.title,
                     description: entry.description,
                     display: 'editEntry',
-                });*/
-                this.state.title = entry.title;
-                this.state.description = entry.description;
-                this.state.display = 'editEntry';
+                });
+
                 //remove the entry being editted, to add the new entry
                 this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
             }
-            
         })
-        console.log("Title, Description, Display: " + this.state.title + " " + this.state.description + " " + this.state.display);
-        console.log(this.state.entryList);
         this.forceUpdate();
     }
 
-    Search = (event) => {
+    //stores in the state the value in the search text box
+    search = (event) => {
         this.setState({
             searchText: event.target.value,
         });
     }
 
+    //stores in the state the value in the description box
     handleDescriptionChange = (event) => {
         this.setState({
             entryDescription: event.target.value,
         });
         this.forceUpdate();
-        //console.log(this.state.entryDescription);
     }
 
+    //stores in the state the value in the title box
     handleTitleChange = (event) => {
-        //////in the title: putting a bunch of spaces, typing a character, and deleting the character, 
+        //TODO: in the title: putting a bunch of spaces, typing a character, and deleting the character, 
             //will add an entry that is titled that deleted character
         if (event.target.value.trim().length > 0){
             this.setState({
@@ -111,22 +120,20 @@ class JournalTab extends React.Component {
         }
     }
 
-    //on componentDidMount(), grab everything in localStorage/postgress and set the state
-
+    //on the first run of the page
     componentDidMount = () => {
         const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
         //if there exist items in the localStorage, save it as our state
         if (savedEntries){ this.state.entryList = savedEntries; }
-        /*if (savedEntries){ this.setState(savedEntries); //empties the localstorage on each change }*/
-        console.log(savedEntries);
-
         this.forceUpdate();
     }
 
-    componentDidUpdate(){ //equiv to useEffect
+    //on each change to the page
+    componentDidUpdate(){
         localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
     }
 
+    //change display mode to the editEntry page
     editDisplay = () => {
         this.setState({
             display: 'editEntry',
@@ -134,6 +141,7 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    //sort entryList by title reverse alphabetically
     sortByTitle = () => {
         this.setState({
             entryList: this.state.entryList.sort((a, b) => (a.title > b.title) ? 1 : -1)
@@ -141,6 +149,7 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    //handles the title sorting check box
     handleTitleCheckChange = () => {
         this.setState({
             titleChecked: !this.state.titleChecked
@@ -152,17 +161,16 @@ class JournalTab extends React.Component {
 
     render = () => {
         return (          
-          //probably need one package to save the image as some datatype
-          //look up react library where I can input an image and save it
+          //TODO: probably need one package to save the image as some datatype
+            //look up react library where I can input an image and save it
             //can probably just look up "Add File" (figure out how to limit it to jpg)
-          //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching
           
             <div className="journal">   
                 <div className='row'>
                     <div className='column'>
                         <div className='search'>
                             <FontAwesomeIcon icon="magnifying-glass" />
-                            <input onChange={this.Search} type="text" placeholder='type to search...'/>
+                            <input onChange={this.search} type="text" placeholder='type to search...'/>
                         </div>                        
                         {this.state.display == "entryList" && (
                             <button 
@@ -214,7 +222,6 @@ class JournalTab extends React.Component {
                                         rows='4'
                                         cols = '10'
                                         placeholder='Type to create the Journal Entry...'
-                                        //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                                         onChange={this.handleDescriptionChange}
                                     >
                                         {this.state.description}
