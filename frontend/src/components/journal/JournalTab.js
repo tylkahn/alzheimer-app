@@ -46,14 +46,16 @@ class JournalTab extends React.Component {
                 images: ["./images/journal.jpg"],//default every image to have the journal image
             });
             
-            this.setState({
-                display: 'entryList',
-            });
-            this.state.entryDescription = '';
-            console.log("Changing entry Description: ");
-            console.log(this.state.entryDescription);
-            this.forceUpdate();
+            
         }
+        this.setState({
+            display: 'entryList',
+            entryTitle: '',
+            entryDescription: '',
+        });
+        
+        console.log("Changing entry Description: " + this.state.entryDescription);
+        this.forceUpdate();
 
     }
 
@@ -76,10 +78,12 @@ class JournalTab extends React.Component {
                 this.state.title = entry.title;
                 this.state.description = entry.description;
                 this.state.display = 'editEntry';
+                //this.state.entryList.remove(entry);
+                //delete this.state.entryList[entry];
             }
+            
         })
-        console.log("Title, Description, Display");
-        console.log(this.state.title, this.state.description, this.state.display);
+        console.log("Title, Description, Display: "+ this.state.title + " " + this.state.description + " " + this.state.display);
         this.forceUpdate();
     }
 
@@ -178,20 +182,22 @@ class JournalTab extends React.Component {
                         {this.state.display == "editEntry" && (
                             <div className="entry new">
                                 <textarea className= "entry-title"
-                                    title={this.state.title}
                                     rows='1'
                                     cols = '10'
                                     placeholder='Enter title...'
                                     onChange={this.handleTitleChange}
-                                ></textarea>
+                                >  
+                                    {this.state.title}
+                                </textarea>
                                 <textarea className= "entry-description"
-                                    description={this.state.description}
                                     rows='4'
                                     cols = '10'
                                     placeholder='Type to create the Journal Entry...'
                                     //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                                     onChange={this.handleDescriptionChange}
-                                ></textarea>
+                                >
+                                    {this.state.description}
+                                </textarea>
                                 <div className="entry-footer">
                                     <button 
                                         onClick={() => {this.onSave()}} 
@@ -200,6 +206,7 @@ class JournalTab extends React.Component {
                                     </button>
                                 </div>
                             </div>
+                            
                         )}
                     </div>
                 </div>
