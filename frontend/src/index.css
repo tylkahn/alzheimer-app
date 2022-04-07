@@ -50,6 +50,10 @@ code {
   grid-gap: 1rem;
 }
 
+.spacing{
+  padding-top: 6rem;
+}
+
 textarea{
   border: none;
   resize: none;

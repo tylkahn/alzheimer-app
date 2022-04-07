@@ -46,7 +46,6 @@ class JournalTab extends React.Component {
             
         }
         
-        
         console.log("Changing entry Description: " + this.state.entryDescription);
 
         this.setState({
@@ -153,12 +152,14 @@ class JournalTab extends React.Component {
                             <FontAwesomeIcon icon="magnifying-glass" />
                             <input onChange={this.Search} type="text" placeholder='type to search...'/>
                         </div>                        
-                        
-                        <button 
-                            onClick={() => {this.editDisplay()}}
-                            className='save' >
-                            <FontAwesomeIcon icon="square-plus" />
-                        </button>
+                        {this.state.display == "entryList" && (
+                            <button 
+                                onClick={() => {this.editDisplay()}}
+                                className='save' >
+                                <FontAwesomeIcon icon="square-plus" />
+                                New Entry
+                            </button>
+                        )}
                     </div>
 
                     <div className='column'>
@@ -180,30 +181,32 @@ class JournalTab extends React.Component {
                         )}
 
                         {this.state.display == "editEntry" && (
-                            <div className="entry new">
-                                <textarea className= "entry-title"
-                                    rows='1'
-                                    cols = '10'
-                                    placeholder='Enter title...'
-                                    onChange={this.handleTitleChange}
-                                >  
-                                    {this.state.title}
-                                </textarea>
-                                <textarea className= "entry-description"
-                                    rows='4'
-                                    cols = '10'
-                                    placeholder='Type to create the Journal Entry...'
-                                    //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                                    onChange={this.handleDescriptionChange}
-                                >
-                                    {this.state.description}
-                                </textarea>
-                                <div className="entry-footer">
-                                    <button 
-                                        onClick={() => {this.onSave()}} 
-                                        className='save' >
-                                        <FontAwesomeIcon icon="floppy-disk" />
-                                    </button>
+                            <div className = "spacing">
+                                <div className="entry new">
+                                    <textarea className= "entry-title"
+                                        rows='1'
+                                        cols = '10'
+                                        placeholder='Enter title...'
+                                        onChange={this.handleTitleChange}
+                                    >  
+                                        {this.state.title}
+                                    </textarea>
+                                    <textarea className= "entry-description"
+                                        rows='4'
+                                        cols = '10'
+                                        placeholder='Type to create the Journal Entry...'
+                                        //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                                        onChange={this.handleDescriptionChange}
+                                    >
+                                        {this.state.description}
+                                    </textarea>
+                                    <div className="entry-footer">
+                                        <button 
+                                            onClick={() => {this.onSave()}} 
+                                            className='save' >
+                                            <FontAwesomeIcon icon="floppy-disk" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             
