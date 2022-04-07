@@ -1,5 +1,6 @@
 import React from "react";
 import {nanoid} from 'nanoid';
+import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk, faSquarePlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -24,7 +25,9 @@ class JournalTab extends React.Component {
             entryTitle: `Entry Title ${this.props.entries.length+1}`,
             entryDescription: '',
             searchText: '',
-            display: 'entryList' //either entrylist or editEntry
+            display: 'entryList', //either entrylist or editEntry
+            titleChecked: false,
+            dateChecked: false,
         };
     }
 
@@ -42,10 +45,10 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 images: ["./images/journal.jpg"],//default every image to have the journal image
+                //taglist: [],
             });
             
         }
-        
         console.log("Changing entry Description: " + this.state.entryDescription);
 
         this.setState({
@@ -54,14 +57,12 @@ class JournalTab extends React.Component {
             description: '',
         });
         this.forceUpdate();
-
     }
 
     deleteEntry = (id) => {
         const newEntries = this.state.entryList.filter((e) => e.id !== id);
         this.state.entryList = newEntries;
         this.forceUpdate();
-
     }
 
     editEntry = (id) => {
@@ -81,7 +82,7 @@ class JournalTab extends React.Component {
             }
             
         })
-        console.log("Title, Description, Display: "+ this.state.title + " " + this.state.description + " " + this.state.display);
+        console.log("Title, Description, Display: " + this.state.title + " " + this.state.description + " " + this.state.display);
         console.log(this.state.entryList);
         this.forceUpdate();
     }
@@ -106,7 +107,6 @@ class JournalTab extends React.Component {
         if (event.target.value.trim().length > 0){
             this.setState({
                 entryTitle: event.target.value,
-            
             });
         }
     }
@@ -132,14 +132,26 @@ class JournalTab extends React.Component {
             display: 'editEntry',
         });
         this.forceUpdate();
-        
+    }
 
+    sortByTitle = () => {
+        this.setState({
+            entryList: this.state.entryList.sort((a, b) => (a.title > b.title) ? 1 : -1)
+        });
+        this.forceUpdate();
+    }
+
+    handleTitleCheckChange = () => {
+        this.setState({
+            titleChecked: !this.state.titleChecked
+        });
+        this.forceUpdate();
+        console.log("Changed title check with boolean: " + this.state.titleChecked);
+        if (this.state.titleChecked === true){ this.sortByTitle(); }
     }
 
     render = () => {
-        return (
-            //react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
-          
+        return (          
           //probably need one package to save the image as some datatype
           //look up react library where I can input an image and save it
             //can probably just look up "Add File" (figure out how to limit it to jpg)
@@ -160,6 +172,13 @@ class JournalTab extends React.Component {
                                 New Entry
                             </button>
                         )}
+                        
+                        <Input
+                            type="checkbox"
+                            name="title"
+                            checked={this.titleChecked}
+                            onChange={this.handleTitleCheckChange}
+                        />
                     </div>
 
                     <div className='column'>
@@ -208,6 +227,7 @@ class JournalTab extends React.Component {
                                         </button>
                                     </div>
                                 </div>
+
                             </div>
                             
                         )}
