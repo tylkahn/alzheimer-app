@@ -27,6 +27,7 @@ class JournalTab extends React.Component {
             entryTitle: `Entry Title ${this.props.entries.length+1}`,
             entryDescription: '',
             searchText: '',
+            display: 'entryList' //either entrylist or editEntry
         };
     }
 
@@ -37,7 +38,7 @@ class JournalTab extends React.Component {
         });
     }
 
-    addEntry = () => {
+    onSave = () => {
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
@@ -49,7 +50,8 @@ class JournalTab extends React.Component {
             });
             
             this.setState({///////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
-                entryDescription: ''
+                entryDescription: '',
+                display: 'entryList',
             });
             this.forceUpdate();
         }
@@ -118,6 +120,14 @@ class JournalTab extends React.Component {
         console.log("component did update\n");
     }
 
+    editDisplay = () => {
+        this.setState({
+            display: 'editEntry',//////////////////////////setState might not work
+        });
+        
+
+    }
+
     render = () => {
         //kinda the noteslist.js
 
@@ -135,48 +145,57 @@ class JournalTab extends React.Component {
                         <div className='search'>
                             <FontAwesomeIcon icon="magnifying-glass" />
                             <input onChange={this.Search} type="text" placeholder='type to search...'/>
-                        </div>
+                        </div>                        
                         
-                        <div className="entry new">
-                            <textarea className= "entry-title"
-                                rows='1'
-                                cols = '10'
-                                placeholder='Enter title...'
-                                onChange={this.handleTitleChange}
-                            ></textarea>
-                            <textarea className= "entry-description"
-                                rows='4'
-                                cols = '10'
-                                placeholder='Type to create the Journal Entry...'
-                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                                onChange={this.handleDescriptionChange}
-                            ></textarea>
-                            <div className="entry-footer">
-                                <button 
-                                    onClick={() => {this.addEntry()}} 
-                                    className='save' >
-                                    <FontAwesomeIcon icon="floppy-disk" />
-                                </button>
-                            </div>
-                        </div>
+                        
+
+                        <button onClick={() => {this.editDisplay}}>
+                            Create new Entry 
+                        </button>
                     </div>
 
-                    <div className='column'>                    
-                        <div className="entry-list"> 
-                        
-                        {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
-                            <Entry
-                                id={entry.id}
-                                title={entry.title}
-                                description={entry.description}
-                                images={entry.images}
-                                key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                                handleDeleteEntry = {this.deleteEntry}
-                                handleEditEntry = {this.editEntry}
-                            />
-                            ),
+                    <div className='column'>
+                        {this.state.display == "entryList" && (
+                            <div className="entry-list"> 
+                                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                                    <Entry
+                                        id={entry.id}
+                                        title={entry.title}
+                                        description={entry.description}
+                                        images={entry.images}
+                                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                                        handleDeleteEntry = {this.deleteEntry}
+                                        handleEditEntry = {this.editEntry}
+                                    />
+                                    ),
+                                )}
+                            </div>
                         )}
-                        </div>
+
+                        {this.state.display == "editEntry" && (
+                            <div className="entry new">
+                                <textarea className= "entry-title"
+                                    rows='1'
+                                    cols = '10'
+                                    placeholder='Enter title...'
+                                    onChange={this.handleTitleChange}
+                                ></textarea>
+                                <textarea className= "entry-description"
+                                    rows='4'
+                                    cols = '10'
+                                    placeholder='Type to create the Journal Entry...'
+                                    //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                                    onChange={this.handleDescriptionChange}
+                                ></textarea>
+                                <div className="entry-footer">
+                                    <button 
+                                        onClick={() => {this.onSave()}} 
+                                        className='save' >
+                                        <FontAwesomeIcon icon="floppy-disk" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
