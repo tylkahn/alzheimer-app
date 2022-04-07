@@ -1,11 +1,9 @@
 import React from "react";
-import Entry from './Entry'
 import {nanoid} from 'nanoid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import Entry from './Entry';
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
@@ -46,15 +44,16 @@ class JournalTab extends React.Component {
                 images: ["./images/journal.jpg"],//default every image to have the journal image
             });
             
-            
         }
-        this.setState({
-            display: 'entryList',
-            entryTitle: '',
-            entryDescription: '',
-        });
+        
         
         console.log("Changing entry Description: " + this.state.entryDescription);
+
+        this.setState({
+            display: 'entryList',
+            title: '',
+            description: '',
+        });
         this.forceUpdate();
 
     }
@@ -78,12 +77,13 @@ class JournalTab extends React.Component {
                 this.state.title = entry.title;
                 this.state.description = entry.description;
                 this.state.display = 'editEntry';
-                //this.state.entryList.remove(entry);
-                //delete this.state.entryList[entry];
+                //remove the entry being editted, to add the new entry
+                this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
             }
             
         })
         console.log("Title, Description, Display: "+ this.state.title + " " + this.state.description + " " + this.state.display);
+        console.log(this.state.entryList);
         this.forceUpdate();
     }
 
