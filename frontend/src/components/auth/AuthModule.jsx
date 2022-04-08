@@ -77,7 +77,17 @@ function AuthModule(props) {
 
     const form = document.getElementById("signUp-form");
 
-    // TODO: make sure passwords match!
+    // TODO: why doesn't the field highlight?
+    if (
+      // event.target.id === "password" ||
+      event.target.id === "repeatPassword"
+    ) {
+      const passwordInput = document.getElementById("password");
+      const repeatPasswordInput = document.getElementById("repeatPassword");
+      if (passwordInput.value !== repeatPasswordInput.value) {
+        event.target.setCustomValidity("passwords don't match!");
+      }
+    }
 
     form.classList.remove("was-validated");
     form.checkValidity();
