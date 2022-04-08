@@ -1,9 +1,10 @@
-from django.contrib.auth import authenticate  # , login
+from django.contrib.auth import authenticate, login
 from rest_framework import generics, mixins
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .serializers import UserSerializer
+from django.http import Http404
 
 # Create your views here.
 
@@ -45,11 +46,30 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
         # TODO: is the queryset= line necessary?
         #   gut reaction says no since I'm doing a lower level call to get the User obj
         # queryset = self.filter_queryset(self.get_queryset())  # noqa: F841
-        obj = authenticate(
-            username=self.request.data["username"],
+        user = authenticate(
+            username=self.request.data["id"],
             password=self.request.data["password"],
         )
-        return obj
+        if user is None:
+            # maybe id is not a username, but an email address
+            try:
+                user = User.objects.get(email__exact=self.request.data["id"])
+            except User.DoesNotExist:
+                print("requested user does not exist!")
+                user = None
+                raise Http404
+            else:
+                # id was an email and user was found, check provided password
+                if user.check_password(self.request.data["password"]):
+                    # attach User to request (and all future requests from the same
+                    # User, until logout is called)
+                    login(self.request, user)
+                else:
+                    user = None  # return anonymous user
+        else:
+            # id was a username and user was authenticated, so log them in
+            login(self.request, user)
+        return user
 
     def post(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

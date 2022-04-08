@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm"; // TODO: maybe refactor and make the login form do both login and sign up
 
@@ -13,46 +14,55 @@ function AuthModule(props) {
 
   const handleLoginChange = (event) => {
     event.preventDefault();
-    const { name, value } = event.target;
 
-    // TODO: THIS VALIDATION IS FOR DEMO PURPOSES ONLY - REPLACE AS SOON AS THE BACKEND IS CONNECTED
-    switch (name) {
-      case "email":
-        value === "test@user.com"
-          ? event.target.setCustomValidity("")
-          : event.target.setCustomValidity(
-              "username or password is incorrect!"
-            );
-        event.target.checkValidity();
-        break;
-      case "password":
-        value === "password123"
-          ? event.target.setCustomValidity("")
-          : event.target.setCustomValidity(
-              "username or password is incorrect!"
-            );
-        event.target.checkValidity();
-        break;
-      default:
-        event.target.checkValidity();
-        break;
-    }
+    const input1 = document.getElementById("emailOrUsername");
+    const input2 = document.getElementById("password");
+    const form = document.getElementById("login-form");
+
+    input1.setCustomValidity(""); // empty string = input is valid
+    input2.setCustomValidity("");
+
+    form.classList.remove("was-validated");
+    form.checkValidity();
   };
 
-  const handleLoginSubmit = (event) => {
+  // send credentials to server (which sends them to db), set auth info based on server response
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
-
-    // event.target.checkValidity();
     event.target.classList.remove("was-validated");
-    // debugger;
-    if (event.target.reportValidity()) {
-      setAuthInfo({ ...authInfo, isLoggedIn: true });
-    } else {
-      event.target.classList.add("was-validated");
-    }
-    // return event.target.reportValidity();
 
-    // TODO: send credentials to server (which sends them to db), set auth info based on server response
+    const config = {
+      method: "POST",
+      baseURL: process.env.REACT_APP_SERVER_BASE_URL,
+      url: "login/",
+      data: {
+        id: event.target.emailOrUsername.value,
+        password: event.target.password.value,
+      },
+    };
+    let response = null;
+    try {
+      response = await axios.request(config);
+    } catch (err) {
+      if (err?.response?.status === 404) {
+        console.log("username or password is incorrect!"); // eslint-disable-line no-console
+      } else {
+        console.error(err); // eslint-disable-line no-console
+      }
+    }
+    if (response == null) {
+      // also catches undefined, just in case
+      event.target.emailOrUsername.setCustomValidity(
+        "username or password is incorrect!"
+      );
+      event.target.password.setCustomValidity(
+        "username or password is incorrect!"
+      );
+      event.target.classList.add("was-validated");
+      event.target.reportValidity();
+    } else {
+      setAuthInfo({ ...authInfo, isLoggedIn: true });
+    }
   };
 
   const handleSignUpSubmit = () => {

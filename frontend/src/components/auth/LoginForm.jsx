@@ -14,14 +14,14 @@ function LoginForm(props) {
       <form
         className="login-form-noVal"
         onSubmit={(e) => handleSubmit(e)}
-        // noValidate
+        id="login-form"
       >
         <div className="form-group">
           <label htmlFor="email">Email address</label>
           <input
-            id="email"
-            name="email"
-            type="email"
+            id="emailOrUsername"
+            name="emailOrUsername"
+            type="text"
             className="form-control mb-2"
             placeholder="name@example.com"
             onChange={(e) => handleChange(e)}
