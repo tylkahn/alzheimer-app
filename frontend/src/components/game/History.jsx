@@ -20,7 +20,7 @@ class History extends React.Component {
     // update scores from the db
     getScores = () => {
         axios
-            .get("/api/game/")
+            .get("http://localhost:8000/api/game/")
             .then((res) => this.setState({ scores: res.data }))
             .catch((err) => console.log(err));
     };

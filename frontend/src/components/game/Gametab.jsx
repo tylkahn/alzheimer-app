@@ -86,7 +86,7 @@ class Gametab extends React.Component {
   submitScore(s) {
     const item = { score: s};
     axios
-      .post("/api/game/", item);
+      .post("http://localhost:8000/api/game/", item);
   }
 }
       
