@@ -19,6 +19,12 @@ code {
   padding-left: 15px;
 }
 
+.checkboxes{
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+}
+
 .column{
   /*stuff for two column structure*/
   display: flex;
