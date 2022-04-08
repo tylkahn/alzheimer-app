@@ -112,10 +112,10 @@ function App() {
     // NOTE: let it be known that I very much dislike using axios.put and axios.delete
     /* if (item.id) {
       axios
-        .put(process.env.REACT_APP_SERVER_BASE_URL + `/api/reminders/${item.id}/`, item)
+        .put(process.env.REACT_APP_SERVER_BASE_URL + `api/reminders/${item.id}/`, item)
         .then(() => refreshList());
     } else {
-      axios.post(process.env.REACT_APP_SERVER_BASE_URL + "/api/reminders/", item).then(() => refreshList());
+      axios.post(process.env.REACT_APP_SERVER_BASE_URL + "api/reminders/", item).then(() => refreshList());
     }
     */
   };
@@ -123,7 +123,7 @@ function App() {
   const deleteItem = (item) => {
     axios
       .delete(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/api/reminders/${item.id}/`
+        `${process.env.REACT_APP_SERVER_BASE_URL}api/reminders/${item.id}/`
       )
       .then(() => refreshList());
   };
@@ -150,7 +150,7 @@ function App() {
 
   const refreshList = () => {
     axios
-      .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/reminders`)
+      .get(`${process.env.REACT_APP_SERVER_BASE_URL}api/reminders`)
       .then((res) => {
         console.log(res);
         setReminderList(res.data);
