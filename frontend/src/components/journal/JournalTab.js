@@ -29,8 +29,6 @@ class JournalTab extends React.Component {
             entryDescription: '',
             searchText: '',
             display: 'entryList', //valued at either entrylist or editEntry
-            titleChecked: false,
-            dateChecked: false,
         };
     }
 
@@ -149,14 +147,51 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    //sort entryList by date (most recent to least recent)
+    sortByDate = () => {
+        
+        this.forceUpdate();
+    }
+
+    //sort entryList by tag alphabetically
+    sortByTag = () => {
+        
+        this.forceUpdate();
+    }
+
+    checkOnlyOne = (checkBox) => {
+        //falsify all checkboxes and then check off the correct one
+        document.getElementById("titleCheckbox").checked = false;
+        document.getElementById("dateCheckbox").checked = false;
+        document.getElementById("tagCheckbox").checked = false;
+        document.getElementById(checkBox).checked = true;
+    }
+
     //handles the title sorting check box
     handleTitleCheckChange = () => {
-        this.setState({
-            titleChecked: !this.state.titleChecked
-        });
+        //skip if should be unchecked
+        if (!document.getElementById("titleCheckbox").checked){return;}
+        this.checkOnlyOne("titleCheckbox");
+        this.sortByTitle();
         this.forceUpdate();
-        console.log("Changed title check with boolean: " + this.state.titleChecked);
-        if (this.state.titleChecked === true){ this.sortByTitle(); }
+    }
+
+    //handles the Date sorting check box
+    handleDateCheckChange = () => {
+        //skip if should be unchecked
+        if (!document.getElementById("dateCheckbox").checked){return;}
+        this.checkOnlyOne("dateCheckbox");
+        this.sortByDate();
+        this.forceUpdate();
+    }
+
+    //handles the tag sorting check box
+    handleTagCheckChange = () => {
+        //skip if should be unchecked
+        if (!document.getElementById("tagCheckbox").checked){return;}
+        this.checkOnlyOne("tagCheckbox");
+        this.sortByTag();
+        this.forceUpdate();
     }
 
     render = () => {
@@ -171,7 +206,40 @@ class JournalTab extends React.Component {
                         <div className='search'>
                             <FontAwesomeIcon icon="magnifying-glass" />
                             <input onChange={this.search} type="text" placeholder='type to search...'/>
-                        </div>                        
+                        </div>
+
+                        <label className='checkboxes'>
+                            <div>
+                                <Input
+                                    id="titleCheckbox"
+                                    type="checkbox"
+                                    name="title"
+                                    //checked={this.titleChecked}
+                                    onClick={this.handleTitleCheckChange}
+                                />
+                            </div>Title
+                            
+                            <div>
+                                <Input
+                                    id="dateCheckbox"
+                                    type="checkbox"
+                                    name="date"
+                                    //checked={this.dateChecked}
+                                    onClick={this.handleDateCheckChange}
+                                />
+                            </div>Date
+
+                            <div>
+                                <Input
+                                    id="tagCheckbox"
+                                    type="checkbox"
+                                    name="tag"
+                                    //checked={this.tagChecked}
+                                    onClick={this.handleTagCheckChange}
+                                />
+                            </div>Tag
+                        </label>
+
                         {this.state.display == "entryList" && (
                             <button 
                                 onClick={() => {this.editDisplay()}}
@@ -180,13 +248,6 @@ class JournalTab extends React.Component {
                                 New Entry
                             </button>
                         )}
-                        
-                        <Input
-                            type="checkbox"
-                            name="title"
-                            checked={this.titleChecked}
-                            onChange={this.handleTitleCheckChange}
-                        />
                     </div>
 
                     <div className='column'>
