@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ORIGIN_WHITELIST = [
+     'http://localhost:3000'
+]
 
 # Application definition
 
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "todo",
+    "authentication",
 ]
 
 # NOTE: corsMiddleware should go AS HIGH AS POSSIBLE in the list,
@@ -56,6 +60,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 ROOT_URLCONF = "backend.urls"
 
@@ -133,7 +139,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 
 CORS_ORIGIN_ALLOW_ALL = True

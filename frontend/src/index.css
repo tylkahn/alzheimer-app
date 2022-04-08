@@ -119,6 +119,36 @@ entry-tag{
   cursor: pointer;
 }
 
+.popup{
+  background-color: #ffd9d9;
+  border-color: #d35e5e;
+  border-radius: 5px;
+  padding: 2px 5px 2px 5px; 
+  min-height: 70px;
+}
+
+.popup-title{
+  font-size: 30px;
+}
+
+.popup-date{
+  font-size: 20px;
+}
+
+.reminder{
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 5px 10px 5px 10px; 
+  min-height: 170px;
+}
+
+.reminder-entry{
+  background-color: #e2e2e2;
+  border-radius: 10px;
+  padding: 5px 10px 5px 10px; 
+  min-height: 170px;
+}
+
 .entry{
   background-color: white;
   border-style: solid;
