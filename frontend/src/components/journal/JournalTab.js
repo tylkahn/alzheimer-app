@@ -1,13 +1,18 @@
 import React from "react";
+import Popup from 'reactjs-popup';
 import {nanoid} from 'nanoid';
 import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk, faSquarePlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import Entry from './Entry';
+import 'reactjs-popup/dist/index.css';
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
+library.add(faPlus);
+library.add(faXmark);
+library.add(faAngleUp);
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -22,12 +27,15 @@ class JournalTab extends React.Component {
                 tagList: [],
             }*/
             entryList: this.props.entries,
-            entryTitle: `Entry Title ${this.props.entries.length+1}`,
+            entryTitle: '',
             entryDescription: '',
             searchText: '',
             display: 'entryList', //either entrylist or editEntry
             titleChecked: false,
             dateChecked: false,
+            entryTag: '',
+            tagList: [], 
+            showPopup: false,
         };
     }
 
@@ -38,22 +46,40 @@ class JournalTab extends React.Component {
         });
     }
 
+    addTag = () => {
+        console.log("SIR");
+        console.log(this.state.entryTag);
+        this.state.tagList.push(this.state.entryTag);
+        this.setState({
+            entryTag: '',
+            showPopup: !this.state.showPopup,
+        });
+        this.forceUpdate();
+    }
+  
+    togglePopup() {
+        this.setState({
+          showPopup: !this.state.showPopup
+        });
+    }
+
     onSave = () => {
+        console.log("taglist");
+        console.log(this.state.tagList);
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 images: ["./images/journal.jpg"],//default every image to have the journal image
-                //taglist: [],
+                tagList: this.state.tagList,
             });
-            
         }
-
         this.setState({
             display: 'entryList',
-            entryTitle: `Entry Title ${this.state.entryList.length+1}`,
+            entryTitle: '',
             entryDescription: '',
+            tagList: [],
         });
         this.forceUpdate();
     }
@@ -73,8 +99,8 @@ class JournalTab extends React.Component {
                     description: entry.description,
                     display: 'editEntry',
                 });*/
-                this.state.title = entry.title;
-                this.state.description = entry.description;
+                this.state.entryTitle = entry.title;
+                this.state.entryDescription = entry.description;
                 this.state.display = 'editEntry';
                 //remove the entry being editted, to add the new entry
                 this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
@@ -108,6 +134,16 @@ class JournalTab extends React.Component {
                 entryTitle: event.target.value,
             });
         }
+    }
+
+    handleTagChange = (event) => {
+        if (event.target.value.trim().length > 0){
+            this.setState({
+                entryTag: event.target.value,
+            });
+        }
+        this.forceUpdate();
+        //console.log(this.state.entryDescription);
     }
 
     //on componentDidMount(), grab everything in localStorage/postgress and set the state
@@ -189,6 +225,7 @@ class JournalTab extends React.Component {
                                         title={entry.title}
                                         description={entry.description}
                                         images={entry.images}
+                                        tagList = {entry.tagList}
                                         key={nanoid(8)} //each entry needs a unique id for rendering, not just db
                                         handleDeleteEntry = {this.deleteEntry}
                                         handleEditEntry = {this.editEntry}
@@ -207,7 +244,7 @@ class JournalTab extends React.Component {
                                         placeholder='Enter title...'
                                         onChange={this.handleTitleChange}
                                     >  
-                                        {this.state.title}
+                                        {this.state.entryTitle}
                                     </textarea>
                                     <textarea className= "entry-description"
                                         rows='4'
@@ -216,9 +253,34 @@ class JournalTab extends React.Component {
                                         //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                                         onChange={this.handleDescriptionChange}
                                     >
-                                        {this.state.description}
+                                        {this.state.entryDescription}
                                     </textarea>
+
+                                    {this.state.showPopup == true && (
+                                        <div className = "tag-pop-up">
+                                            <textarea className= "entry-tag"
+                                                rows='1'
+                                                cols = '16'
+                                                placeholder='tag...'
+                                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                                                onChange={this.handleTagChange}>
+                                            </textarea>
+                                            <button 
+                                                onClick={() => {{this.addTag()}}} 
+                                                className='add-tag' >
+                                                <FontAwesomeIcon icon="plus" />
+                                            </button>
+                                        </div>
+                                    )}
+
+
                                     <div className="entry-footer">
+                                        <button 
+                                            onClick={() => {{this.togglePopup()}}} 
+                                            className='add-tag' >
+                                            <FontAwesomeIcon icon="angle-up" />
+                                        </button>
+                                        
                                         <button 
                                             onClick={() => {this.onSave()}} 
                                             className='save' >

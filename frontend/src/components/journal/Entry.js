@@ -15,7 +15,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
             description: this.props.description,
             images: this.props.images,
             lastUpdated: 0,
-            tagList: [],//since im storing on the frontend, this stuff isnt useful yet
+            tagList: this.props.tagList,//since im storing on the frontend, this stuff isnt useful yet
             handleDeleteEntry: this.props.handleDeleteEntry,
             handleEditEntry: this.props.handleEditEntry,
         };
@@ -59,6 +59,14 @@ class Entry extends React.Component { //extend this journal entry from a generic
             </span>
             
             {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
+            <div className = "tag-list">
+            {this.state.tagList.map(tag => (
+                <button className="tag-button">
+                  {tag}
+                </button>
+                ),
+            )}
+            </div>
             
             <div className="entry-footer">
                 <button
@@ -71,8 +79,6 @@ class Entry extends React.Component { //extend this journal entry from a generic
                   className='delete' >
                   <FontAwesomeIcon icon="trash-can" />
                 </button>
-                
-                
             </div>
 
           </div>
