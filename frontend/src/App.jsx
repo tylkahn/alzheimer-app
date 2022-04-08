@@ -7,8 +7,6 @@ import ReminderTab from "./components/reminder/ReminderTab";
 import JournalTab from "./components/journal/JournalTab";
 import AuthModule from "./components/auth/AuthModule";
 
-const BASE_URL = "http://localhost:8000";
-
 function App() {
   const [viewTab, setViewTab] = useState("");
   const [reminderList, setReminderList] = useState([]);
@@ -22,6 +20,7 @@ function App() {
     completed: false,
   });
   const [authInfo, setAuthInfo] = useState({
+    username: "",
     isLoggedIn: false,
   });
 
@@ -29,30 +28,28 @@ function App() {
     setViewTab(tabName);
   };
 
-  const renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <span
-          className={viewTab ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("reminder")}
-        >
-          Reminder
-        </span>
-        <span
-          className={viewTab ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("journal")}
-        >
-          Journal
-        </span>
-        <span
-          className={viewTab ? "nav-link" : "nav-link active"}
-          onClick={() => displayTab("game")}
-        >
-          Game
-        </span>
-      </div>
-    );
-  };
+  const renderTabList = () => (
+    <div className="nav nav-tabs">
+      <span
+        className={viewTab ? "nav-link active" : "nav-link"}
+        onClick={() => displayTab("reminder")}
+      >
+        Reminder
+      </span>
+      <span
+        className={viewTab ? "nav-link active" : "nav-link"}
+        onClick={() => displayTab("journal")}
+      >
+        Journal
+      </span>
+      <span
+        className={viewTab ? "nav-link" : "nav-link active"}
+        onClick={() => displayTab("game")}
+      >
+        Game
+      </span>
+    </div>
+  );
 
   const renderTab = () => (
     <div className="tabs">
@@ -69,7 +66,11 @@ function App() {
               Reminder app
             </h1>
             <div className="row">
-              <button className="btn btn-primary" onClick={createItem}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={createItem}
+              >
                 Add task
               </button>
             </div>
@@ -96,32 +97,34 @@ function App() {
     toggle();
     console.log("Item", item);
     setActiveItem(item);
-    /*setActiveItem({
+    /* setActiveItem({
         title: item.title,
         reminderType: item.reminderType,
         date: item.date,
         repeating: item.repeating,
         description: item.description,
         completed: item.completed,
-    });*/
+    }); */
 
     console.log("Active Item: ");
     console.log(activeItem);
 
     // NOTE: let it be known that I very much dislike using axios.put and axios.delete
-    /*if (item.id) {
+    /* if (item.id) {
       axios
-        .put(BASE_URL + `/api/reminders/${item.id}/`, item)
+        .put(process.env.REACT_APP_SERVER_BASE_URL + `api/reminders/${item.id}/`, item)
         .then(() => refreshList());
     } else {
-      axios.post(BASE_URL + "/api/reminders/", item).then(() => refreshList());
+      axios.post(process.env.REACT_APP_SERVER_BASE_URL + "api/reminders/", item).then(() => refreshList());
     }
     */
   };
 
   const deleteItem = (item) => {
     axios
-      .delete(BASE_URL + `/api/reminders/${item.id}/`)
+      .delete(
+        `${process.env.REACT_APP_SERVER_BASE_URL}api/reminders/${item.id}/`
+      )
       .then(() => refreshList());
   };
 
@@ -147,7 +150,7 @@ function App() {
 
   const refreshList = () => {
     axios
-      .get(BASE_URL + "/api/reminders")
+      .get(`${process.env.REACT_APP_SERVER_BASE_URL}api/reminders`)
       .then((res) => {
         console.log(res);
         setReminderList(res.data);
@@ -164,9 +167,7 @@ function App() {
   };
 
   const renderItems = () => {
-    const newItems = reminderList.filter(
-      (item) => item.completed == viewCompleted
-    );
+    const newItems = reminderList.filter((item) => item.completed == viewTab);
 
     return newItems.map((item) => (
       <li
@@ -175,7 +176,7 @@ function App() {
       >
         <span
           className={`reminder-title mr-2 ${
-            viewCompleted ? "completed-reminder" : ""
+            viewTab ? "completed-reminder" : ""
           }`}
           title={item.description}
         >
@@ -183,12 +184,17 @@ function App() {
         </span>
         <span>
           <button
+            type="button"
             className="btn btn-secondary mr-2"
             onClick={() => editItem(item)}
           >
             Edit
           </button>
-          <button className="btn btn-danger" onClick={() => deleteItem(item)}>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => deleteItem(item)}
+          >
             Delete
           </button>
         </span>
@@ -199,7 +205,7 @@ function App() {
   return (
     <main className="container">
       <h1 className="text-white text-uppercase text-center my-4">
-        Alzheimer's Assistance App
+        Alzheimer&apos;s Assistance App
       </h1>
       {authInfo.isLoggedIn ? (
         <div className="row">

@@ -18,6 +18,7 @@ frontend/build
 .env.test.local
 .env.production.local
 .vscode
+__pycache__
 
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
