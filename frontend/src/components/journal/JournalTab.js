@@ -54,6 +54,7 @@ class JournalTab extends React.Component {
                 id: nanoid(4), 
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
+                date: new Date(),
                 images: ["./images/journal.jpg"],//default every image to have the journal image
             });            
         }
@@ -149,7 +150,9 @@ class JournalTab extends React.Component {
 
     //sort entryList by date (most recent to least recent)
     sortByDate = () => {
-        
+        this.setState({
+            entryList: this.state.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)
+        });
         this.forceUpdate();
     }
 
