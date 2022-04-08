@@ -7,11 +7,10 @@ import ReminderTab from "./components/reminder/ReminderTab";
 import JournalTab from "./components/journal/JournalTab";
 import AuthModule from "./components/auth/AuthModule";
 
-const BASE_URL = "http://localhost:8000";
-
 function App() {
   const [viewTab, setViewTab] = useState("");
   const [authInfo, setAuthInfo] = useState({
+    username: "",
     isLoggedIn: false,
   });
 
@@ -19,31 +18,28 @@ function App() {
     setViewTab(tabName);
   };
 
-  // Displays all tabs at top of page (Reminder, Journal, Game)
-  const renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <span
-          className={viewTab ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("reminder")}
-        >
-          Reminder
-        </span>
-        <span
-          className={viewTab ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("journal")}
-        >
-          Journal
-        </span>
-        <span
-          className={viewTab ? "nav-link" : "nav-link active"}
-          onClick={() => displayTab("game")}
-        >
-          Game
-        </span>
-      </div>
-    );
-  };
+  const renderTabList = () => (
+    <div className="nav nav-tabs">
+      <span
+        className={viewTab ? "nav-link active" : "nav-link"}
+        onClick={() => displayTab("reminder")}
+      >
+        Reminder
+      </span>
+      <span
+        className={viewTab ? "nav-link active" : "nav-link"}
+        onClick={() => displayTab("journal")}
+      >
+        Journal
+      </span>
+      <span
+        className={viewTab ? "nav-link" : "nav-link active"}
+        onClick={() => displayTab("game")}
+      >
+        Game
+      </span>
+    </div>
+  );
 
   // If a tab is clicked, displays that tab
   const renderTab = () => (
@@ -78,7 +74,7 @@ function App() {
   return (
     <main className="container">
       <h1 className="text-white text-uppercase text-center my-4">
-        Alzheimer's Assistance App
+        Alzheimer&apos;s Assistance App
       </h1>
       {authInfo.isLoggedIn ? (
         <div className="row">
