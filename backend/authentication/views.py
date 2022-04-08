@@ -57,6 +57,8 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
             except User.DoesNotExist:
                 print("requested user does not exist!")
                 user = None
+                # I could tell the frontend that this block only runs if the
+                # username/email doesn't exist, but that's bad for security, so I won't
                 raise Http404
             else:
                 # id was an email and user was found, check provided password
@@ -66,6 +68,7 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
                     login(self.request, user)
                 else:
                     user = None  # return anonymous user
+                    raise Http404
         else:
             # id was a username and user was authenticated, so log them in
             login(self.request, user)
@@ -85,10 +88,14 @@ class CreateUser(mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = CreateUserSerializer
 
     def post(self, request, *args, **kwargs):
-        print("CreateUser post")
-        print(self)
-        print(request)
-        print(request.data)
-        print(args)
-        print(kwargs)
-        return self.create(request, *args, **kwargs)
+        response = self.create(request, *args, **kwargs)
+        # TODO: i assume i need to call login here to tie the user to the request?
+        # as far as i know, the default create function doesn't do this
+        try:
+            user = User.objects.get(username__exact=request.data["username"])
+        except User.DoesNotExist:
+            raise RuntimeError(
+                "newly created user object does not exist in the database!"
+            )
+        login(self.request, user)
+        return response

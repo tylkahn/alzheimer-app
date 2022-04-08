@@ -18,6 +18,20 @@ class CreateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "first_name", "last_name", "email", "password"]
 
+    def create(self, validated_data):
+        # i have to override this because the standard create function does not handle
+        # passwords even remotely close to how a sane person would assume it should
+        # thanks django rest framework, very cool :/
+        user = User(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
+
     def validate_email(self, value):
         try:
             User.objects.get(email__exact=value)
