@@ -14,11 +14,12 @@ class Entry extends React.Component { //extend this journal entry from a generic
             title: this.props.title,
             description: this.props.description,
             images: this.props.images,
-            lastUpdated: 0,
+            date: this.props.date,
             tagList: [],
             handleDeleteEntry: this.props.handleDeleteEntry,
             handleEditEntry: this.props.handleEditEntry,
         };
+        
     }
     
     setJournalLastUpdated(time){
@@ -35,6 +36,11 @@ class Entry extends React.Component { //extend this journal entry from a generic
               <div className="entry-title">
                 {this.state.title} <br/>
               </div>
+
+              <h6>
+                <i>{this.state.date.split('T')[0]}</i>
+              </h6>
+
               <div className="entry-description">
                 {this.state.description} <br/>
               </div>
