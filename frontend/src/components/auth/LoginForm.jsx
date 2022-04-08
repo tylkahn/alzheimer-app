@@ -17,7 +17,7 @@ function LoginForm(props) {
         id="login-form"
       >
         <div className="form-group">
-          <label htmlFor="emailOrUsername">Email address</label>
+          <label htmlFor="emailOrUsername">Email address or username</label>
           <input
             id="emailOrUsername"
             name="emailOrUsername"
