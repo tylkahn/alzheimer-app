@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import ReminderSerializer, GameSerializer
 from .models import Reminder, GameHistory
@@ -8,6 +8,7 @@ from .models import Reminder, GameHistory
 # class TodoView(viewsets.ModelViewSet):
 #     serializer_class = TodoSerializer
 #     queryset = Todo.objects.all()
+
 
 class ReminderView(viewsets.ModelViewSet):
     serializer_class = ReminderSerializer

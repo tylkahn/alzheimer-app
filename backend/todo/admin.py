@@ -4,9 +4,18 @@ from datetime import datetime
 
 # class TodoAdmin(admin.ModelAdmin):
 #     list_display = ('title', 'description', 'completed')
- 
+
+
 class ReminderAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reminderType', 'date', 'repeating', 'description', 'completed')
+    list_display = (
+        "title",
+        "reminderType",
+        "date",
+        "repeating",
+        "description",
+        "completed",
+    )
+
 
 class GameAdmin(admin.ModelAdmin):
     list_display = ('player', 'score', 'date')

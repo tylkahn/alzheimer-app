@@ -6,10 +6,19 @@ from .models import GameHistory, Reminder
 #         model = Todo
 #         fields = ('id', 'title', 'description', 'completed')
 
+
 class ReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reminder
-        fields = ('id', 'title', 'reminderType', 'date', 'repeating', 'description', 'completed')
+        fields = (
+            "id",
+            "title",
+            "reminderType",
+            "date",
+            "repeating",
+            "description",
+            "completed",
+        )
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
