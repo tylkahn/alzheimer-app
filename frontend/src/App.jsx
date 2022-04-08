@@ -20,6 +20,7 @@ function App() {
     completed: false,
   });
   const [authInfo, setAuthInfo] = useState({
+    username: "",
     isLoggedIn: false,
   });
 

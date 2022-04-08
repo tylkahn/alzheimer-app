@@ -3,7 +3,7 @@ from rest_framework import generics, mixins
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from .serializers import UserSerializer
+from .serializers import GetUserSerializer, CreateUserSerializer
 from django.http import Http404
 
 # Create your views here.
@@ -40,7 +40,7 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
     """
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = GetUserSerializer
 
     def get_object(self):
         # TODO: is the queryset= line necessary?
@@ -57,6 +57,8 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
             except User.DoesNotExist:
                 print("requested user does not exist!")
                 user = None
+                # I could tell the frontend that this block only runs if the
+                # username/email doesn't exist, but that's bad for security, so I won't
                 raise Http404
             else:
                 # id was an email and user was found, check provided password
@@ -66,6 +68,7 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
                     login(self.request, user)
                 else:
                     user = None  # return anonymous user
+                    raise Http404
         else:
             # id was a username and user was authenticated, so log them in
             login(self.request, user)
@@ -81,10 +84,18 @@ class CreateUser(mixins.CreateModelMixin, generics.GenericAPIView):
     View to create a new user
     """
 
+    queryset = User.objects.all()
+    serializer_class = CreateUserSerializer
+
     def post(self, request, *args, **kwargs):
-        print("CreateUser post")
-        print(self)
-        print(request)
-        print(args)
-        print(kwargs)
-        return self.create(request, *args, **kwargs)
+        response = self.create(request, *args, **kwargs)
+        # TODO: i assume i need to call login here to tie the user to the request?
+        # as far as i know, the default create function doesn't do this
+        try:
+            user = User.objects.get(username__exact=request.data["username"])
+        except User.DoesNotExist:
+            raise RuntimeError(
+                "newly created user object does not exist in the database!"
+            )
+        login(self.request, user)
+        return response
