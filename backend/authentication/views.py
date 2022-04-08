@@ -75,6 +75,7 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return user
 
     def post(self, request, *args, **kwargs):
+        print(vars(request.session))
         return self.retrieve(request, *args, **kwargs)
 
 

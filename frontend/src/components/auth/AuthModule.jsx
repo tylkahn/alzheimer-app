@@ -4,6 +4,8 @@ import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm"; // TODO: maybe refactor and make the login form do both login and sign up
 
+axios.defaults.withCredentials = true;
+
 function AuthModule(props) {
   const { authInfo, setAuthInfo } = props;
   const [isActiveLoginForm, setIsActiveLoginForm] = useState(true);
@@ -44,11 +46,14 @@ function AuthModule(props) {
     let response = null;
     try {
       response = await axios.request(config);
+      // debugger;
     } catch (err) {
       if (err?.response?.status === 404) {
         console.log("username or password is incorrect!"); // eslint-disable-line no-console
       } else {
         console.error(err); // eslint-disable-line no-console
+        // console.log(err.response);
+        // debugger;
       }
     }
     if (response == null) {

@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from .serializers import ReminderSerializer, GameSerializer
 from .models import Reminder, GameHistory
 
+from pprint import pprint
+
 # Create your views here.
 
 # class TodoView(viewsets.ModelViewSet):
@@ -14,10 +16,15 @@ class ReminderView(viewsets.ModelViewSet):
     serializer_class = ReminderSerializer
     queryset = Reminder.objects.all()
 
+
 class GameView(viewsets.ModelViewSet):
     serializer_class = GameSerializer
+
     def get_queryset(self):
         queryset = GameHistory.objects.all()
+        print("gameview get_queryset")
+        pprint(vars(self.request))
+        pprint(vars(self.request.session))
         print(self.request.session)
         if self.request.user.is_authenticated:
             query_set = queryset.filter(player=self.request.user)
