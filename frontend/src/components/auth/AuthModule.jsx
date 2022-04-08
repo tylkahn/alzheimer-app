@@ -62,7 +62,11 @@ function AuthModule(props) {
       event.target.classList.add("was-validated");
       event.target.reportValidity();
     } else {
-      setAuthInfo({ ...authInfo, isLoggedIn: true });
+      setAuthInfo({
+        ...authInfo,
+        username: response.data.username,
+        isLoggedIn: true,
+      });
     }
   };
 
@@ -73,7 +77,7 @@ function AuthModule(props) {
 
     const form = document.getElementById("signUp-form");
 
-    // TODO: make sure passwords match! (do this on the backend as well!)
+    // TODO: make sure passwords match!
 
     form.classList.remove("was-validated");
     form.checkValidity();
@@ -82,15 +86,14 @@ function AuthModule(props) {
   const handleSignUpSubmit = async (event) => {
     event.preventDefault();
     event.target.classList.remove("was-validated");
-    // TODO: send data to server, set auth info based on server response
 
     const config = {
       method: "POST",
       baseURL: process.env.REACT_APP_SERVER_BASE_URL,
       url: "signup/",
       data: {
-        id: event.target.username.value,
-        first_name: event.target.firstName.value,
+        username: event.target.username.value,
+        first_name: event.target.firstName.value, // why no camel case? idk, ask django
         last_name: event.target.lastName.value,
         email: event.target.email.value,
         password: event.target.password.value,
@@ -101,9 +104,25 @@ function AuthModule(props) {
     try {
       response = await axios.request(config);
     } catch (err) {
-      // TODO: figure out what the server will respond when email/username is taken
-      if (err?.response?.status === 404) {
-        console.log("404 for some reason??"); // eslint-disable-line no-console
+      if (err?.response?.status === 400) {
+        let knownError = false;
+        if (err.response?.data?.email) {
+          // email already exists
+          knownError = true;
+          event.target.email.setCustomValidity(
+            "a user with this email already exists!"
+          );
+        }
+        if (err.response?.data?.username) {
+          // username already exists
+          knownError = true;
+          event.target.username.setCustomValidity(
+            "this username is taken, please try another username"
+          );
+        }
+        if (!knownError) {
+          console.error(err.response); // eslint-disable-line no-console
+        }
       } else {
         console.error(err); // eslint-disable-line no-console
       }
@@ -111,8 +130,13 @@ function AuthModule(props) {
       event.target.reportValidity();
     }
     if (response != null) {
-      // also catches undefined, just in case
-      setAuthInfo({ ...authInfo, isLoggedIn: true });
+      // TODO: i don't particularly like that the password is returned to the frontend
+      // at least it's hashed, but still...kinda feels like a security issue
+      setAuthInfo({
+        ...authInfo,
+        username: response.data.username,
+        isLoggedIn: true,
+      });
     }
   };
 
