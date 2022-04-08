@@ -10,10 +10,23 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import {nanoid} from 'nanoid';
 
+// Modal interactive popup used to create a new Reminder object
 export default function CustomModal(props) {
-  let [activeItem, setActiveItem] = useState(props.activeItem);
+  const [activeItem, setActiveItem] = useState(
+    {
+      id: nanoid(),
+      title: "",
+      reminderType: "",
+      date: "",
+      repeating: "",
+      description: "",
+    }
+  );
+  const { toggle, onSave } = props;
 
+  // Saves information into activeItem
   const handleChange = (e) => {
     let { name, value } = e.target;
 
@@ -24,8 +37,6 @@ export default function CustomModal(props) {
     setActiveItem({ ...activeItem, [name]: value });
   };
 
-  const { toggle, onSave } = props;
-
   useEffect(() => {
     console.log(props, activeItem)
   }, [props, activeItem]);
@@ -34,7 +45,7 @@ export default function CustomModal(props) {
     <Modal isOpen={true} toggle={toggle}>
       <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
       <ModalBody>
-        <Form>
+        <Form onSubmit={() => onSave(tempActiveItem)}>
           <FormGroup>
             <Label for="reminder-title">Title</Label>
             <Input
@@ -49,11 +60,13 @@ export default function CustomModal(props) {
           <FormGroup>
             <Label for="reminder-type">Reminder Type</Label>
             <Input
+              name="reminderType"
               type="select"
               id="reminder-type"
-              value={activeItem.reinderType}
+              value={activeItem.reminderType}
               onChange={handleChange}
             >
+              <option>  </option>
               <option> Medicine </option>
               <option> Appointment </option>
               <option> Other </option>
@@ -73,11 +86,13 @@ export default function CustomModal(props) {
           <FormGroup>
             <Label for="reminder-repeating">Repeating</Label>
             <Input
+              name="repeating"
               type="select"
               id="reminder-repeating"
-              value={activeItem.reinderType}
+              value={activeItem.repeating}
               onChange={handleChange}
             >
+              <option> None </option>
               <option> Daily </option>
               <option> Weekly </option>
               <option> Monthly </option>
@@ -95,17 +110,6 @@ export default function CustomModal(props) {
               onChange={handleChange}
               placeholder="Enter Reminder Description"
             />
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="checkbox"
-                name="completed"
-                checked={activeItem.completed}
-                onChange={handleChange}
-              />
-              Completed
-            </Label>
           </FormGroup>
         </Form>
       </ModalBody>

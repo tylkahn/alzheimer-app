@@ -52,8 +52,38 @@ textarea:focus{
   cursor: pointer;
 }
 
+.popup{
+  background-color: #ffd9d9;
+  border-color: #d35e5e;
+  border-radius: 5px;
+  padding: 2px 5px 2px 5px; 
+  min-height: 70px;
+}
+
+.popup-title{
+  font-size: 30px;
+}
+
+.popup-date{
+  font-size: 20px;
+}
+
+.reminder{
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 5px 10px 5px 10px; 
+  min-height: 170px;
+}
+
+.reminder-entry{
+  background-color: #e2e2e2;
+  border-radius: 10px;
+  padding: 5px 10px 5px 10px; 
+  min-height: 170px;
+}
+
 .entry{
-  background-color: #69f775;
+  background-color: #c085c0;
   border-radius: 10px;
   padding: 1rem;
   min-height: 170px;
@@ -63,10 +93,37 @@ textarea:focus{
   flex-direction: column;
   justify-content: space-between;
 }
+.entry-title{
+  font-size: 40px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.entry-description{
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+}
 
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
 .entry-footer{
   display: flex;
   text-align: right; 
   /*something with spacebetween*/
+}
+
+.search{
+  display: flex;
+  align-items: center;
+  background-color: rgb(230, 230, 230);
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 1.5em;
+}
+
+.search input{
+  border: none;
+  background-color: rgb(230, 230, 230);
+}
+
+.search input:focus{
+  outline: none;
 }

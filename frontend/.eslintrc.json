@@ -22,5 +22,6 @@
     // npx eslint-config-prettier path/to/main.js
     // for a few files (ideally every file but that's too much work)
     // in the workspace to ensure that no rules conflict with prettier
+    "jsx-a11y/label-has-associated-control": ["error", { "assert": "htmlFor" }] // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/718#issuecomment-659552677
   }
 }
