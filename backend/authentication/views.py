@@ -3,7 +3,7 @@ from rest_framework import generics, mixins
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from .serializers import UserSerializer
+from .serializers import GetUserSerializer, CreateUserSerializer
 from django.http import Http404
 
 # Create your views here.
@@ -40,7 +40,7 @@ class GetUser(mixins.RetrieveModelMixin, generics.GenericAPIView):
     """
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = GetUserSerializer
 
     def get_object(self):
         # TODO: is the queryset= line necessary?
@@ -81,10 +81,14 @@ class CreateUser(mixins.CreateModelMixin, generics.GenericAPIView):
     View to create a new user
     """
 
+    queryset = User.objects.all()
+    serializer_class = CreateUserSerializer
+
     def post(self, request, *args, **kwargs):
         print("CreateUser post")
         print(self)
         print(request)
+        print(request.data)
         print(args)
         print(kwargs)
         return self.create(request, *args, **kwargs)
