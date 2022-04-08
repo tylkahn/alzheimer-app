@@ -1,7 +1,7 @@
 import React from "react";
-import Entry from './Entry'
 import {nanoid} from 'nanoid';
-//import { MdSearch } from 'react-icons/md';
+import Entry from './Entry'
+// import { MdSearch } from 'react-icons/md';
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class JournalTab extends React.Component {
         };
     }
 
-    //this one is specific to journalentries
+    // this one is specific to journalentries
     addImage = (jpg) => {
         this.setState({
             images: [...jpg],
@@ -35,14 +35,14 @@ class JournalTab extends React.Component {
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
-                //eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
+                // eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
                 title: this.state.entryTitle,
                 
                 description: this.state.entryDescription,
-                images: ["./images/journal.jpg"],//default every image to have the journal image
+                images: ["./images/journal.jpg"],// default every image to have the journal image
             });
             
-            this.setState({///////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
+            this.setState({/// ////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
                 entryDescription: ''
             });
             this.forceUpdate();
@@ -53,15 +53,15 @@ class JournalTab extends React.Component {
     Search = (event) => {
         this.setState({
             searchText: event.target.value,
-            //displayList: this.state.entryList.filter(
+            // displayList: this.state.entryList.filter(
             //    (entry)=>entry.state.title.toLowerCase().includes(searchText)
-            //),
+            // ),
         });
         console.log(this.state.searchText);
     }
 
     handleDescriptionChange = (event) => {
-        //event.target.value is what was typed into the text area
+        // event.target.value is what was typed into the text area
         this.setState({
             entryDescription: event.target.value,
         });
@@ -69,9 +69,9 @@ class JournalTab extends React.Component {
     }
 
     handleTitleChange = (event) => {
-        //event.target.value is what was typed into the text area
-        //////in the title: putting a bunch of spaces, typing a character, and deleting the character, 
-            //will add an entry that is titled that deleted character
+        // event.target.value is what was typed into the text area
+        /// ///in the title: putting a bunch of spaces, typing a character, and deleting the character, 
+            // will add an entry that is titled that deleted character
         if (event.target.value.trim().length > 0){
             this.setState({
                 entryTitle: event.target.value,
@@ -80,19 +80,19 @@ class JournalTab extends React.Component {
         }
     }
 
-    render = () => {
-        //kinda the noteslist.js
+    render() {
+        // kinda the noteslist.js
 
         return (
-            //when some button is pressed, call makeDisplayList() that 
-            //uses the javascript filter function on entry list to produce display list based on title inputted from text box
-            //onComponentDidMount might be used to initialize displayList to entryList if the page is loaded
-                //react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
+            // when some button is pressed, call makeDisplayList() that 
+            // uses the javascript filter function on entry list to produce display list based on title inputted from text box
+            // onComponentDidMount might be used to initialize displayList to entryList if the page is loaded
+                // react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
           
-          //probably need one package to save the image as some datatype
-          //look up react library where I can input an image and save it
-            //can probably just look up "Add File" (figure out how to limit it to jpg)
-          //<MdSearch className='search-icons' size='1.25em'/>: react icon for searching, might have to do an annoying installation to have access to the react-icons 
+          // probably need one package to save the image as some datatype
+          // look up react library where I can input an image and save it
+            // can probably just look up "Add File" (figure out how to limit it to jpg)
+          // <MdSearch className='search-icons' size='1.25em'/>: react icon for searching, might have to do an annoying installation to have access to the react-icons 
           
           <div className="journal">    
 
@@ -106,14 +106,14 @@ class JournalTab extends React.Component {
                     cols = '10'
                     placeholder='Enter title...'
                     onChange={this.handleTitleChange}
-                ></textarea>
+                 />
                 <textarea className= "entry-description"
                     rows='8'
                     cols = '10'
                     placeholder='Type to create the Journal Entry...'
-                    //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                    // value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                     onChange={this.handleDescriptionChange}
-                ></textarea>
+                 />
                 <div className="entry-footer">
                     <small>Characters remaining: 100</small>
                     <button onClick={() => {this.addEntry()}} className='save' >Save</button>
@@ -129,7 +129,7 @@ class JournalTab extends React.Component {
                     title={entry.title}
                     description={entry.description}
                     images={entry.images}
-                    key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                    key={nanoid(8)} // each entry needs a unique id for rendering, not just db
                 />
                 ),
                 

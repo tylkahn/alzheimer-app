@@ -42,7 +42,7 @@ export default function CustomModal(props) {
   }, [props, activeItem]);
 
   return (
-    <Modal isOpen={true} toggle={toggle}>
+    <Modal isOpen toggle={toggle}>
       <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
       <ModalBody>
         <Form onSubmit={() => onSave(tempActiveItem)}>

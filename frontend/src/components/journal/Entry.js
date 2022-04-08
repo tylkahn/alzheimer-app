@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import React from "react";
 
-class Entry extends React.Component { //extend this journal entry from a generic entry class
+class Entry extends React.Component { // extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
         this.state = {
@@ -10,11 +10,11 @@ class Entry extends React.Component { //extend this journal entry from a generic
             description: this.props.description,
             images: this.props.images,
             lastUpdated: 0,
-            tagList: [],//since im storing on the frontend, this stuff isnt useful yet
+            tagList: [],// since im storing on the frontend, this stuff isnt useful yet
         };
     }
     
-    /*migrate these functions to the Entry class */
+    /* migrate these functions to the Entry class */
     setJournalLastUpdated(time){
       this.setState(
           { lastUpdated: time }
@@ -39,15 +39,15 @@ class Entry extends React.Component { //extend this journal entry from a generic
       let reader = new FileReader();
       reader.readAsDataURL(files[0]);
       console.log(reader.result);
-    }*/
+    } */
 
     render() {
         return (
-          //entry-footer will contain the Edit button (inside the small tag)
+          // entry-footer will contain the Edit button (inside the small tag)
 
-          /*<div onSubmit={this.onFormSubmit}>
+          /* <div onSubmit={this.onFormSubmit}>
                 <input type="file" name="file" onChange={(e) => this.onChange(e)}/>
-              </div>*/
+              </div> */
           <div className='entry'>
             <span>
               <div className="entry-title">
@@ -58,7 +58,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
               </div>
             </span>
             
-            {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
+            {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info" />)}
             
             <div className="entry-footer">
               <small>Edit</small>
