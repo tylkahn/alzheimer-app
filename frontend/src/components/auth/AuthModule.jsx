@@ -22,6 +22,7 @@ function AuthModule(props) {
     input1.setCustomValidity(""); // empty string = input is valid
     input2.setCustomValidity("");
 
+    // form won't let you resubmit unless you remove this class
     form.classList.remove("was-validated");
     form.checkValidity();
   };
@@ -65,8 +66,54 @@ function AuthModule(props) {
     }
   };
 
-  const handleSignUpSubmit = () => {
+  const handleSignUpChange = (event) => {
+    event.preventDefault();
+    // clear validation and whatnot
+    event.target.setCustomValidity("");
+
+    const form = document.getElementById("signUp-form");
+
+    // TODO: make sure passwords match! (do this on the backend as well!)
+
+    form.classList.remove("was-validated");
+    form.checkValidity();
+  };
+
+  const handleSignUpSubmit = async (event) => {
+    event.preventDefault();
+    event.target.classList.remove("was-validated");
     // TODO: send data to server, set auth info based on server response
+
+    const config = {
+      method: "POST",
+      baseURL: process.env.REACT_APP_SERVER_BASE_URL,
+      url: "signup/",
+      data: {
+        id: event.target.username.value,
+        first_name: event.target.firstName.value,
+        last_name: event.target.lastName.value,
+        email: event.target.email.value,
+        password: event.target.password.value,
+        repeatPassword: event.target.repeatPassword.value,
+      },
+    };
+    let response = null;
+    try {
+      response = await axios.request(config);
+    } catch (err) {
+      // TODO: figure out what the server will respond when email/username is taken
+      if (err?.response?.status === 404) {
+        console.log("404 for some reason??"); // eslint-disable-line no-console
+      } else {
+        console.error(err); // eslint-disable-line no-console
+      }
+      event.target.classList.add("was-validated");
+      event.target.reportValidity();
+    }
+    if (response != null) {
+      // also catches undefined, just in case
+      setAuthInfo({ ...authInfo, isLoggedIn: true });
+    }
   };
 
   return isActiveLoginForm ? (
@@ -76,7 +123,11 @@ function AuthModule(props) {
       toggleForm={toggleForm}
     />
   ) : (
-    <SignUpForm handleSubmit={handleSignUpSubmit} toggleForm={toggleForm} />
+    <SignUpForm
+      handleSubmit={handleSignUpSubmit}
+      handleChange={handleSignUpChange}
+      toggleForm={toggleForm}
+    />
   );
 }
 AuthModule.propTypes = {

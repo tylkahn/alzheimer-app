@@ -12,12 +12,12 @@ function LoginForm(props) {
     <>
       <div className="invalid-feedback">Username or password is incorrect!</div>
       <form
-        className="login-form-noVal"
+        className="login-form"
         onSubmit={(e) => handleSubmit(e)}
         id="login-form"
       >
         <div className="form-group">
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="emailOrUsername">Email address</label>
           <input
             id="emailOrUsername"
             name="emailOrUsername"
