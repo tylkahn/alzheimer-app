@@ -18,6 +18,7 @@ class GameView(viewsets.ModelViewSet):
     serializer_class = GameSerializer
     def get_queryset(self):
         queryset = GameHistory.objects.all()
+        print(self.request.session)
         if self.request.user.is_authenticated:
             query_set = queryset.filter(player=self.request.user)
         else:

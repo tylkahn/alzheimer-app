@@ -33,13 +33,6 @@ CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        
-    )
-}
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -67,6 +60,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 ROOT_URLCONF = "backend.urls"
 
