@@ -3,9 +3,18 @@ from .models import Reminder
 
 # class TodoAdmin(admin.ModelAdmin):
 #     list_display = ('title', 'description', 'completed')
- 
+
+
 class ReminderAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reminderType', 'date', 'repeating', 'description', 'completed')
+    list_display = (
+        "title",
+        "reminderType",
+        "date",
+        "repeating",
+        "description",
+        "completed",
+    )
+
 
 # Register your models here.
 
