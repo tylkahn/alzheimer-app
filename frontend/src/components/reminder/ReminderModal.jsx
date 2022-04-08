@@ -10,11 +10,23 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import {nanoid} from 'nanoid';
 
+// Modal interactive popup used to create a new Reminder object
 export default function CustomModal(props) {
-  // let [activeItem, setActiveItem] = useState(props.activeItem);
-  const { activeItem, setActiveItem, toggle, onSave } = props;
+  const [activeItem, setActiveItem] = useState(
+    {
+      id: nanoid(),
+      title: "",
+      reminderType: "",
+      date: "",
+      repeating: "",
+      description: "",
+    }
+  );
+  const { toggle, onSave } = props;
 
+  // Saves information into activeItem
   const handleChange = (e) => {
     let { name, value } = e.target;
 
@@ -51,9 +63,10 @@ export default function CustomModal(props) {
               name="reminderType"
               type="select"
               id="reminder-type"
-              value={activeItem.reinderType}
+              value={activeItem.reminderType}
               onChange={handleChange}
             >
+              <option>  </option>
               <option> Medicine </option>
               <option> Appointment </option>
               <option> Other </option>
@@ -76,9 +89,10 @@ export default function CustomModal(props) {
               name="repeating"
               type="select"
               id="reminder-repeating"
-              value={activeItem.reinderType}
+              value={activeItem.repeating}
               onChange={handleChange}
             >
+              <option> None </option>
               <option> Daily </option>
               <option> Weekly </option>
               <option> Monthly </option>
@@ -96,17 +110,6 @@ export default function CustomModal(props) {
               onChange={handleChange}
               placeholder="Enter Reminder Description"
             />
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="checkbox"
-                name="completed"
-                checked={activeItem.completed}
-                onChange={handleChange}
-              />
-              Completed
-            </Label>
           </FormGroup>
         </Form>
       </ModalBody>

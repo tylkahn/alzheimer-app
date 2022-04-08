@@ -9,16 +9,6 @@ import AuthModule from "./components/auth/AuthModule";
 
 function App() {
   const [viewTab, setViewTab] = useState("");
-  const [reminderList, setReminderList] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [activeItem, setActiveItem] = useState({
-    title: "",
-    reminderType: "",
-    date: "",
-    repeating: "",
-    description: "",
-    completed: false,
-  });
   const [authInfo, setAuthInfo] = useState({
     username: "",
     isLoggedIn: false,
@@ -51,156 +41,35 @@ function App() {
     </div>
   );
 
+  // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab == "journal" && (
+      {viewTab == "journal" && 
         <div className="journaltab">
           <JournalTab entries={[]} />
-        </div>
-      )}
-      {viewTab == "reminder" && (
-        <div className="remindertab">
-          <ReminderTab entries={[activeItem]} />
-          <main className="container">
-            <h1 className="text-white text-uppercase text-center my-4">
-              Reminder app
-            </h1>
-            <div className="row">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={createItem}
-              >
-                Add task
-              </button>
-            </div>
-            <ul className="list-group list-group-flush border-top-0">
-              {renderItems()}
-            </ul>
-            {modal ? (
-              <ReminderModal
-                activeItem={activeItem}
-                toggle={toggle}
-                onSave={handleSubmit}
-                setActiveItem={setActiveItem}
-              />
-            ) : null}
-          </main>
-        </div>
-      )}
-      {viewTab == "game" && <Gametab />}
-    </div>
-  );
+        </div>}
+        {viewTab == "reminder" && <div className="remindertab">
+          <ReminderTab />
+        </div>}
+        {viewTab == "game" && <Gametab />}
+      </div>
 
-  const handleSubmit = (item) => {
-    console.log("handleSubmit");
-    toggle();
-    console.log("Item", item);
-    setActiveItem(item);
-    /* setActiveItem({
-        title: item.title,
-        reminderType: item.reminderType,
-        date: item.date,
-        repeating: item.repeating,
-        description: item.description,
-        completed: item.completed,
-    }); */
+    )
 
-    console.log("Active Item: ");
-    console.log(activeItem);
+  // TODO: Connect to backend/database
+  // const refreshList = () => {
+  //   axios
+  //     .get(BASE_URL + "/api/reminders")
+  //     .then((res) => {
+  //       console.log(res);
+  //       setReminderList(res.data)
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
-    // NOTE: let it be known that I very much dislike using axios.put and axios.delete
-    /* if (item.id) {
-      axios
-        .put(process.env.REACT_APP_SERVER_BASE_URL + `api/reminders/${item.id}/`, item)
-        .then(() => refreshList());
-    } else {
-      axios.post(process.env.REACT_APP_SERVER_BASE_URL + "api/reminders/", item).then(() => refreshList());
-    }
-    */
-  };
-
-  const deleteItem = (item) => {
-    axios
-      .delete(
-        `${process.env.REACT_APP_SERVER_BASE_URL}api/reminders/${item.id}/`
-      )
-      .then(() => refreshList());
-  };
-
-  const createItem = () => {
-    const item = {
-      title: "",
-      reminderType: "",
-      date: "",
-      repeating: "",
-      description: "",
-      completed: false,
-    };
-    console.log("created item");
-    setActiveItem(item);
-    toggle();
-  };
-
-  const editItem = (item) => {
-    setActiveItem(item);
-    console.log(item);
-    toggle();
-  };
-
-  const refreshList = () => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_BASE_URL}api/reminders`)
-      .then((res) => {
-        console.log(res);
-        setReminderList(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    refreshList();
-  }, []);
-
-  const toggle = () => {
-    setModal(!modal);
-  };
-
-  const renderItems = () => {
-    const newItems = reminderList.filter((item) => item.completed == viewTab);
-
-    return newItems.map((item) => (
-      <li
-        key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <span
-          className={`reminder-title mr-2 ${
-            viewTab ? "completed-reminder" : ""
-          }`}
-          title={item.description}
-        >
-          {item.title}
-        </span>
-        <span>
-          <button
-            type="button"
-            className="btn btn-secondary mr-2"
-            onClick={() => editItem(item)}
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => deleteItem(item)}
-          >
-            Delete
-          </button>
-        </span>
-      </li>
-    ));
-  };
+  // useEffect(() => {
+  //   refreshList();
+  // }, []);
 
   return (
     <main className="container">
