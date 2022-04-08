@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import axios from "axios";
 
+/* eslint-disable */
 class History extends React.Component {
     constructor(props) {
         super(props);
@@ -11,10 +12,12 @@ class History extends React.Component {
         this.sortScore = this.sortScore.bind(this);
     }
 
+    // initialize scores on mount
     componentDidMount() {
         this.getScores();
-      }
+    }
     
+    // update scores from the db
     getScores = () => {
         axios
             .get("/api/game/")
@@ -22,6 +25,7 @@ class History extends React.Component {
             .catch((err) => console.log(err));
     };
 
+    // return a single row populated with a score entry
     formRow(entry) {
         const d = new Date(entry.date);
         const day = d.getDate();
@@ -30,13 +34,14 @@ class History extends React.Component {
         return(<tr><td>{entry.player}</td><td>{entry.score}</td><td>{month}/{day}/{year}</td></tr>)
     }
 
+    // sort the scores list by the desired property
     sortScore(k) {
         console.log(this.state)
-        var newScores;
+        let newScores;
         if (k == 0) {
-            newScores = this.state.scores.sort(function(a,b) {return a.score-b.score});
+            newScores = this.state.scores.sort((a,b) => a.score-b.score);
         } else {
-            newScores = this.state.scores.sort(function(a,b) {return (new Date(a.date)).getTime()- (new Date(b.date)).getTime()});
+            newScores = this.state.scores.sort((a,b) => (new Date(a.date)).getTime()- (new Date(b.date)).getTime());
         }
         if (this.state.asc) {
             newScores.reverse();
@@ -47,6 +52,7 @@ class History extends React.Component {
         })
     }
 
+    // render the scores table
     render() {
         return(
             <div>

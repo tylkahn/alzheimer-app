@@ -15,9 +15,8 @@ class ReminderView(viewsets.ModelViewSet):
 
 class GameView(viewsets.ModelViewSet):
     serializer_class = GameSerializer
-    queryset = GameHistory.objects.all()
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = GameHistory.objects.all()
         if self.request.user.is_authenticated:
             query_set = queryset.filter(player=self.request.user)
         else:

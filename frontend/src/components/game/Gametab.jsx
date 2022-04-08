@@ -1,15 +1,15 @@
 import React from "react";
+import axios from "axios";
 import Board from './Board';
 import History from './History';
-import axios from "axios";
 
+/* eslint-disable */
 class Gametab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isGameMode: false,
       difficulty: 2,
-      scores: [{player:"test", score: 4, date: Date()}, {player:"test", score: 12, date: Date()}, {player:"test", score: 8, date: Date()}],
     };
     this.handleStartGame = this.handleStartGame.bind(this);
     this.handleEndGame = this.handleEndGame.bind(this);
@@ -17,18 +17,21 @@ class Gametab extends React.Component {
     this.submitScore = this.submitScore.bind(this);
   }
   
+  // enable the game mode
   handleStartGame() {
     this.setState({
       isGameMode: true,
     });
   }
   
+  // disable the game mode
   handleEndGame() {
     this.setState({
       isGameMode: false,
     });
   }
   
+  // toggle the difficulty based on user input
   handleChange(event) {
     var d = 2;
     if (event.target.value == "Easy") {
@@ -43,13 +46,14 @@ class Gametab extends React.Component {
     });
   }
 
-  test() {
-    const item = { score: 60 }
-    axios
-      .post("/api/game/", item)
-      .catch((err) => console.log(err));
-  }
+  // test() {
+  //   const item = { score: 60 }
+  //   axios
+  //     .post("/api/game/", item)
+  //     .catch((err) => console.log(err));
+  // }
   
+  // render the gametab, create the history and board components
   render() {
     return (
       <div className="game">
@@ -68,21 +72,22 @@ class Gametab extends React.Component {
         <input type="submit" value="Start Game" />
         </form>
         <button onClick={this.test}></button>
-        <History scores={this.state.scores}/>
+        <History/>
         </div>}
-        {this.state.isGameMode && 
-          <div className="game-board">
-          <Board onEnd={this.handleEndGame} size={this.state.difficulty} submit={this.submitScore}/>
-          </div>}
-          </div>
-          );
-        }
-        
-        submitScore(s) {
-          const item = { score: s};
-          axios
-            .post("/api/game/", item);
-        }
-      }
+      {this.state.isGameMode && 
+        <div className="game-board">
+        <Board onEnd={this.handleEndGame} size={this.state.difficulty} submit={this.submitScore}/>
+        </div>}
+      </div>
+    );
+  }
+  
+  // post the score to the db
+  submitScore(s) {
+    const item = { score: s};
+    axios
+      .post("/api/game/", item);
+  }
+}
       
-      export default Gametab;
+export default Gametab;

@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import Card from "./Card"
 
+/* eslint-disable */
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -15,10 +16,12 @@ class Board extends React.Component {
     this.promptNext = this.promptNext.bind(this)
   }
 
+  // check if the two active cards are matching
   checkMatch() {
     return this.state.cards[this.state.active1] % (this.size/2) == this.state.cards[this.state.active2] % (this.size/2);
   }
 
+  // handle the user clicking on a card, update the state
   handleClick(i) {
     if (this.state.active1 === i || this.state.matched[i]) {
 
@@ -48,6 +51,7 @@ class Board extends React.Component {
     }
   }
 
+  // render a specific card
   renderSquare(i) {
       const val = (this.state.active1 == i)|| (this.state.active2 == i) || this.state.matched[i] ? (this.state.cards[i] % (this.size/2)) : '?';
       return <Card 
@@ -58,12 +62,14 @@ class Board extends React.Component {
       />;
   }
 
+  // run the endgame 
   promptNext() {
     const finalScore = (5 - this.props.size) * this.state.score;
     this.props.submit(finalScore);
     this.props.onEnd();
   }
 
+  // render a single row of cards
   renderRow(v) {
     let i = v*6;
     return (
@@ -78,6 +84,7 @@ class Board extends React.Component {
     )
   }
 
+  // render the game board
   render() {
     const completed = isComplete(this.state.matched);
     const finalScore = (5 - this.props.size) * this.state.score;
@@ -101,6 +108,7 @@ class Board extends React.Component {
   }
 }
 
+// check if all cards are matched (the game is done)
 function isComplete(matched) {
   for (let i=0; i < matched.length; i++) {
     if (!matched[i]) {

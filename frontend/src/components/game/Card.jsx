@@ -1,5 +1,6 @@
 import React from "react";
 
+// render a card with proper styling
 class Card extends React.Component {
   render() {
     const style = this.props.status ? "matching" : (this.props.active ? "game-active" : "gamecard");
