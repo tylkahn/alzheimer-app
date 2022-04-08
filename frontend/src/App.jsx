@@ -9,16 +9,7 @@ import AuthModule from "./components/auth/AuthModule";
 
 function App() {
   const [viewTab, setViewTab] = useState("journal");
-  const [reminderList, setReminderList] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [activeItem, setActiveItem] = useState({
-    title: "",
-    reminderType: "",
-    date: "",
-    repeating: "",
-    description: "",
-    completed: false,
-  });
+  
   const [authInfo, setAuthInfo] = useState({
     username: "",
     isLoggedIn: false,
