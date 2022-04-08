@@ -13,41 +13,108 @@ code {
 }
 
 .journal{
-  max-width: 960px;
   margin-right: auto;
   margin-left: auto;
   padding-right: 15px;
   padding-left: 15px;
 }
 
+.checkboxes{
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+}
+
+.column{
+  /*stuff for two column structure*/
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  grid-gap: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .entry-list{
   display: grid;
-  grid-gap: 1rem; /*space between entries*/
+  grid-gap: 1rem; /*space between entries in entryList*/
   grid-template-columns: repeat(1, minmax(200px, 1fr)); /*only 1 column and that column must be > 500px but < 1fr*/
+  padding-top: 6rem;
+  padding-left: 2rem;
 }
 
 .entry.new{
-  background-color: #a769f7;
+  border-style: solid;
+  border-color: rgba(106, 216, 179, 0.959);
+  background-color: white;
+  grid-gap: 1rem;
+}
+
+.tag-pop-up{
+  border-style: solid;
+  border-color: rgba(106, 216, 179, 0.959);
+  border-radius: 15em;
+  background-color: white;
+  grid-gap: 1rem;
+}
+
+.spacing{
+  padding-top: 6rem;
 }
 
 textarea{
   border: none;
   resize: none;
-  background-color: #a769f7;
+  color: black;
+  background-color: white;
 }
 
 textarea:focus{
   outline: none;
 }
 
+entry-tag{
+  border: none;
+  border-radius: 15em;
+}
 .save{
-  background-color: aquamarine;
+  background-color: transparent;
   border: none;
   border-radius: 15px;
   padding: 5px 10px 5px 10px;  
 }
 
 .save:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
+}
+
+.add-tag{
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.add-tag:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
+}
+
+.tag-button{
+  background-color: rgb(238, 186, 248);
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.tag-button:hover{
   background-color: rgb(186, 248, 227);
   cursor: pointer;
 }
@@ -83,7 +150,9 @@ textarea:focus{
 }
 
 .entry{
-  background-color: #c085c0;
+  background-color: white;
+  border-style: solid;
+  border-color: #a769f7;
   border-radius: 10px;
   padding: 1rem;
   min-height: 170px;
@@ -95,28 +164,29 @@ textarea:focus{
 }
 .entry-title{
   font-size: 40px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: sans-serif;
 }
+
 
 .entry-description{
   font-size: 20px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: sans-serif;
 }
 
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
 .entry-footer{
   display: flex;
-  text-align: right; 
-  /*something with spacebetween*/
+  align-items: center;
+  justify-content: space-between;
 }
 
 .search{
-  display: flex;
   align-items: center;
   background-color: rgb(230, 230, 230);
   border-radius: 10px;
   padding: 5px;
-  margin-bottom: 1.5em;
+  margin-top: 1em;
+  margin-bottom: .5em;
 }
 
 .search input{
@@ -126,4 +196,28 @@ textarea:focus{
 
 .search input:focus{
   outline: none;
+}
+
+.delete {
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.delete:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
+}
+
+.edit {
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.edit:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
 }

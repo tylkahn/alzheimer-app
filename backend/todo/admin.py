@@ -5,7 +5,8 @@ from datetime import datetime
 # class TodoAdmin(admin.ModelAdmin):
 #     list_display = ('title', 'description', 'completed')
 
-
+class JournalAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
 class ReminderAdmin(admin.ModelAdmin):
     list_display = (
         "title",

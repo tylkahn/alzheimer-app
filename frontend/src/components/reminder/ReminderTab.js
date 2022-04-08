@@ -9,9 +9,9 @@ class ReminderTab extends React.Component {
         super(props);
         this.state = {
             entryList: [],
-            /*{"id": "", "title": "", "reminderType": "", "date": "", 
+            /* {"id": "", "title": "", "reminderType": "", "date": "", 
                 "repeating": "", "description": "", "images": [],
-                "lastUpdated": 0, "tagList": []}*/
+                "lastUpdated": 0, "tagList": []} */
             activeEntry: '',
             searchType: '',
             searchText: '',
@@ -23,7 +23,7 @@ class ReminderTab extends React.Component {
     // Removes entries from list, called when delete button is clicked
     deleteEntry(entry) {
         let b = false;
-        for (var i = 0; i < this.state.entryList.length; i++) {
+        for (let i = 0; i < this.state.entryList.length; i++) {
             if (b) break;
             if (this.state.entryList[i] == entry) {
                 this.state.entryList.splice(i, 1);
@@ -71,9 +71,9 @@ class ReminderTab extends React.Component {
 
     // Checks if a reminder is set within 10 minutes of the current time
     isValidPopup(popup) {
-        let currentDate = new Date();
-        let popupDate = new Date(popup.date)
-        let diffMinute = Math.abs(popupDate - currentDate) / (1000 * 60);
+        const currentDate = new Date();
+        const popupDate = new Date(popup.date)
+        const diffMinute = Math.abs(popupDate - currentDate) / (1000 * 60);
         // console.log("diffMinute:",diffMinute);
         // console.log("currentDate:",currentDate);
         // console.log("popupDate:",popupDate);
@@ -81,13 +81,13 @@ class ReminderTab extends React.Component {
             console.log('valid')
             return true
         }
-        else {
+        
             console.log('invalid')
             return false
-        }
+        
     }
 
-    render = () =>{
+    render() {
 
         return (
             <div>    
@@ -113,8 +113,7 @@ class ReminderTab extends React.Component {
                             <option value="reminderType"> Type </option>
                         </select>
                     </div> */}
-                    <div>
-                    </div> <br/>
+                    <div /> <br/>
                     {/* Search bar */}
                     <div className='search'>
                         <input onChange={this.Search} type="text" placeholder='type to search...'/>
@@ -145,7 +144,7 @@ class ReminderTab extends React.Component {
                                 date={entry.date}
                                 repeating={entry.repeating}
                                 description={entry.description}
-                                key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                                key={nanoid(8)} // each entry needs a unique id for rendering, not just db
                             /><br/>
                             <span>
                             <button
