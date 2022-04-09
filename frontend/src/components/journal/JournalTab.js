@@ -1,142 +1,377 @@
 import React from "react";
+import Popup from 'reactjs-popup';
 import {nanoid} from 'nanoid';
-import Entry from './Entry'
-// import { MdSearch } from 'react-icons/md';
+import {Input} from 'reactstrap';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import Entry from './Entry';
+import 'reactjs-popup/dist/index.css';
+library.add(faFloppyDisk);
+library.add(faMagnifyingGlass);
+library.add(faSquarePlus);
+library.add(faPlus);
+library.add(faXmark);
+library.add(faAngleUp);
 
 class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* what an ENTRY looks like
-            {
+            /* ENTRY Parameters {
                 id: nanoid(),
-                title: "The First Title",
-                description: "The First Description",
+                title: "",
+                description: "",
                 images: [],
+
+                //to be implemented in the future
                 lastUpdated: "3/27/2022",
                 tagList: [],
-            }
-            */
+            }*/
             entryList: this.props.entries,
-            entryTitle: `Entry Title ${this.props.entries.length+1}`,
+            //TODO: base the default entry title off of a counter, not the length
+            entryTitle: '',
             entryDescription: '',
             searchText: '',
+            display: 'entryList', //either entrylist or editEntry
+            titleChecked: false,
+            dateChecked: false,
+            entryTag: '',
+            tagList: [], 
+            showPopup: false,
         };
     }
 
-    // this one is specific to journalentries
+    //specific to journalentries
     addImage = (jpg) => {
         this.setState({
             images: [...jpg],
         });
     }
 
-    addEntry = () => {
+    addTag = () => {
+        console.log("SIR");
+        console.log(this.state.entryTag);
+        this.state.tagList.push(this.state.entryTag);
+        this.setState({
+            entryTag: '',
+            showPopup: !this.state.showPopup,
+        });
+        this.forceUpdate();
+    }
+  
+    togglePopup() {
+        this.setState({
+          showPopup: !this.state.showPopup
+        });
+    }
+
+
+    //occurs either when creating a new entry or when finished editting one
+    onSave = () => {
+        //empty title box so default it
+        if (!this.state.entryTitle){
+            this.setState({
+                entryTitle: `Entry Title ${this.state.entryList.length+1}`,
+            })
+        }
+
+        //if there exists a description, add it to the list of entries
         if (this.state.entryDescription.trim().length > 0){
             this.state.entryList.push({
                 id: nanoid(4), 
-                // eventually have the title default to this if the string is empty, but have another title text box where the user can inputs stuff
                 title: this.state.entryTitle,
-                
                 description: this.state.entryDescription,
-                images: ["./images/journal.jpg"],// default every image to have the journal image
+                date: new Date(),
+                images: ["./images/journal.jpg"],//default every image to have the journal image
+                tagList: this.state.tagList,
             });
-            
-            this.setState({/// ////////////////reset contents of entryDescription, doesnt work, might need value variable in entry new tag below
-                entryDescription: ''
-            });
-            this.forceUpdate();
         }
 
+        //empty out the current state because it was saved
+        this.setState({
+            display: 'entryList',
+            entryTitle: '',
+            entryDescription: '',
+            tagList: [],
+        });
+        this.forceUpdate();
     }
 
-    Search = (event) => {
+    //remove an entry given its id
+    deleteEntry = (id) => {
+        const newEntries = this.state.entryList.filter((e) => e.id !== id);
+        this.state.entryList = newEntries;
+        this.forceUpdate();
+    }
+
+    //edit an entry given its id
+    editEntry = (id) => {
+        const entries = this.state.entryList;
+        entries.map(entry=>{      
+            if(entry.id === id){
+                this.setState({
+                    entryTitle: entry.title,
+                    entryDescription: entry.description,
+                    display: 'editEntry',
+                });
+
+                //remove the entry being edited, to add the new entry
+                this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
+            }
+        })
+        this.forceUpdate();
+    }
+
+    //stores in the state the value in the search text box
+    search = (event) => {
         this.setState({
             searchText: event.target.value,
-            // displayList: this.state.entryList.filter(
-            //    (entry)=>entry.state.title.toLowerCase().includes(searchText)
-            // ),
         });
-        console.log(this.state.searchText);
     }
 
+    //stores in the state the value in the description box
     handleDescriptionChange = (event) => {
-        // event.target.value is what was typed into the text area
         this.setState({
             entryDescription: event.target.value,
         });
-        console.log(this.state.entryDescription);
+        this.forceUpdate();
     }
 
+    //stores in the state the value in the title box
     handleTitleChange = (event) => {
-        // event.target.value is what was typed into the text area
-        /// ///in the title: putting a bunch of spaces, typing a character, and deleting the character, 
-            // will add an entry that is titled that deleted character
+        //TODO: in the title: putting a bunch of spaces, typing a character, and deleting the character, 
+            //will add an entry that is titled that deleted character
         if (event.target.value.trim().length > 0){
             this.setState({
                 entryTitle: event.target.value,
-            
             });
         }
     }
 
-    render() {
-        // kinda the noteslist.js
+    handleTagChange = (event) => {
+        if (event.target.value.trim().length > 0){
+            this.setState({
+                entryTag: event.target.value,
+            });
+        }
+        this.forceUpdate();
+        //console.log(this.state.entryDescription);
+    }
 
-        return (
-            // when some button is pressed, call makeDisplayList() that 
-            // uses the javascript filter function on entry list to produce display list based on title inputted from text box
-            // onComponentDidMount might be used to initialize displayList to entryList if the page is loaded
-                // react components will have a list of all these kinds of useful functions (like maybe onComponentDidUpdate)
+    //on componentDidMount(), grab everything in localStorage/postgress and set the state
+
+    //on the first run of the page
+    componentDidMount = () => {
+        const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
+        //if there exist items in the localStorage, save it as our state
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        this.forceUpdate();
+    }
+
+    //on each change to the page
+    componentDidUpdate(){
+        localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
+    }
+
+    //change display mode to the editEntry page
+    editDisplay = () => {
+        this.setState({
+            display: 'editEntry',
+        });
+        this.forceUpdate();
+    }
+
+    //sort entryList by title reverse alphabetically
+    sortByTitle = () => {
+        this.setState({
+            entryList: this.state.entryList.sort((a, b) => (a.title > b.title) ? 1 : -1)
+        });
+        this.forceUpdate();
+    }
+
+    //sort entryList by date (most recent to least recent)
+    sortByDate = () => {
+        this.setState({
+            entryList: this.state.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)
+        });
+        this.forceUpdate();
+    }
+
+    //sort entryList by tag alphabetically
+    sortByTag = () => {
+        
+        this.forceUpdate();
+    }
+
+    checkOnlyOne = (checkBox) => {
+        //falsify all checkboxes and then check off the correct one
+        document.getElementById("titleCheckbox").checked = false;
+        document.getElementById("dateCheckbox").checked = false;
+        document.getElementById("tagCheckbox").checked = false;
+        document.getElementById(checkBox).checked = true;
+    }
+
+    //handles the title sorting check box
+    handleTitleCheckChange = () => {
+        //skip if should be unchecked
+        if (!document.getElementById("titleCheckbox").checked){return;}
+        this.checkOnlyOne("titleCheckbox");
+        this.sortByTitle();
+        this.forceUpdate();
+    }
+
+    //handles the Date sorting check box
+    handleDateCheckChange = () => {
+        //skip if should be unchecked
+        if (!document.getElementById("dateCheckbox").checked){return;}
+        this.checkOnlyOne("dateCheckbox");
+        this.sortByDate();
+        this.forceUpdate();
+    }
+
+    //handles the tag sorting check box
+    handleTagCheckChange = () => {
+        //skip if should be unchecked
+        if (!document.getElementById("tagCheckbox").checked){return;}
+        this.checkOnlyOne("tagCheckbox");
+        this.sortByTag();
+        this.forceUpdate();
+    }
+
+    render = () => {
+        return (          
+          //TODO: probably need one package to save the image as some datatype
+            //look up react library where I can input an image and save it
+            //can probably just look up "Add File" (figure out how to limit it to jpg)
           
-          // probably need one package to save the image as some datatype
-          // look up react library where I can input an image and save it
-            // can probably just look up "Add File" (figure out how to limit it to jpg)
-          // <MdSearch className='search-icons' size='1.25em'/>: react icon for searching, might have to do an annoying installation to have access to the react-icons 
-          
-          <div className="journal">    
+            <div className="journal">   
+                <div className='row'>
+                    <div className='column'>
+                        <div className='search'>
+                            <FontAwesomeIcon icon="magnifying-glass" />
+                            <input onChange={this.search} type="text" placeholder='type to search...'/>
+                        </div>
 
-            <div className='search'>
-                <input onChange={this.Search} type="text" placeholder='type to search...'/>
-            </div>
+                        <label className='checkboxes'>
+                            <div>
+                                <Input
+                                    id="titleCheckbox"
+                                    type="checkbox"
+                                    name="title"
+                                    //checked={this.titleChecked}
+                                    onClick={this.handleTitleCheckChange}
+                                />
+                            </div>Title
+                            
+                            <div>
+                                <Input
+                                    id="dateCheckbox"
+                                    type="checkbox"
+                                    name="date"
+                                    //checked={this.dateChecked}
+                                    onClick={this.handleDateCheckChange}
+                                />
+                            </div>Date
 
-            <div className="entry new">
-                <textarea className= "entry-title"
-                    rows='1'
-                    cols = '10'
-                    placeholder='Enter title...'
-                    onChange={this.handleTitleChange}
-                 />
-                <textarea className= "entry-description"
-                    rows='8'
-                    cols = '10'
-                    placeholder='Type to create the Journal Entry...'
-                    // value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                    onChange={this.handleDescriptionChange}
-                 />
-                <div className="entry-footer">
-                    <small>Characters remaining: 100</small>
-                    <button onClick={() => {this.addEntry()}} className='save' >Save</button>
+                            <div>
+                                <Input
+                                    id="tagCheckbox"
+                                    type="checkbox"
+                                    name="tag"
+                                    //checked={this.tagChecked}
+                                    onClick={this.handleTagCheckChange}
+                                />
+                            </div>Tag
+                        </label>
+
+                        {this.state.display == "entryList" && (
+                            <button 
+                                onClick={() => {this.editDisplay()}}
+                                className='save' >
+                                <FontAwesomeIcon icon="square-plus" />
+                                New Entry
+                            </button>
+                        )}
+                    </div>
+
+                    <div className='column'>
+                        {this.state.display == "entryList" && (
+                            <div className="entry-list"> 
+                                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                                    <Entry
+                                        id={entry.id}
+                                        title={entry.title}
+                                        description={entry.description}
+                                        images={entry.images}
+                                        tagList = {entry.tagList}
+                                        date={entry.date}
+                                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
+                                        handleDeleteEntry = {this.deleteEntry}
+                                        handleEditEntry = {this.editEntry}
+                                    />
+                                    ),
+                                )}
+                            </div>
+                        )}
+
+                        {this.state.display == "editEntry" && (
+                            <div className = "spacing">
+                                <div className="entry new">
+                                    <textarea className= "entry-title"
+                                        rows='1'
+                                        cols = '10'
+                                        placeholder='Enter title...'
+                                        onChange={this.handleTitleChange}
+                                    >  
+                                        {this.state.entryTitle}
+                                    </textarea>
+                                    <textarea className= "entry-description"
+                                        rows='4'
+                                        cols = '10'
+                                        placeholder='Type to create the Journal Entry...'
+                                        onChange={this.handleDescriptionChange}
+                                    >
+                                        {this.state.entryDescription}
+                                    </textarea>
+
+                                    {this.state.showPopup == true && (
+                                        <div className = "tag-pop-up">
+                                            <textarea className= "entry-tag"
+                                                rows='1'
+                                                cols = '16'
+                                                placeholder='tag...'
+                                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
+                                                onChange={this.handleTagChange}>
+                                            </textarea>
+                                            <button 
+                                                onClick={() => {{this.addTag()}}} 
+                                                className='add-tag' >
+                                                <FontAwesomeIcon icon="plus" />
+                                            </button>
+                                        </div>
+                                    )}
+
+
+                                    <div className="entry-footer">
+                                        <button 
+                                            onClick={() => {{this.togglePopup()}}} 
+                                            className='add-tag' >
+                                            <FontAwesomeIcon icon="angle-up" />
+                                        </button>
+                                        
+                                        <button 
+                                            onClick={() => {this.onSave()}} 
+                                            className='save' >
+                                            <FontAwesomeIcon icon="floppy-disk" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-
-            <div className="entry-list">
-            My NON-hard-coded list: 
-            
-            {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
-                <Entry
-                    id={entry.id}
-                    title={entry.title}
-                    description={entry.description}
-                    images={entry.images}
-                    key={nanoid(8)} // each entry needs a unique id for rendering, not just db
-                />
-                ),
-                
-            )}
-            </div>           
-              
-          </div>
         );
     }
 }

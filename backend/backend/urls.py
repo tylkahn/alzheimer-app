@@ -21,7 +21,7 @@ from authentication import views as authViews
 
 router = routers.DefaultRouter()
 router.register(r'game', todoViews.GameView, 'game')
-
+router.register(r"journalentries", todoViews.JournalView, "journalentry")
 router.register(r"reminders", todoViews.ReminderView, "reminder")
 # router.register(r"users", authViews.UserViewSet, "user")
 
