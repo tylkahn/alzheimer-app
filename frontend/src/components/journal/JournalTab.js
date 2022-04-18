@@ -50,8 +50,7 @@ class JournalTab extends React.Component {
     }
 
     addTag = () => {
-        console.log("SIR");
-        console.log(this.state.entryTag);
+        if (this.state.entryTag.trim().length <= 0){ return; }
         this.state.tagList.push(this.state.entryTag);
         this.setState({
             entryTag: '',
@@ -156,7 +155,6 @@ class JournalTab extends React.Component {
             });
         }
         this.forceUpdate();
-        //console.log(this.state.entryDescription);
     }
 
     //on componentDidMount(), grab everything in localStorage/postgress and set the state
@@ -198,17 +196,10 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //sort entryList by tag alphabetically
-    sortByTag = () => {
-        
-        this.forceUpdate();
-    }
-
     checkOnlyOne = (checkBox) => {
         //falsify all checkboxes and then check off the correct one
         document.getElementById("titleCheckbox").checked = false;
         document.getElementById("dateCheckbox").checked = false;
-        document.getElementById("tagCheckbox").checked = false;
         document.getElementById(checkBox).checked = true;
     }
 
@@ -227,15 +218,6 @@ class JournalTab extends React.Component {
         if (!document.getElementById("dateCheckbox").checked){return;}
         this.checkOnlyOne("dateCheckbox");
         this.sortByDate();
-        this.forceUpdate();
-    }
-
-    //handles the tag sorting check box
-    handleTagCheckChange = () => {
-        //skip if should be unchecked
-        if (!document.getElementById("tagCheckbox").checked){return;}
-        this.checkOnlyOne("tagCheckbox");
-        this.sortByTag();
         this.forceUpdate();
     }
 
@@ -274,15 +256,6 @@ class JournalTab extends React.Component {
                                 />
                             </div>Date
 
-                            <div>
-                                <Input
-                                    id="tagCheckbox"
-                                    type="checkbox"
-                                    name="tag"
-                                    //checked={this.tagChecked}
-                                    onClick={this.handleTagCheckChange}
-                                />
-                            </div>Tag
                         </label>
 
                         {this.state.display == "entryList" && (
@@ -341,7 +314,6 @@ class JournalTab extends React.Component {
                                                 rows='1'
                                                 cols = '16'
                                                 placeholder='tag...'
-                                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
                                                 onChange={this.handleTagChange}>
                                             </textarea>
                                             <button 

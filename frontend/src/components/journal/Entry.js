@@ -42,10 +42,10 @@ class Entry extends React.Component { //extend this journal entry from a generic
               </div>
             </span>
             
-            {this.state.images.map((img) => <img key={nanoid()} src={img} alt="info"></img>)}
+            {this.state.images.map(img => <img key={nanoid()} src={img} alt="info"></img>)}
             <div className = "tag-list">
             {this.state.tagList.map(tag => (
-                <button className="tag-button">
+                <button key={nanoid()} className="tag-button">
                   {tag}
                 </button>
                 ),
