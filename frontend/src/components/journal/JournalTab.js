@@ -5,14 +5,24 @@ import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import Entry from './Entry';
+import Entry from './JournalEntry';
 import 'reactjs-popup/dist/index.css';
+
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
 library.add(faPlus);
 library.add(faXmark);
 library.add(faAngleUp);
+
+const getBase64 = (file) => {
+    return new Promise((resolve,reject) => {
+       const reader = new FileReader();
+       reader.onload = () => resolve(reader.result);
+       reader.onerror = error => reject(error);
+       reader.readAsDataURL(file);
+    });
+}
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -33,20 +43,12 @@ class JournalTab extends React.Component {
             entryTitle: '',
             entryDescription: '',
             searchText: '',
+            entryB64ImageList: [],
             display: 'entryList', //either entrylist or editEntry
-            titleChecked: false,
-            dateChecked: false,
             entryTag: '',
             tagList: [], 
             showPopup: false,
         };
-    }
-
-    //specific to journalentries
-    addImage = (jpg) => {
-        this.setState({
-            images: [...jpg],
-        });
     }
 
     addTag = () => {
@@ -82,7 +84,7 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 date: new Date(),
-                images: ["./images/journal.jpg"],//default every image to have the journal image
+                images: [this.state.entryB64ImageList],
                 tagList: this.state.tagList,
             });
         }
@@ -93,6 +95,7 @@ class JournalTab extends React.Component {
             entryTitle: '',
             entryDescription: '',
             tagList: [],
+            entryB64ImageList: [],
         });
         this.forceUpdate();
     }
@@ -113,6 +116,8 @@ class JournalTab extends React.Component {
                     entryTitle: entry.title,
                     entryDescription: entry.description,
                     display: 'editEntry',
+                    entryB64ImageList: entry.images,
+                    //taglist??//////////////////////////////////////////////////
                 });
 
                 //remove the entry being edited, to add the new entry
@@ -170,6 +175,7 @@ class JournalTab extends React.Component {
     //on each change to the page
     componentDidUpdate(){
         localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
+        console.log(this.state.entryList);
     }
 
     //change display mode to the editEntry page
@@ -193,6 +199,7 @@ class JournalTab extends React.Component {
         this.setState({
             entryList: this.state.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)
         });
+        
         this.forceUpdate();
     }
 
@@ -221,6 +228,14 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    imageUpload = async (e) => {
+        const file = e.target.files;
+        for (let i = 0; i < file.length; i++){
+            const base64 = await getBase64(file[i]);
+            this.state.entryB64ImageList.append(base64);
+        }
+    };
+
     render = () => {
         return (          
           //TODO: probably need one package to save the image as some datatype
@@ -241,7 +256,6 @@ class JournalTab extends React.Component {
                                     id="titleCheckbox"
                                     type="checkbox"
                                     name="title"
-                                    //checked={this.titleChecked}
                                     onClick={this.handleTitleCheckChange}
                                 />
                             </div>Title
@@ -251,11 +265,9 @@ class JournalTab extends React.Component {
                                     id="dateCheckbox"
                                     type="checkbox"
                                     name="date"
-                                    //checked={this.dateChecked}
                                     onClick={this.handleDateCheckChange}
                                 />
                             </div>Date
-
                         </label>
 
                         {this.state.display == "entryList" && (
@@ -308,6 +320,11 @@ class JournalTab extends React.Component {
                                         {this.state.entryDescription}
                                     </textarea>
 
+                                    {this.state.entryB64ImageList.map(img => {
+                                        const image = img
+                                        return <img key={nanoid()} src={image} alt="info"></img>
+                                    })}
+                                    
                                     {this.state.showPopup == true && (
                                         <div className = "tag-pop-up">
                                             <textarea className= "entry-tag"
@@ -332,11 +349,20 @@ class JournalTab extends React.Component {
                                             <FontAwesomeIcon icon="angle-up" />
                                         </button>
                                         
+                                        <input type="file"
+                                            id="img-upload" name="img-upload"
+                                            accept="image/png, image/jpeg"
+                                            onChange={this.imageUpload}
+                                            multiple="multiple"
+                                        >
+                                        </input>
+
                                         <button 
                                             onClick={() => {this.onSave()}} 
                                             className='save' >
                                             <FontAwesomeIcon icon="floppy-disk" />
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
