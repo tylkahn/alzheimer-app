@@ -1,11 +1,11 @@
 import { nanoid } from "nanoid";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-
+import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(faTrashCan);
 library.add(faPenToSquare);
+
 class Entry extends React.Component { //extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
@@ -14,19 +14,11 @@ class Entry extends React.Component { //extend this journal entry from a generic
             title: this.props.title,
             description: this.props.description,
             images: this.props.images,
-            lastUpdated: 0,
             tagList: this.props.tagList,//since im storing on the frontend, this stuff isnt useful yet
             date: this.props.date,
             handleDeleteEntry: this.props.handleDeleteEntry,
             handleEditEntry: this.props.handleEditEntry,
         };
-        
-    }
-    
-    setJournalLastUpdated(time){
-      this.setState(
-          { lastUpdated: time }
-      );
     }
 
     render = () => {
@@ -44,11 +36,12 @@ class Entry extends React.Component { //extend this journal entry from a generic
             
             {this.state.images.map(img => <img key={nanoid()} src={img} alt="info"></img>)}
             <div className = "tag-list">
-            {this.state.tagList.map(tag => (
+            {this.state.tagList.map(tag => 
+              (
                 <button key={nanoid()} className="tag-button">
                   {tag}
                 </button>
-                ),
+              ),
             )}
             </div>
             

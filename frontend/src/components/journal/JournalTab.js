@@ -5,7 +5,7 @@ import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import Entry from './JournalEntry';
+import Entry from './Entry';
 import 'reactjs-popup/dist/index.css';
 
 library.add(faFloppyDisk);
@@ -33,13 +33,10 @@ class JournalTab extends React.Component {
                 title: "",
                 description: "",
                 images: [],
-
-                //to be implemented in the future
-                lastUpdated: "3/27/2022",
                 tagList: [],
             }*/
             entryList: this.props.entries,
-            //TODO: base the default entry title off of a counter, not the length
+            //TODO: base the default entry title off of a counter, not the length////////////////////////
             entryTitle: '',
             entryDescription: '',
             searchText: '',
@@ -47,7 +44,7 @@ class JournalTab extends React.Component {
             display: 'entryList', //either entrylist or editEntry
             entryTag: '',
             tagList: [], 
-            showPopup: false,
+            showPopup: false,/////////////////////////////////////
         };
     }
 
@@ -84,7 +81,7 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 date: new Date(),
-                images: [this.state.entryB64ImageList],
+                images: this.state.entryB64ImageList,
                 tagList: this.state.tagList,
             });
         }
@@ -117,7 +114,7 @@ class JournalTab extends React.Component {
                     entryDescription: entry.description,
                     display: 'editEntry',
                     entryB64ImageList: entry.images,
-                    //taglist??//////////////////////////////////////////////////
+                    //taglist??/////////////////////////////////////////////////////////////////////////////////
                 });
 
                 //remove the entry being edited, to add the new entry
@@ -229,10 +226,10 @@ class JournalTab extends React.Component {
     }
 
     imageUpload = async (e) => {
-        const file = e.target.files;
-        for (let i = 0; i < file.length; i++){
-            const base64 = await getBase64(file[i]);
-            this.state.entryB64ImageList.append(base64);
+        const file_list = e.target.files;
+        for (let i = 0; i < file_list.length; i++){
+            let base64 = await getBase64(file_list[i]);
+            this.state.entryB64ImageList.push(base64);
         }
     };
 
