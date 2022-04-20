@@ -36,7 +36,6 @@ class JournalTab extends React.Component {
                 tagList: [],
             }*/
             entryList: this.props.entries,
-            //TODO: base the default entry title off of a counter, not the length////////////////////////
             entryTitle: '',
             entryDescription: '',
             searchText: '',
@@ -68,10 +67,8 @@ class JournalTab extends React.Component {
     //occurs either when creating a new entry or when finished editting one
     onSave = () => {
         //empty title box so default it
-        if (!this.state.entryTitle){
-            this.setState({
-                entryTitle: `Entry Title ${this.state.entryList.length+1}`,
-            })
+        if (!this.state.entryTitle || this.state.entryTitle.trim().length === 0){
+            this.state.entryTitle = "Untitled";
         }
 
         //if there exists a description, add it to the list of entries
@@ -109,6 +106,9 @@ class JournalTab extends React.Component {
         const entries = this.state.entryList;
         entries.map(entry=>{      
             if(entry.id === id){
+                if (!entry.title || entry.title.trim().length === 0){
+                    this.state.entryTitle = "Untitled";
+                }
                 this.setState({
                     entryTitle: entry.title,
                     entryDescription: entry.description,
@@ -141,13 +141,9 @@ class JournalTab extends React.Component {
 
     //stores in the state the value in the title box
     handleTitleChange = (event) => {
-        //TODO: in the title: putting a bunch of spaces, typing a character, and deleting the character, 
-            //will add an entry that is titled that deleted character
-        if (event.target.value.trim().length > 0){
-            this.setState({
-                entryTitle: event.target.value,
-            });
-        }
+        this.setState({
+            entryTitle: event.target.value,
+        });
     }
 
     handleTagChange = (event) => {
@@ -158,8 +154,6 @@ class JournalTab extends React.Component {
         }
         this.forceUpdate();
     }
-
-    //on componentDidMount(), grab everything in localStorage/postgress and set the state
 
     //on the first run of the page
     componentDidMount = () => {
@@ -172,7 +166,6 @@ class JournalTab extends React.Component {
     //on each change to the page
     componentDidUpdate(){
         localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
-        console.log(this.state.entryList);
     }
 
     //change display mode to the editEntry page
@@ -305,17 +298,16 @@ class JournalTab extends React.Component {
                                         cols = '10'
                                         placeholder='Enter title...'
                                         onChange={this.handleTitleChange}
-                                    >  
-                                        {this.state.entryTitle}
-                                    </textarea>
+                                        value={this.state.entryTitle}
+                                    />
+
                                     <textarea className= "entry-description"
                                         rows='4'
                                         cols = '10'
                                         placeholder='Type to create the Journal Entry...'
                                         onChange={this.handleDescriptionChange}
-                                    >
-                                        {this.state.entryDescription}
-                                    </textarea>
+                                        value={this.state.entryDescription}
+                                    />
 
                                     {this.state.entryB64ImageList.map(img => {
                                         const image = img
@@ -323,13 +315,14 @@ class JournalTab extends React.Component {
                                     })}
                                     
                                     {this.state.showPopup == true && (
-                                        <div className = "tag-pop-up">
+                                        <div className = "tag-pop-up"/*///////////////////////////////////////////*/>
                                             <textarea className= "entry-tag"
                                                 rows='1'
                                                 cols = '16'
                                                 placeholder='tag...'
-                                                onChange={this.handleTagChange}>
-                                            </textarea>
+                                                onChange={this.handleTagChange}
+                                            />
+
                                             <button 
                                                 onClick={() => {{this.addTag()}}} 
                                                 className='add-tag' >
@@ -337,7 +330,6 @@ class JournalTab extends React.Component {
                                             </button>
                                         </div>
                                     )}
-
 
                                     <div className="entry-footer">
                                         <button 
@@ -351,8 +343,7 @@ class JournalTab extends React.Component {
                                             accept="image/png, image/jpeg"
                                             onChange={this.imageUpload}
                                             multiple="multiple"
-                                        >
-                                        </input>
+                                        />
 
                                         <button 
                                             onClick={() => {this.onSave()}} 
@@ -372,3 +363,19 @@ class JournalTab extends React.Component {
 }
 
 export default JournalTab;
+
+
+/* NOTES/Stuff to do
+    FIGURE OUT IF WE NEED THE BACKEND/DATABASE bc according to the demos, mentors, and sheldon,
+        we really dont need it at all
+    figure out whats up with popups (if anything can be removed)
+    all the compilation warnings from the linter
+    
+    gotta scale the inputted images to not be massive
+    defaulting Entry Title #N and Entry Description N
+        writing a title and then deleting wont remove it**************
+
+    -------edit mode deletes all tags
+    -------make everything lower before sorting (C comes before a)
+    
+*/
