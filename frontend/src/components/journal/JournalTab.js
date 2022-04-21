@@ -224,6 +224,7 @@ class JournalTab extends React.Component {
             let base64 = await getBase64(file_list[i]);
             this.state.entryB64ImageList.push(base64);
         }
+        this.forceUpdate();
     };
 
     render = () => {
@@ -308,11 +309,12 @@ class JournalTab extends React.Component {
                                         onChange={this.handleDescriptionChange}
                                         value={this.state.entryDescription}
                                     />
-
-                                    {this.state.entryB64ImageList.map(img => {
-                                        const image = img
-                                        return <img key={nanoid()} src={image} alt="info"></img>
-                                    })}
+                                    <div className="entry-images">
+                                        {this.state.entryB64ImageList.map(img => {
+                                            const image = img
+                                            return <img key={nanoid()} src={image} alt="info"></img>
+                                        })}
+                                    </div>
                                     
                                     {this.state.showPopup == true && (
                                         <div className = "tag-pop-up"/*///////////////////////////////////////////*/>
@@ -368,14 +370,15 @@ export default JournalTab;
 /* NOTES/Stuff to do
     FIGURE OUT IF WE NEED THE BACKEND/DATABASE bc according to the demos, mentors, and sheldon,
         we really dont need it at all
-    figure out whats up with popups (if anything can be removed)
-    all the compilation warnings from the linter
     
-    gotta scale the inputted images to not be massive
-    defaulting Entry Title #N and Entry Description N
-        writing a title and then deleting wont remove it**************
-
+    figure out whats up with popups (if anything can be removed)
+    
+    all the compilation warnings from the linter (disable it before the demo)
+    
+    -------gotta scale the inputted images to not be massive
     -------edit mode deletes all tags
     -------make everything lower before sorting (C comes before a)
+    -------defaulting Entry Title #N and Entry Description N
+        writing a title and then deleting wont remove it
     
 */

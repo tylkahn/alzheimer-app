@@ -1,12 +1,12 @@
-import { nanoid } from "nanoid";
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { nanoid } from "nanoid"
+import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { library } from "@fortawesome/fontawesome-svg-core"
 library.add(faTrashCan);
 library.add(faPenToSquare);
 
-class Entry extends React.Component { //extend this journal entry from a generic entry class
+class Entry extends React.Component { // extend this journal entry from a generic entry class
     constructor(props) {
         super(props);
         this.state = {
@@ -14,7 +14,7 @@ class Entry extends React.Component { //extend this journal entry from a generic
             title: this.props.title,
             description: this.props.description,
             images: this.props.images,
-            tagList: this.props.tagList,//since im storing on the frontend, this stuff isnt useful yet
+            tagList: this.props.tagList, // since im storing on the frontend, this stuff isnt useful yet
             date: this.props.date,
             handleDeleteEntry: this.props.handleDeleteEntry,
             handleEditEntry: this.props.handleEditEntry,
