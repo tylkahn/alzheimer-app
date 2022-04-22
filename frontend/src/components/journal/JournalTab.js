@@ -279,6 +279,7 @@ class JournalTab extends React.Component {
                 for(var i = 0; i < this.state.selectedTags.length; i++){
                     if(entry.tagList.has(this.state.selectedTags[i])){
                         taggedEntries.push(entry);
+                        break;
                     }
                 }     
             }
@@ -409,7 +410,11 @@ class JournalTab extends React.Component {
                                     <div className = "tag-list">
                                         {Array.from(this.state.tagList).map(tag => (
                                             <button className="tag-button">
-                                            {tag}
+                                                {tag}
+                                                <button
+                                                    className='delete-tag' >
+                                                    <FontAwesomeIcon icon="xmark" />
+                                                </button>
                                             </button>
                                             ),
                                         )}

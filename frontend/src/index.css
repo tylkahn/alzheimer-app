@@ -120,6 +120,18 @@ entry-tag{
   cursor: pointer;
 }
 
+.delete-tag{
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.delete-tag:hover{
+  background-color: rgb(186, 248, 227);
+  cursor: pointer;
+}
+
 .tag-button{
   background-color: rgb(238, 186, 248);
   border: none;
