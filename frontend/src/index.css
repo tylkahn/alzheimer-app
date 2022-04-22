@@ -92,10 +92,13 @@ textarea:focus{
   outline: none;
 }
 
-entry-tag{
+textarea.entry-tag{
   border: none;
   border-radius: 15em;
+  margin-left: 5px;
 }
+
+
 .save{
   background-color: transparent;
   border: none;
@@ -137,6 +140,7 @@ entry-tag{
   border: none;
   border-radius: 15px;
   padding: 5px 10px 5px 10px;  
+  justify-content: space-evenly;
 }
 
 .tag-button:hover{
