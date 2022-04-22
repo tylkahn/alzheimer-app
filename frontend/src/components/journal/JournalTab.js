@@ -284,7 +284,7 @@ class JournalTab extends React.Component {
     }
     
     render = () => {
-        
+
         return (          
           //TODO: probably need one package to save the image as some datatype
             //look up react library where I can input an image and save it
@@ -451,10 +451,6 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
-    FIGURE OUT IF WE NEED THE BACKEND/DATABASE bc according to the demos, mentors, and sheldon,
-        we really dont need it at all
-    
-    figure out whats up with popups (if anything can be removed)
     
     all the compilation warnings from the linter (disable it before the demo)
     
