@@ -64,8 +64,21 @@ code {
   grid-gap: 1rem;
 }
 
+.entry-images img{
+  width: 100%;
+  margin: 0px 0px 10px 0px;
+}
+
+.entry-images{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .spacing{
-  padding-top: 6rem;
+  padding-top: 5rem;
 }
 
 textarea{
@@ -167,10 +180,15 @@ entry-tag{
   font-family: sans-serif;
 }
 
-
 .entry-description{
   font-size: 20px;
   font-family: sans-serif;
+  max-height: 100px;
+  overflow-y: auto;
+
+  box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;/*****************************************************/
+  border: 1px solid #000;
+  border-radius: 4px;
 }
 
 /*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
@@ -191,7 +209,7 @@ entry-tag{
 
 .search input{
   border: none;
-  background-color: rgb(230, 230, 230);
+  background-color: rgb(230, 230, 230); 
 }
 
 .search input:focus{

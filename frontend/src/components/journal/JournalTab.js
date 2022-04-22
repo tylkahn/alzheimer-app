@@ -7,12 +7,22 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faTag } from "@fortawesome/free-solid-svg-icons";
 import Entry from './Entry';
 import 'reactjs-popup/dist/index.css';
+
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
 library.add(faPlus);
 library.add(faXmark);
 library.add(faTag);
+
+const getBase64 = (file) => {
+    return new Promise((resolve,reject) => {
+       const reader = new FileReader();
+       reader.onload = () => resolve(reader.result);
+       reader.onerror = error => reject(error);
+       reader.readAsDataURL(file);
+    });
+}
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -23,19 +33,14 @@ class JournalTab extends React.Component {
                 title: "",
                 description: "",
                 images: [],
-
-                //to be implemented in the future
-                lastUpdated: "3/27/2022",
                 tagList: [],
             }*/
             entryList: this.props.entries,
-            //TODO: base the default entry title off of a counter, not the length
             entryTitle: '',
             entryDescription: '',
             searchText: '',
+            entryB64ImageList: [],
             display: 'entryList', //either entrylist or editEntry
-            titleChecked: false,
-            dateChecked: false,
             entryTag: '',
             tagList: new Set(), 
             allTagsList: new Set(),
@@ -52,12 +57,11 @@ class JournalTab extends React.Component {
         });
     }
 
+ 
     addTag = () => {
+        if (this.state.entryTag.trim().length <= 0){ return; }
         this.state.tagList.add(this.state.entryTag);
         this.state.allTagsList.add(this.state.entryTag);
-        
-       
-        console.log(this.state.allTagsList);
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -75,10 +79,8 @@ class JournalTab extends React.Component {
     //occurs either when creating a new entry or when finished editting one
     onSave = () => {
         //empty title box so default it
-        if (!this.state.entryTitle){
-            this.setState({
-                entryTitle: `Entry Title ${this.state.entryList.length+1}`,
-            })
+        if (!this.state.entryTitle || this.state.entryTitle.trim().length === 0){
+            this.state.entryTitle = "Untitled";
         }
 
         //if there exists a description, add it to the list of entries
@@ -88,7 +90,7 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 date: new Date(),
-                images: ["./images/journal.jpg"],//default every image to have the journal image
+                images: this.state.entryB64ImageList,
                 tagList: this.state.tagList,
             });
         }
@@ -100,6 +102,7 @@ class JournalTab extends React.Component {
             entryDescription: '',
             tagList: new Set(),
             selectedTags: [],
+            entryB64ImageList: [],
         });
         this.forceUpdate();
     }
@@ -116,11 +119,16 @@ class JournalTab extends React.Component {
         const entries = this.state.entryList;
         entries.map(entry=>{      
             if(entry.id === id){
+                if (!entry.title || entry.title.trim().length === 0){
+                    this.state.entryTitle = "Untitled";
+                }
                 this.setState({
                     entryTitle: entry.title,
                     entryDescription: entry.description,
                     tagList: entry.tagList,
                     display: 'editEntry',
+                    entryB64ImageList: entry.images,
+                    //taglist??/////////////////////////////////////////////////////////////////////////////////
                 });
 
                 //remove the entry being edited, to add the new entry
@@ -147,13 +155,9 @@ class JournalTab extends React.Component {
 
     //stores in the state the value in the title box
     handleTitleChange = (event) => {
-        //TODO: in the title: putting a bunch of spaces, typing a character, and deleting the character, 
-            //will add an entry that is titled that deleted character
-        if (event.target.value.trim().length > 0){
-            this.setState({
-                entryTitle: event.target.value,
-            });
-        }
+        this.setState({
+            entryTitle: event.target.value,
+        });
     }
 
     handleTagChange = (event) => {
@@ -163,10 +167,7 @@ class JournalTab extends React.Component {
             });
         }
         this.forceUpdate();
-        //console.log(this.state.entryDescription);
     }
-
-    //on componentDidMount(), grab everything in localStorage/postgress and set the state
 
     //on the first run of the page
     componentDidMount = () => {
@@ -216,7 +217,6 @@ class JournalTab extends React.Component {
         //falsify all checkboxes and then check off the correct one
         document.getElementById("titleCheckbox").checked = false;
         document.getElementById("dateCheckbox").checked = false;
-        document.getElementById("tagCheckbox").checked = false;
         document.getElementById(checkBox).checked = true;
     }
 
@@ -238,14 +238,14 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //handles the tag sorting check box
-    handleTagCheckChange = () => {
-        //skip if should be unchecked
-        if (!document.getElementById("tagCheckbox").checked){return;}
-        this.checkOnlyOne("tagCheckbox");
-        this.sortByTag();
+    imageUpload = async (e) => {
+        const file_list = e.target.files;
+        for (let i = 0; i < file_list.length; i++){
+            let base64 = await getBase64(file_list[i]);
+            this.state.entryB64ImageList.push(base64);
+        }
         this.forceUpdate();
-    }
+    };
 
 
 
@@ -314,7 +314,6 @@ class JournalTab extends React.Component {
                                     id="titleCheckbox"
                                     type="checkbox"
                                     name="title"
-                                    //checked={this.titleChecked}
                                     onClick={this.handleTitleCheckChange}
                                 />
                             </div>Title
@@ -324,20 +323,9 @@ class JournalTab extends React.Component {
                                     id="dateCheckbox"
                                     type="checkbox"
                                     name="date"
-                                    //checked={this.dateChecked}
                                     onClick={this.handleDateCheckChange}
                                 />
                             </div>Date
-
-                            <div>
-                                <Input
-                                    id="tagCheckbox"
-                                    type="checkbox"
-                                    name="tag"
-                                    //checked={this.tagChecked}
-                                    onClick={this.handleTagCheckChange}
-                                />
-                            </div>Tag
                         </label>
                         <div className = "tag-list">
                             {Array.from(this.state.allTagsList.values()).map(tag => (
@@ -385,27 +373,32 @@ class JournalTab extends React.Component {
                                         cols = '10'
                                         placeholder='Enter title...'
                                         onChange={this.handleTitleChange}
-                                    >  
-                                        {this.state.entryTitle}
-                                    </textarea>
+                                        value={this.state.entryTitle}
+                                    />
+
                                     <textarea className= "entry-description"
                                         rows='4'
                                         cols = '10'
                                         placeholder='Type to create the Journal Entry...'
                                         onChange={this.handleDescriptionChange}
-                                    >
-                                        {this.state.entryDescription}
-                                    </textarea>
-
+                                        value={this.state.entryDescription}
+                                    />
+                                    <div className="entry-images">
+                                        {this.state.entryB64ImageList.map(img => {
+                                            const image = img
+                                            return <img key={nanoid()} src={image} alt="info"></img>
+                                        })}
+                                    </div>
+                                    
                                     {this.state.showPopup == true && (
-                                        <div className = "tag-pop-up">
+                                        <div className = "tag-pop-up"/*///////////////////////////////////////////*/>
                                             <textarea className= "entry-tag"
                                                 rows='1'
                                                 cols = '16'
                                                 placeholder='tag...'
-                                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                                                onChange={this.handleTagChange}>
-                                            </textarea>
+                                                onChange={this.handleTagChange}
+                                            />
+
                                             <button 
                                                 onClick={this.addTag}
                                                 className='add-tag' >
@@ -428,11 +421,19 @@ class JournalTab extends React.Component {
                                             <FontAwesomeIcon icon="tag" />
                                         </button>
                                         
+                                        <input type="file"
+                                            id="img-upload" name="img-upload"
+                                            accept="image/png, image/jpeg"
+                                            onChange={this.imageUpload}
+                                            multiple="multiple"
+                                        />
+
                                         <button 
                                             onClick={() => {this.onSave()}} 
                                             className='save' >
                                             <FontAwesomeIcon icon="floppy-disk" />
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -447,3 +448,18 @@ class JournalTab extends React.Component {
 export default JournalTab;
 
 
+/* NOTES/Stuff to do
+    FIGURE OUT IF WE NEED THE BACKEND/DATABASE bc according to the demos, mentors, and sheldon,
+        we really dont need it at all
+    
+    figure out whats up with popups (if anything can be removed)
+    
+    all the compilation warnings from the linter (disable it before the demo)
+    
+    -------gotta scale the inputted images to not be massive
+    -------edit mode deletes all tags
+    -------make everything lower before sorting (C comes before a)
+    -------defaulting Entry Title #N and Entry Description N
+        writing a title and then deleting wont remove it
+    
+*/

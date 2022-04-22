@@ -22,12 +22,6 @@ class Entry extends React.Component { //extend this journal entry from a generic
         };
         
     }
-    
-    setJournalLastUpdated(time){
-      this.setState(
-          { lastUpdated: time }
-      );
-    }
 
     render = () => {
         return (
