@@ -4,7 +4,7 @@ import {nanoid} from 'nanoid';
 import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faTag } from "@fortawesome/free-solid-svg-icons";
 import Entry from './Entry';
 import 'reactjs-popup/dist/index.css';
 library.add(faFloppyDisk);
@@ -12,7 +12,7 @@ library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
 library.add(faPlus);
 library.add(faXmark);
-library.add(faAngleUp);
+library.add(faTag);
 
 class JournalTab extends React.Component {
     constructor(props) {
@@ -37,11 +37,14 @@ class JournalTab extends React.Component {
             titleChecked: false,
             dateChecked: false,
             entryTag: '',
-            tagList: [], 
+            tagList: new Set(), 
+            allTagsList: new Set(),
+            selectedTags: [],
             showPopup: false,
         };
     }
 
+   
     //specific to journalentries
     addImage = (jpg) => {
         this.setState({
@@ -50,9 +53,11 @@ class JournalTab extends React.Component {
     }
 
     addTag = () => {
-        console.log("SIR");
-        console.log(this.state.entryTag);
-        this.state.tagList.push(this.state.entryTag);
+        this.state.tagList.add(this.state.entryTag);
+        this.state.allTagsList.add(this.state.entryTag);
+        
+       
+        console.log(this.state.allTagsList);
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -66,7 +71,7 @@ class JournalTab extends React.Component {
         });
     }
 
-
+    
     //occurs either when creating a new entry or when finished editting one
     onSave = () => {
         //empty title box so default it
@@ -93,7 +98,8 @@ class JournalTab extends React.Component {
             display: 'entryList',
             entryTitle: '',
             entryDescription: '',
-            tagList: [],
+            tagList: new Set(),
+            selectedTags: [],
         });
         this.forceUpdate();
     }
@@ -113,6 +119,7 @@ class JournalTab extends React.Component {
                 this.setState({
                     entryTitle: entry.title,
                     entryDescription: entry.description,
+                    tagList: entry.tagList,
                     display: 'editEntry',
                 });
 
@@ -165,7 +172,9 @@ class JournalTab extends React.Component {
     componentDidMount = () => {
         const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
         //if there exist items in the localStorage, save it as our state
-        if (savedEntries){ this.state.entryList = savedEntries; }
+        if (savedEntries){ 
+            this.state.entryList = savedEntries; 
+        }
         this.forceUpdate();
     }
 
@@ -185,7 +194,7 @@ class JournalTab extends React.Component {
     //sort entryList by title reverse alphabetically
     sortByTitle = () => {
         this.setState({
-            entryList: this.state.entryList.sort((a, b) => (a.title > b.title) ? 1 : -1)
+            entryList: this.state.entryList.sort((a, b) => ((a.title).toLowerCase() > (b.title).toLowerCase()) ? 1 : -1)
         });
         this.forceUpdate();
     }
@@ -200,7 +209,6 @@ class JournalTab extends React.Component {
 
     //sort entryList by tag alphabetically
     sortByTag = () => {
-        
         this.forceUpdate();
     }
 
@@ -239,7 +247,47 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+
+
+    filterBySearch = () => {
+        return (
+            this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText))
+        );
+    }
+
+    selectTag = (event) => {
+        console.log("YO");
+        console.log(event.target.value);
+        //this.setState({
+          //  selectedTags: this.state.selectedTags.concat([document.getElementById("tag-button").value])            
+        //})
+        this.state.selectedTags.push(document.getElementById("tag-button").value);
+        this.forceUpdate();
+    }
+
+    filterByTag = (searchFilteredEntries) => {
+        console.log("hi");
+        console.log(this.state.selectedTags);
+        let taggedEntries = [];
+        if(this.state.selectedTags.length === 0){
+            return searchFilteredEntries;
+        }
+        searchFilteredEntries.map( entry =>
+            {
+                console.log(entry.title);
+                console.log(entry.tagList);
+                for(var i = 0; i < this.state.selectedTags.length; i++){
+                    if(entry.tagList.has(this.state.selectedTags[i])){
+                        taggedEntries.push(entry);
+                    }
+                }     
+            }
+        )
+        return taggedEntries;
+    }
+    
     render = () => {
+        
         return (          
           //TODO: probably need one package to save the image as some datatype
             //look up react library where I can input an image and save it
@@ -252,7 +300,14 @@ class JournalTab extends React.Component {
                             <FontAwesomeIcon icon="magnifying-glass" />
                             <input onChange={this.search} type="text" placeholder='type to search...'/>
                         </div>
-
+                        {this.state.display == "entryList" && (
+                            <button 
+                                onClick={() => {this.editDisplay()}}
+                                className='save' >
+                                <FontAwesomeIcon icon="square-plus" />
+                                New Entry
+                            </button>
+                        )}
                         <label className='checkboxes'>
                             <div>
                                 <Input
@@ -284,21 +339,28 @@ class JournalTab extends React.Component {
                                 />
                             </div>Tag
                         </label>
+                        <div className = "tag-list">
+                            {Array.from(this.state.allTagsList.values()).map(tag => (
+                                <button 
+                                    id = "tag-button"
+                                    className="tag-button"
+                                    onClick={this.selectTag}
+                                    value = {tag}
+                                >
+                                    {tag}
+                                </button>
+                                ),
+                            )}
+                        </div>
+                        
+                        
 
-                        {this.state.display == "entryList" && (
-                            <button 
-                                onClick={() => {this.editDisplay()}}
-                                className='save' >
-                                <FontAwesomeIcon icon="square-plus" />
-                                New Entry
-                            </button>
-                        )}
                     </div>
 
                     <div className='column'>
                         {this.state.display == "entryList" && (
                             <div className="entry-list"> 
-                                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                                {this.filterByTag(this.filterBySearch()). map(entry => (
                                     <Entry
                                         id={entry.id}
                                         title={entry.title}
@@ -345,19 +407,25 @@ class JournalTab extends React.Component {
                                                 onChange={this.handleTagChange}>
                                             </textarea>
                                             <button 
-                                                onClick={() => {{this.addTag()}}} 
+                                                onClick={this.addTag}
                                                 className='add-tag' >
                                                 <FontAwesomeIcon icon="plus" />
                                             </button>
                                         </div>
                                     )}
-
-
+                                    <div className = "tag-list">
+                                        {Array.from(this.state.tagList).map(tag => (
+                                            <button className="tag-button">
+                                            {tag}
+                                            </button>
+                                            ),
+                                        )}
+                                    </div>   
                                     <div className="entry-footer">
                                         <button 
                                             onClick={() => {{this.togglePopup()}}} 
                                             className='add-tag' >
-                                            <FontAwesomeIcon icon="angle-up" />
+                                            <FontAwesomeIcon icon="tag" />
                                         </button>
                                         
                                         <button 
@@ -377,3 +445,5 @@ class JournalTab extends React.Component {
 }
 
 export default JournalTab;
+
+
