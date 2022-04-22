@@ -68,6 +68,11 @@ class JournalTab extends React.Component {
         });
         this.forceUpdate();
     }
+
+    deleteTag = (tag) => {
+        this.state.tagList.delete(document.getElementById("delete-tag").value);
+        this.forceUpdate();
+    }
   
     togglePopup() {
         this.setState({
@@ -409,12 +414,13 @@ class JournalTab extends React.Component {
                                     )}
                                     <div className = "tag-list">
                                         {Array.from(this.state.tagList).map(tag => (
-                                            <button className="tag-button">
+                                            <button 
+                                                className="tag-button"
+                                                id = "delete-tag"
+                                                value = {tag}
+                                            >    
                                                 {tag}
-                                                <button
-                                                    className='delete-tag' >
-                                                    <FontAwesomeIcon icon="xmark" />
-                                                </button>
+                                                <FontAwesomeIcon icon="xmark" onClick={this.deleteTag} />
                                             </button>
                                             ),
                                         )}
