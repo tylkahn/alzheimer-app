@@ -97,7 +97,7 @@ class Gametab extends React.Component {
   // post the score to the db
   submitScore(s) {
     const item = { score: s };
-    axios.post("http://localhost:8000/api/game/", item);
+    axios.post(process.env.REACT_APP_SERVER_BASE_URL + "api/game/", item);
   }
 }
 

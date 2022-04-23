@@ -1,9 +1,14 @@
 from django.contrib import admin
 from .models import GameHistory, Reminder
-from datetime import datetime
+
+# from datetime import datetime
 
 # class TodoAdmin(admin.ModelAdmin):
 #     list_display = ('title', 'description', 'completed')
+
+
+class JournalAdmin(admin.ModelAdmin):
+    list_display = ("title", "description")
 
 
 class ReminderAdmin(admin.ModelAdmin):
@@ -18,10 +23,12 @@ class ReminderAdmin(admin.ModelAdmin):
 
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('player', 'score', 'date')
+    list_display = ("player", "score", "date")
+
     def save_model(self, request, obj, form, change):
         obj.player = request.user
         super().save_model(request, obj, form, change)
+
 
 # Register your models here.
 
