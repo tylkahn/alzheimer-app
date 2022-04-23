@@ -176,7 +176,7 @@ class JournalTab extends React.Component {
 
     //on the first run of the page
     componentDidMount = () => {
-        const savedEntries = JSON.parse(localStorage.getItem('entryList-data'));
+        const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
         //if there exist items in the localStorage, save it as our state
         if (savedEntries){ 
             this.state.entryList = savedEntries; 
@@ -186,7 +186,7 @@ class JournalTab extends React.Component {
 
     //on each change to the page
     componentDidUpdate(){
-        localStorage.setItem('entryList-data', JSON.stringify(this.state.entryList));
+        localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
     }
 
     //change display mode to the editEntry page
@@ -261,17 +261,26 @@ class JournalTab extends React.Component {
     }
 
     selectTag = (event) => {
-        this.state.selectedTags.push(event.target.value);
+        console.log("YO");
+        console.log(event.target.value);
+        //this.setState({
+          //  selectedTags: this.state.selectedTags.concat([document.getElementById("tag-button").value])            
+        //})
+        this.state.selectedTags.push(document.getElementById("tag-button").value);
         this.forceUpdate();
     }
 
     filterByTag = (searchFilteredEntries) => {
+        console.log("hi");
+        console.log(this.state.selectedTags);
         let taggedEntries = [];
         if(this.state.selectedTags.length === 0){
             return searchFilteredEntries;
         }
         searchFilteredEntries.map( entry =>
             {
+                console.log(entry.title);
+                console.log(entry.tagList);
                 for(var i = 0; i < this.state.selectedTags.length; i++){
                     if(entry.tagList.has(this.state.selectedTags[i])){
                         taggedEntries.push(entry);
@@ -411,7 +420,7 @@ class JournalTab extends React.Component {
                                                 value = {tag}
                                             >    
                                                 {tag}
-                                                <FontAwesomeIcon icon="xmark" width="7px" height="7px" onClick={this.deleteTag} />
+                                                <FontAwesomeIcon icon="xmark" onClick={this.deleteTag} />
                                             </button>
                                             ),
                                         )}
