@@ -48,20 +48,11 @@ class JournalTab extends React.Component {
             showPopup: false,
         };
     }
-
-   
-    //specific to journalentries
-    addImage = (jpg) => {
-        this.setState({
-            images: [...jpg],
-        });
-    }
-
  
     addTag = () => {
         if (this.state.entryTag.trim().length <= 0){ return; }
-        this.state.tagList.add(this.state.entryTag);
-        this.state.allTagsList.add(this.state.entryTag);
+        this.state.tagList.add(this.state.entryTag.trim());
+        this.state.allTagsList.add(this.state.entryTag.trim());
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -133,7 +124,6 @@ class JournalTab extends React.Component {
                     tagList: entry.tagList,
                     display: 'editEntry',
                     entryB64ImageList: entry.images,
-                    //taglist??/////////////////////////////////////////////////////////////////////////////////
                 });
 
                 //remove the entry being edited, to add the new entry
@@ -177,9 +167,11 @@ class JournalTab extends React.Component {
     //on the first run of the page
     componentDidMount = () => {
         const savedEntries = JSON.parse(localStorage.getItem('entryList-data'));
+        //const savedAllTagsList = JSON.parse(localStorage.getItem('allTagsList-data'));
         //if there exist items in the localStorage, save it as our state
         if (savedEntries){ 
             this.state.entryList = savedEntries; 
+            //this.state.allTagsList = savedAllTagsList; 
         }
         this.forceUpdate();
     }
@@ -187,6 +179,7 @@ class JournalTab extends React.Component {
     //on each change to the page
     componentDidUpdate(){
         localStorage.setItem('entryList-data', JSON.stringify(this.state.entryList));
+        //localStorage.setItem('allTagsList-data', JSON.stringify(this.state.allTagsList));
     }
 
     //change display mode to the editEntry page
@@ -200,7 +193,8 @@ class JournalTab extends React.Component {
     //sort entryList by title reverse alphabetically
     sortByTitle = () => {
         this.setState({
-            entryList: this.state.entryList.sort((a, b) => ((a.title).toLowerCase() > (b.title).toLowerCase()) ? 1 : -1)
+            entryList: this.state.entryList.sort((a, b) => 
+                ((a.title).toLowerCase() > (b.title).toLowerCase()) ? 1 : -1)
         });
         this.forceUpdate();
     }
@@ -210,11 +204,6 @@ class JournalTab extends React.Component {
         this.setState({
             entryList: this.state.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)
         });
-        this.forceUpdate();
-    }
-
-    //sort entryList by tag alphabetically
-    sortByTag = () => {
         this.forceUpdate();
     }
 
@@ -252,8 +241,6 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     };
 
-
-
     filterBySearch = () => {
         return (
             this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText))
@@ -270,7 +257,7 @@ class JournalTab extends React.Component {
         if(this.state.selectedTags.length === 0){
             return searchFilteredEntries;
         }
-        searchFilteredEntries.map( entry =>
+        searchFilteredEntries.map( entry => 
             {
                 for(var i = 0; i < this.state.selectedTags.length; i++){
                     if(entry.tagList.has(this.state.selectedTags[i])){
@@ -284,12 +271,7 @@ class JournalTab extends React.Component {
     }
     
     render = () => {
-
-        return (          
-          //TODO: probably need one package to save the image as some datatype
-            //look up react library where I can input an image and save it
-            //can probably just look up "Add File" (figure out how to limit it to jpg)
-          
+        return (
             <div className="journal">   
                 <div className='row'>
                     <div className='column'>
@@ -325,9 +307,11 @@ class JournalTab extends React.Component {
                             </div>Date
                         </label>
                         <div className = "tag-list">
+                            {/*console.log(this.state.allTagsList)*/}
                             {Array.from(this.state.allTagsList.values()).map(tag => (
                                 <button 
                                     id = "tag-button"
+                                    key={nanoid()}
                                     className="tag-button"
                                     onClick={this.selectTag}
                                     value = {tag}
@@ -337,25 +321,22 @@ class JournalTab extends React.Component {
                                 ),
                             )}
                         </div>
-                        
-                        
-
                     </div>
 
                     <div className='column'>
                         {this.state.display == "entryList" && (
                             <div className="entry-list"> 
-                                {this.filterByTag(this.filterBySearch()). map(entry => (
+                                {this.filterByTag(this.filterBySearch()).map(entry => (
                                     <Entry
                                         id={entry.id}
                                         title={entry.title}
                                         description={entry.description}
                                         images={entry.images}
-                                        tagList = {entry.tagList}
+                                        tagList={entry.tagList}
                                         date={entry.date}
-                                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                                        handleDeleteEntry = {this.deleteEntry}
-                                        handleEditEntry = {this.editEntry}
+                                        key={nanoid(8)} //each entry needs a unique id for rendering
+                                        handleDeleteEntry={this.deleteEntry}
+                                        handleEditEntry={this.editEntry}
                                     />
                                     ),
                                 )}
@@ -388,7 +369,7 @@ class JournalTab extends React.Component {
                                     </div>
                                     
                                     {this.state.showPopup == true && (
-                                        <div className = "tag-pop-up"/*///////////////////////////////////////////*/>
+                                        <div className = "tag-pop-up">
                                             <textarea className= "entry-tag"
                                                 rows='1'
                                                 cols = '16'
@@ -409,6 +390,7 @@ class JournalTab extends React.Component {
                                                 className="tag-button"
                                                 id = "delete-tag"
                                                 value = {tag}
+                                                key={nanoid()}
                                             >    
                                                 {tag}
                                                 <FontAwesomeIcon icon="xmark" width="7px" height="7px" onClick={this.deleteTag} />
@@ -451,8 +433,10 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
-    
-    all the compilation warnings from the linter (disable it before the demo)
+    clicking multiple tags doesnt sort correctly
+    save tags to local storage
+
+    disable all the compilation warnings from the linter (before the demo)
     
     -------gotta scale the inputted images to not be massive
     -------edit mode deletes all tags

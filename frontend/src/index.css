@@ -128,11 +128,6 @@ textarea.entry-tag{
   padding: 5px 10px 5px 10px;  
 }
 
-.delete-tag:hover{
-  background-color: #E6D1F2;
-  cursor: pointer;
-}
-
 .tag-button{
   background-color: #E6D1F2;
   border: none;
@@ -141,7 +136,7 @@ textarea.entry-tag{
 }
 
 .tag-button:hover{
-  background-color: #E6D1F2;
+  background-color: #9d6fb7;
   cursor: pointer;
 }
 
