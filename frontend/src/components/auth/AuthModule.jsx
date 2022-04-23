@@ -31,15 +31,13 @@ function AuthModule(props) {
           setAuthInfo((prevAuthInfo) => ({
             ...prevAuthInfo,
             isLoggedIn: false,
-            username: null,
+            username: "",
           }));
         } else {
           console.error(err); // eslint-disable-line no-console
         }
       }
-      if (response == null) {
-        console.error("something went wrong!"); // eslint-disable-line no-console
-      } else {
+      if (response != null) {
         setAuthInfo((prevAuthInfo) => ({
           ...prevAuthInfo,
           isLoggedIn: true,
@@ -211,7 +209,8 @@ function AuthModule(props) {
 }
 AuthModule.propTypes = {
   authInfo: PropTypes.shape({
-    isAuthenticated: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
+    username: PropTypes.string,
   }).isRequired,
   setAuthInfo: PropTypes.func.isRequired,
 };
