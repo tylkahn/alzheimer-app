@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -100,3 +102,28 @@ class CreateUser(mixins.CreateModelMixin, generics.GenericAPIView):
             )
         login(self.request, user)
         return response
+
+
+class IsUserLoggedIn(APIView):
+    """
+    View to check if a user is tied to the request
+    """
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user and self.request.user.is_authenticated:
+            return Response(
+                data={"requestHasUser": True, "username": self.request.user.username},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                data={"requestHasUser": False}, status=status.HTTP_401_UNAUTHORIZED
+            )
+
+
+class LogoutUser(APIView):
+    """
+    View to log the current user out
+    """
+
+    pass

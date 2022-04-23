@@ -85,6 +85,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
+# TODO: not sure if this is necessary
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework.authentication.BasicAuthentication",
+#         "rest_framework.authentication.SessionAuthentication",
+#     ]
+# }
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
