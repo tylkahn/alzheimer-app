@@ -44,7 +44,7 @@ class JournalTab extends React.Component {
             entryTag: '',
             tagList: new Set(), 
             allTagsList: new Set(),
-            selectedTags: [],
+            selectedTags: new Set(),
             showPopup: false,
         };
     }
@@ -97,7 +97,7 @@ class JournalTab extends React.Component {
             entryTitle: '',
             entryDescription: '',
             tagList: new Set(),
-            selectedTags: [],
+            selectedTags: new Set(),
             entryB64ImageList: [],
         });
         this.forceUpdate();
@@ -248,28 +248,38 @@ class JournalTab extends React.Component {
     }
 
     selectTag = (event) => {
-        this.state.selectedTags.push(event.target.value);
+        this.state.selectedTags.add(event.target.value);
+        console.log(this.state.selectedTags);
         this.forceUpdate();
     }
 
     filterByTag = (searchFilteredEntries) => {
         let taggedEntries = [];
-        if(this.state.selectedTags.length === 0){
+        let shouldSkip = false;
+        if(this.state.selectedTags.size === 0){
             return searchFilteredEntries;
         }
-        searchFilteredEntries.map( entry => 
-            {
-                for(var i = 0; i < this.state.selectedTags.length; i++){
-                    if(entry.tagList.has(this.state.selectedTags[i])){
+        searchFilteredEntries.map( entry => //for each element in the search-filtered list
+            {  
+                shouldSkip = false; 
+                this.state.selectedTags.forEach((tag) => { //for each selected tag
+                    //if the element has any of the selected tags, 
+                        //then display it and skip the rest of the tags to not create duplicates
+                    if(!shouldSkip && entry.tagList.has(tag)){ 
                         taggedEntries.push(entry);
-                        break;
+                        shouldSkip = true;
                     }
-                }     
-            }
-        )
+                });
+            })
         return taggedEntries;
     }
     
+    resetAllTagsList = () => {
+        this.setState({
+            selectedTags: new Set()
+        })
+    }
+
     render = () => {
         return (
             <div className="journal">   
@@ -321,6 +331,10 @@ class JournalTab extends React.Component {
                                 ),
                             )}
                         </div>
+                        <button 
+                            key={nanoid()}
+                            onClick={this.resetAllTagsList}
+                        >Reset Tag Selection</button>
                     </div>
 
                     <div className='column'>
@@ -433,8 +447,9 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
-    clicking multiple tags doesnt sort correctly
     save tags to local storage
+    check if we need to remove tags after deleting entries
+    have a different color for tags that are selected
 
     disable all the compilation warnings from the linter (before the demo)
     
@@ -443,5 +458,7 @@ export default JournalTab;
     -------make everything lower before sorting (C comes before a)
     -------defaulting Entry Title #N and Entry Description N
         writing a title and then deleting wont remove it
+    -------clicking multiple tags doesnt sort correctly
+
     
 */
