@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user, logout
 from rest_framework import generics, mixins, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -110,9 +110,10 @@ class IsUserLoggedIn(APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        if self.request.user and self.request.user.is_authenticated:
+        userObj = get_user(request)
+        if userObj.is_authenticated:
             return Response(
-                data={"requestHasUser": True, "username": self.request.user.username},
+                data={"requestHasUser": True, "username": userObj.get_username()},
                 status=status.HTTP_200_OK,
             )
         else:
@@ -121,9 +122,16 @@ class IsUserLoggedIn(APIView):
             )
 
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class LogoutUser(APIView):
     """
     View to log the current user out
     """
 
-    pass
+    def post(self, request, *args, **kwargs):
+        userObj = get_user(request)
+        if userObj.is_authenticated:
+            logout(request)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)

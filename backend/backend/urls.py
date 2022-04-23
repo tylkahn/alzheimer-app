@@ -28,6 +28,7 @@ router.register(r"reminders", todoViews.ReminderView, "reminder")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", authViews.GetUser.as_view()),
+    path("logout/", authViews.LogoutUser.as_view()),
     path("signup/", authViews.CreateUser.as_view()),
     path("get-current-user/", authViews.IsUserLoggedIn.as_view()),
     path("api/", include(router.urls)),

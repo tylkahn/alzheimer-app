@@ -10,6 +10,7 @@
     "axios": "^0.26.0",
     "bootstrap": "^4.6.0",
     "http-proxy-middleware": "^2.0.4",
+    "js-cookie": "^3.0.1",
     "nanoid": "^3.3.2",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
