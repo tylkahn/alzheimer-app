@@ -96,7 +96,7 @@ function App() {
 
   return (
     <main className="container">
-      <h1 className="text-black text-uppercase text-center my-4">
+      <h1 className="alzheimers-title">
         Alzheimer's Assistance App
       </h1>
       {authInfo.isLoggedIn ? (

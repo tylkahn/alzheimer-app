@@ -51,14 +51,14 @@ code {
 
 .entry.new{
   border-style: solid;
-  border-color: rgba(106, 216, 179, 0.959);
+  border-color: #E6D1F2;
   background-color: white;
   grid-gap: 1rem;
 }
 
 .tag-pop-up{
   border-style: solid;
-  border-color: rgba(106, 216, 179, 0.959);
+  border-color: #E6D1F2;
   border-radius: 15em;
   background-color: white;
   grid-gap: 1rem;
@@ -95,9 +95,8 @@ textarea:focus{
 textarea.entry-tag{
   border: none;
   border-radius: 15em;
-  margin-left: 5px;
+  margin-left: 2px;
 }
-
 
 .save{
   background-color: transparent;
@@ -107,7 +106,7 @@ textarea.entry-tag{
 }
 
 .save:hover{
-  background-color: rgb(186, 248, 227);
+  background-color: #E6D1F2;
   cursor: pointer;
 }
 
@@ -119,7 +118,7 @@ textarea.entry-tag{
 }
 
 .add-tag:hover{
-  background-color: rgb(186, 248, 227);
+  background-color: #E6D1F2;
   cursor: pointer;
 }
 
@@ -130,21 +129,15 @@ textarea.entry-tag{
   padding: 5px 10px 5px 10px;  
 }
 
-.delete-tag:hover{
-  background-color: rgb(186, 248, 227);
-  cursor: pointer;
-}
-
 .tag-button{
-  background-color: rgb(238, 186, 248);
+  background-color: #E6D1F2;
   border: none;
   border-radius: 15px;
   padding: 5px 10px 5px 10px;  
-  justify-content: space-evenly;
 }
 
 .tag-button:hover{
-  background-color: rgb(186, 248, 227);
+  background-color: #9d6fb7;
   cursor: pointer;
 }
 
@@ -181,7 +174,7 @@ textarea.entry-tag{
 .entry{
   background-color: white;
   border-style: solid;
-  border-color: #a769f7;
+  border-color: #E6D1F2;
   border-radius: 10px;
   padding: 1rem;
   min-height: 170px;
@@ -205,13 +198,10 @@ textarea.entry-tag{
   font-family: sans-serif;
   max-height: 100px;
   overflow-y: auto;
-
-  box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;/*****************************************************/
-  border: 1px solid #000;
   border-radius: 4px;
 }
 
-/*since the button is in the bottom, push it to the right*******************************why isnt it onthe right*/
+/*since the button is in the bottom, push it to the right*/
 .entry-footer{
   display: flex;
   align-items: center;
@@ -229,7 +219,7 @@ textarea.entry-tag{
 
 .search input{
   border: none;
-  background-color: rgb(230, 230, 230); 
+  background-color: transparent;
 }
 
 .search input:focus{
@@ -244,7 +234,7 @@ textarea.entry-tag{
 }
 
 .delete:hover{
-  background-color: rgb(186, 248, 227);
+  background-color: #E6D1F2;
   cursor: pointer;
 }
 
@@ -256,6 +246,10 @@ textarea.entry-tag{
 }
 
 .edit:hover{
-  background-color: rgb(186, 248, 227);
+  background-color: #E6D1F2;
   cursor: pointer;
+}
+
+.alzheimers-title{
+  
 }
