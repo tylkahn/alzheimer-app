@@ -5,6 +5,7 @@ import "./App.css";
 import ReminderTab from "./components/reminder/ReminderTab";
 import JournalTab from "./components/journal/JournalTab";
 import AuthModule from "./components/auth/AuthModule";
+import LogoutButton from "./components/auth/LogoutButton";
 
 function App() {
   const [viewTab, setViewTab] = useState("");
@@ -37,23 +38,26 @@ function App() {
       >
         Game
       </span>
+      <LogoutButton setAuthInfo={setAuthInfo} />
     </div>
   );
 
   // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab == "journal" && 
+      {viewTab == "journal" && (
         <div className="journaltab">
           <JournalTab entries={[]} />
-        </div>}
-        {viewTab == "reminder" && <div className="remindertab">
+        </div>
+      )}
+      {viewTab == "reminder" && (
+        <div className="remindertab">
           <ReminderTab />
-        </div>}
-        {viewTab == "game" && <Gametab />}
-      </div>
-
-    )
+        </div>
+      )}
+      {viewTab == "game" && <Gametab />}
+    </div>
+  );
 
   // TODO: Connect to backend/database
   // const refreshList = () => {
