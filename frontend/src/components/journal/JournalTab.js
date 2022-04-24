@@ -4,59 +4,67 @@ import {nanoid} from 'nanoid';
 import {Input} from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faSquarePlus, faMagnifyingGlass, faPlus, faXmark, faTag, 
+        faArrowUpFromBracket, faArrowsRotate, faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Entry from './Entry';
 import 'reactjs-popup/dist/index.css';
+
 library.add(faFloppyDisk);
 library.add(faMagnifyingGlass);
 library.add(faSquarePlus);
 library.add(faPlus);
 library.add(faXmark);
-library.add(faAngleUp);
+library.add(faTag);
+library.add(faArrowUpFromBracket);
+library.add(faArrowsRotate);
+library.add(faArrowDownWideShort);
+
+const getBase64 = (file) => {
+    return new Promise((resolve,reject) => {
+       const reader = new FileReader();
+       reader.onload = () => resolve(reader.result);
+       reader.onerror = error => reject(error);
+       reader.readAsDataURL(file);
+    });
+}
 
 class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* ENTRY Parameters {
-                id: nanoid(),
-                title: "",
-                description: "",
-                images: [],
-
-                //to be implemented in the future
-                lastUpdated: "3/27/2022",
-                tagList: [],
-            }*/
-            entryList: this.props.entries,
-            //TODO: base the default entry title off of a counter, not the length
+            entryList: [],
+            allTagsList: new Set(), //must store as list in localstorage
             entryTitle: '',
             entryDescription: '',
             searchText: '',
+            entryB64ImageList: [],
             display: 'entryList', //either entrylist or editEntry
-            titleChecked: false,
-            dateChecked: false,
             entryTag: '',
-            tagList: [], 
+            tagList: new Set(),  //must store as list in localstorage
+            selectedTags: new Set(),
             showPopup: false,
+            showCheckboxes: false,
+
         };
     }
-
-    //specific to journalentries
-    addImage = (jpg) => {
-        this.setState({
-            images: [...jpg],
-        });
-    }
-
+ 
     addTag = () => {
-        console.log("SIR");
-        console.log(this.state.entryTag);
-        this.state.tagList.push(this.state.entryTag);
+        if (this.state.entryTag.trim().length <= 0){ return; }
+                
+        this.state.tagList.add(this.state.entryTag.trim()); 
+
+        this.state.allTagsList.add(this.state.entryTag.trim()); 
+
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
         });
+        this.forceUpdate();
+    }
+
+    deleteTag = (tag) => {
+        this.state.tagList.delete(document.getElementById("delete-tag").value);
+        this.potentiallyRemoveTags();
         this.forceUpdate();
     }
   
@@ -66,14 +74,18 @@ class JournalTab extends React.Component {
         });
     }
 
+    toggleCheckboxes() {
+        this.setState({
+          showCheckboxes: !this.state.showCheckboxes
+        });
+        this.forceUpdate();
+    }
 
     //occurs either when creating a new entry or when finished editting one
     onSave = () => {
         //empty title box so default it
-        if (!this.state.entryTitle){
-            this.setState({
-                entryTitle: `Entry Title ${this.state.entryList.length+1}`,
-            })
+        if (!this.state.entryTitle || this.state.entryTitle.trim().length === 0){
+            this.state.entryTitle = "Untitled";
         }
 
         //if there exists a description, add it to the list of entries
@@ -83,9 +95,12 @@ class JournalTab extends React.Component {
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
                 date: new Date(),
-                images: ["./images/journal.jpg"],//default every image to have the journal image
-                tagList: this.state.tagList,
+                images: this.state.entryB64ImageList,
+                tagList: Array.from(this.state.tagList),
             });
+            for (let i = 0; i < Array.from(this.state.tagList).length; i++){
+                this.state.allTagsList.add(Array.from(this.state.tagList)[i]);
+            }   
         }
 
         //empty out the current state because it was saved
@@ -93,15 +108,49 @@ class JournalTab extends React.Component {
             display: 'entryList',
             entryTitle: '',
             entryDescription: '',
-            tagList: [],
+            tagList: new Set(),
+            selectedTags: new Set(),
+            entryB64ImageList: [],
         });
         this.forceUpdate();
     }
 
+    potentiallyRemoveTags = (entry) => {
+        let stillUsedTags = new Set();
+
+        //for every still-existing entry, add all of its tags into stillUsedTags
+        for (let i = 0; i < this.state.entryList.length; i++){
+            for (let j = 0; j < this.state.entryList[i].tagList.length; j++){
+                stillUsedTags.add(this.state.entryList[i].tagList[j]);
+            }
+        }
+        for (let i = 0; i < Array.from(this.state.tagList).length; i++){
+            stillUsedTags.add(Array.from(this.state.tagList)[i]);
+        }
+
+        this.state.allTagsList = stillUsedTags;
+        this.forceUpdate(); 
+    }
+
     //remove an entry given its id
     deleteEntry = (id) => {
-        const newEntries = this.state.entryList.filter((e) => e.id !== id);
-        this.state.entryList = newEntries;
+        let remainingEntries = [];
+        let removedEntry;
+        for (let i = 0; i < this.state.entryList.length; i++){
+            if (this.state.entryList[i].id === id){
+                //we found the one entry we shouldnt add
+                removedEntry = this.state.entryList[i];
+            }
+            else{
+                remainingEntries.push(this.state.entryList[i]);
+            }
+        }
+        //const remainingEntries = this.state.entryList.filter((e) => e.id !== id);
+        this.state.entryList = remainingEntries;
+
+        //potentially remove tags of the entry thats being removed
+        this.potentiallyRemoveTags(removedEntry);
+
         this.forceUpdate();
     }
 
@@ -110,14 +159,20 @@ class JournalTab extends React.Component {
         const entries = this.state.entryList;
         entries.map(entry=>{      
             if(entry.id === id){
+                if (!entry.title || entry.title.trim().length === 0){
+                    this.state.entryTitle = "Untitled";
+                }
                 this.setState({
                     entryTitle: entry.title,
                     entryDescription: entry.description,
+                    tagList: new Set(entry.tagList),
                     display: 'editEntry',
+                    entryB64ImageList: entry.images,
                 });
 
                 //remove the entry being edited, to add the new entry
-                this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
+                //this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
+                this.deleteEntry(id);
             }
         })
         this.forceUpdate();
@@ -140,13 +195,9 @@ class JournalTab extends React.Component {
 
     //stores in the state the value in the title box
     handleTitleChange = (event) => {
-        //TODO: in the title: putting a bunch of spaces, typing a character, and deleting the character, 
-            //will add an entry that is titled that deleted character
-        if (event.target.value.trim().length > 0){
-            this.setState({
-                entryTitle: event.target.value,
-            });
-        }
+        this.setState({
+            entryTitle: event.target.value,
+        });
     }
 
     handleTagChange = (event) => {
@@ -156,22 +207,31 @@ class JournalTab extends React.Component {
             });
         }
         this.forceUpdate();
-        //console.log(this.state.entryDescription);
     }
 
-    //on componentDidMount(), grab everything in localStorage/postgress and set the state
-
-    //on the first run of the page
+    //on the every opening of the journal page
     componentDidMount = () => {
-        const savedEntries = JSON.parse(localStorage.getItem('react-journal-data'));
+        const savedEntries = JSON.parse(localStorage.getItem('entryList-data')); //receives a list
+        const savedAllTagsList = new Set(JSON.parse(localStorage.getItem('allTagsList-data'))); //receives a list and casts to set
+
         //if there exist items in the localStorage, save it as our state
         if (savedEntries){ this.state.entryList = savedEntries; }
+        else{ this.state.entryList=[] }
+        
+        if (savedAllTagsList){
+            this.state.allTagsList = savedAllTagsList;
+        }
+        else{
+            this.state.allTagsList=new Set();
+        }
+
         this.forceUpdate();
     }
 
     //on each change to the page
     componentDidUpdate(){
-        localStorage.setItem('react-journal-data', JSON.stringify(this.state.entryList));
+        localStorage.setItem('entryList-data', JSON.stringify(this.state.entryList));
+        localStorage.setItem('allTagsList-data', JSON.stringify(Array.from(this.state.allTagsList))); //store as a list
     }
 
     //change display mode to the editEntry page
@@ -185,7 +245,8 @@ class JournalTab extends React.Component {
     //sort entryList by title reverse alphabetically
     sortByTitle = () => {
         this.setState({
-            entryList: this.state.entryList.sort((a, b) => (a.title > b.title) ? 1 : -1)
+            entryList: this.state.entryList.sort((a, b) => 
+                ((a.title).toLowerCase() > (b.title).toLowerCase()) ? 1 : -1)
         });
         this.forceUpdate();
     }
@@ -198,17 +259,10 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //sort entryList by tag alphabetically
-    sortByTag = () => {
-        
-        this.forceUpdate();
-    }
-
     checkOnlyOne = (checkBox) => {
         //falsify all checkboxes and then check off the correct one
         document.getElementById("titleCheckbox").checked = false;
         document.getElementById("dateCheckbox").checked = false;
-        document.getElementById("tagCheckbox").checked = false;
         document.getElementById(checkBox).checked = true;
     }
 
@@ -230,36 +284,92 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //handles the tag sorting check box
-    handleTagCheckChange = () => {
-        //skip if should be unchecked
-        if (!document.getElementById("tagCheckbox").checked){return;}
-        this.checkOnlyOne("tagCheckbox");
-        this.sortByTag();
+    imageUpload = async (e) => {
+        const file_list = e.target.files;
+        for (let i = 0; i < file_list.length; i++){
+            let base64 = await getBase64(file_list[i]);
+            this.state.entryB64ImageList.push(base64);
+        }
+        this.forceUpdate();
+    };
+
+    filterBySearch = () => {
+        return (
+            this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText))
+        );
+    }
+
+    selectTag = (event) => {
+        this.state.selectedTags.add(event.target.value);
         this.forceUpdate();
     }
 
+    filterByTag = (searchFilteredEntries) => {
+        let taggedEntries = [];
+        let shouldSkip = false;
+        if(this.state.selectedTags.size === 0){
+            return searchFilteredEntries;
+        }
+        searchFilteredEntries.map( entry => //for each element in the search-filtered list
+            {  
+                shouldSkip = false; 
+                this.state.selectedTags.forEach((tag) => { //for each selected tag
+                    //if the element has any of the selected tags, 
+                        //then display it and skip the rest of the tags to not create duplicates
+                    if(!shouldSkip && entry.tagList.includes(tag)){ 
+                        taggedEntries.push(entry);
+                        shouldSkip = true;
+                    }
+                });
+            })
+        return taggedEntries;
+    }
+    
+    resetAllTagsList = () => {
+        this.setState({
+            selectedTags: new Set()
+        })
+    }
+
     render = () => {
-        return (          
-          //TODO: probably need one package to save the image as some datatype
-            //look up react library where I can input an image and save it
-            //can probably just look up "Add File" (figure out how to limit it to jpg)
-          
+        return (
             <div className="journal">   
                 <div className='row'>
                     <div className='column'>
                         <div className='search'>
                             <FontAwesomeIcon icon="magnifying-glass" />
-                            <input onChange={this.search} type="text" placeholder='type to search...'/>
+                            <input onChange={this.search} type="text"/>
                         </div>
+                        {this.state.display == "entryList" && (
+                            <div>
+                                <button 
+                                    onClick={() => {this.editDisplay()}}
+                                    className='delete' >
+                                    <FontAwesomeIcon icon="square-plus" />
+                                    
+                                </button>
 
-                        <label className='checkboxes'>
+                                <button 
+                                    onClick={() => {this.toggleCheckboxes()}}
+                                    className='delete' >
+                                    <FontAwesomeIcon icon="arrow-down-wide-short" />
+                                </button>
+
+                                <button 
+                                    className= "reset-tags"
+                                    key={nanoid()}
+                                    onClick={this.resetAllTagsList}
+                                    ><FontAwesomeIcon icon="arrows-rotate" />
+                                </button>
+                            </div>
+                        )}
+                        {this.state.showCheckboxes == true && (
+                            <label className='checkboxes'>
                             <div>
                                 <Input
                                     id="titleCheckbox"
                                     type="checkbox"
                                     name="title"
-                                    //checked={this.titleChecked}
                                     onClick={this.handleTitleCheckChange}
                                 />
                             </div>Title
@@ -269,46 +379,60 @@ class JournalTab extends React.Component {
                                     id="dateCheckbox"
                                     type="checkbox"
                                     name="date"
-                                    //checked={this.dateChecked}
                                     onClick={this.handleDateCheckChange}
                                 />
                             </div>Date
-
-                            <div>
-                                <Input
-                                    id="tagCheckbox"
-                                    type="checkbox"
-                                    name="tag"
-                                    //checked={this.tagChecked}
-                                    onClick={this.handleTagCheckChange}
-                                />
-                            </div>Tag
                         </label>
-
-                        {this.state.display == "entryList" && (
-                            <button 
-                                onClick={() => {this.editDisplay()}}
-                                className='save' >
-                                <FontAwesomeIcon icon="square-plus" />
-                                New Entry
-                            </button>
                         )}
+                            
+                        <div className = "tag-list">
+                            {Array.from(this.state.selectedTags.values()).map(tag => (
+                                <div>
+                                    <button 
+                                        className = "selected-tag"
+                                        value = {tag}
+                                        key={nanoid()}
+                                        //onClick={this.selectTag}   
+                                    >
+                                        {tag}
+                                    </button>
+                                    
+                                </div>
+                                ),
+                            )}
+                            {Array.from(this.state.allTagsList.values()).map(tag => (
+                                <div>
+                                    <button 
+                                        id = "select-tag"
+                                        value = {tag}
+                                        key={nanoid()}
+                                        className = "unselected-tag"
+                                        onClick={this.selectTag}   
+                                    >
+                                        {tag}
+                                    </button>
+                                    
+                                </div>
+                                ),
+                            )}
+                        </div>
+                        
                     </div>
 
                     <div className='column'>
                         {this.state.display == "entryList" && (
                             <div className="entry-list"> 
-                                {this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText)).map(entry => (
+                                {this.filterByTag(this.filterBySearch()).map(entry => (
                                     <Entry
                                         id={entry.id}
                                         title={entry.title}
                                         description={entry.description}
                                         images={entry.images}
-                                        tagList = {entry.tagList}
+                                        tagList={Array.from(entry.tagList)}
                                         date={entry.date}
-                                        key={nanoid(8)} //each entry needs a unique id for rendering, not just db
-                                        handleDeleteEntry = {this.deleteEntry}
-                                        handleEditEntry = {this.editEntry}
+                                        key={nanoid()} //each entry needs a unique id for rendering
+                                        handleDeleteEntry={this.deleteEntry}
+                                        handleEditEntry={this.editEntry}
                                     />
                                     ),
                                 )}
@@ -321,50 +445,75 @@ class JournalTab extends React.Component {
                                     <textarea className= "entry-title"
                                         rows='1'
                                         cols = '10'
-                                        placeholder='Enter title...'
+                                        //placeholder='Enter title...'
                                         onChange={this.handleTitleChange}
-                                    >  
-                                        {this.state.entryTitle}
-                                    </textarea>
+                                        value={this.state.entryTitle}
+                                    />
+
                                     <textarea className= "entry-description"
                                         rows='4'
                                         cols = '10'
-                                        placeholder='Type to create the Journal Entry...'
+                                        //placeholder='Type to create the Journal Entry...'
                                         onChange={this.handleDescriptionChange}
-                                    >
-                                        {this.state.entryDescription}
-                                    </textarea>
-
+                                        value={this.state.entryDescription}
+                                    />
+                                    <div className="entry-images">
+                                        {this.state.entryB64ImageList.map(img => {
+                                            const image = img
+                                            return <img key={nanoid()} src={image} alt="info"></img>
+                                        })}
+                                    </div>
+                                    
                                     {this.state.showPopup == true && (
                                         <div className = "tag-pop-up">
                                             <textarea className= "entry-tag"
                                                 rows='1'
                                                 cols = '16'
                                                 placeholder='tag...'
-                                                //value={entryDescription} for resetting state but i dont think i need this bc of the last line of handlesaveclick
-                                                onChange={this.handleTagChange}>
-                                            </textarea>
+                                                onChange={this.handleTagChange}
+                                            />
+
                                             <button 
-                                                onClick={() => {{this.addTag()}}} 
+                                                onClick={this.addTag}
                                                 className='add-tag' >
                                                 <FontAwesomeIcon icon="plus" />
                                             </button>
                                         </div>
                                     )}
-
-
+                                    <div className = "tag-list">
+                                        {Array.from(this.state.tagList).map(tag => (
+                                            <button 
+                                                className="tag-button"
+                                                id = "delete-tag"
+                                                value = {tag}
+                                                key={nanoid()}
+                                            >    
+                                                {tag}
+                                                <FontAwesomeIcon icon="xmark" onClick={this.deleteTag} />
+                                            </button>
+                                            ),
+                                        )}
+                                    </div>   
                                     <div className="entry-footer">
                                         <button 
                                             onClick={() => {{this.togglePopup()}}} 
                                             className='add-tag' >
-                                            <FontAwesomeIcon icon="angle-up" />
+                                            <FontAwesomeIcon icon="tag" />
                                         </button>
                                         
+                                        <input type="file"
+                                            id="img-upload" name="img-upload"
+                                            accept="image/png, image/jpeg"
+                                            onChange={this.imageUpload}
+                                            multiple="multiple"
+                                        />
+
                                         <button 
                                             onClick={() => {this.onSave()}} 
                                             className='save' >
                                             <FontAwesomeIcon icon="floppy-disk" />
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -377,3 +526,24 @@ class JournalTab extends React.Component {
 }
 
 export default JournalTab;
+
+
+/* NOTES/Stuff to do
+    check if we need to remove tags after deleting entries
+        usually in just adding and deleting entries the tags behave as expected, but in the edit mode
+        it messes up the displayed alltagslist until it saves
+
+    put refresh button by the alltagslist
+
+    disable all the compilation warnings from the linter (before the demo)
+    
+    -------gotta scale the inputted images to not be massive
+    -------edit mode deletes all tags
+    -------make everything lower before sorting (C comes before a)
+    -------defaulting Entry Title #N and Entry Description N
+        writing a title and then deleting wont remove it
+    -------clicking multiple tags doesnt sort correctly
+    -------save tags to local storage
+    -------have a different color for tags that are selected
+    
+*/

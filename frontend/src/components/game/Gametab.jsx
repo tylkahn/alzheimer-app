@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import Board from "./Board";
 import History from "./History";
 
@@ -33,7 +34,7 @@ class Gametab extends React.Component {
 
   // toggle the difficulty based on user input
   handleChange(event) {
-    var d = 2;
+    let d = 2;
     if (event.target.value == "Easy") {
       d = 2;
     } else if (event.target.value == "Medium") {
@@ -46,12 +47,18 @@ class Gametab extends React.Component {
     });
   }
 
-  // test() {
-  //   const item = { score: 60 }
-  //   axios
-  //     .post("/api/game/", item)
-  //     .catch((err) => console.log(err));
-  // }
+  // post the score to the db
+  submitScore(s) {
+
+    const item = { score: s,
+    }; 
+    const config = { 
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+    };
+    axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }api/game/`, item, config);
+  }
 
   // render the gametab, create the history and board components
   render() {
@@ -74,7 +81,6 @@ class Gametab extends React.Component {
               &nbsp;
               <input type="submit" value="Start Game" />
             </form>
-            <button onClick={this.test}></button>
             <History />
           </div>
         )}
@@ -89,12 +95,6 @@ class Gametab extends React.Component {
         )}
       </div>
     );
-  }
-
-  // post the score to the db
-  submitScore(s) {
-    const item = { score: s };
-    axios.post(process.env.REACT_APP_SERVER_BASE_URL + "api/game/", item);
   }
 }
 
