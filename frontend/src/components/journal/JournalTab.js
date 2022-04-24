@@ -470,13 +470,18 @@ class JournalTab extends React.Component {
                                             className='add-tag' >
                                             <FontAwesomeIcon icon="tag" />
                                         </button>
-                                        
+                                        <div>
+                                        <label for="img-upload"> my name is rasya maybe
+                                        </label>
                                         <input type="file"
-                                            id="img-upload" name="img-upload"
+                                            id="img-upload" 
+                                            name="img-upload"
+                                          
                                             accept="image/png, image/jpeg"
                                             onChange={this.imageUpload}
                                             multiple="multiple"
                                         />
+                                        </div>
 
                                         <button 
                                             onClick={() => {this.onSave()}} 
