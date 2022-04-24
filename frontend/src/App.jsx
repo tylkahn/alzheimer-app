@@ -49,17 +49,17 @@ function App() {
   // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab == "journal" && 
-        <div className="journaltab">
+      {viewTab == "journal" && ( <div className="journaltab">
           <JournalTab/>
-        </div>}
-        {viewTab == "reminder" && <div className="remindertab">
+        </div>)}
+        
+        {viewTab == "reminder" && (<div className="remindertab">
           <ReminderTab />
-        </div>}
-        {viewTab == "game" && <Gametab />}
-      </div>
-
-    )
+        </div>
+      )}
+      {viewTab == "game" && <Gametab />}
+    </div>
+  );
 
   const renderItems = () => {
     const newItems = reminderList.filter(
