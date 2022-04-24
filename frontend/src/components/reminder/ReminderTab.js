@@ -114,6 +114,19 @@ class ReminderTab extends React.Component {
             .then((res) => this.setState({ entryList: res }))
             .catch((err) => console.log(err));
     };
+    
+    //on the first run of the page
+    componentDidMount = () => {
+        const savedEntries = JSON.parse(localStorage.getItem('react-reminder-data'));
+        //if there exist items in the localStorage, save it as our state
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        this.forceUpdate();
+    }
+
+    //on each change to the page
+    componentDidUpdate(){
+        localStorage.setItem('react-reminder-data', JSON.stringify(this.state.entryList));
+    }
 
     render = () =>{
 
