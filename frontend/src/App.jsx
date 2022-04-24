@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Gametab from "./components/game/Gametab"
-import './App.css';
-import ReminderTab from './components/reminder/ReminderTab';
-import JournalTab from './components/journal/JournalTab';
-import { nanoid } from 'nanoid';
+import Gametab from "./components/game/Gametab";
+import "./App.css";
+import ReminderTab from "./components/reminder/ReminderTab";
+import JournalTab from "./components/journal/JournalTab";
+import { nanoid } from "nanoid";
 import AuthModule from "./components/auth/AuthModule";
+import LogoutButton from "./components/auth/LogoutButton";
 
 function App() {
   const [viewTab, setViewTab] = useState("journal");
-  
+
   const [authInfo, setAuthInfo] = useState({
     username: "",
     isLoggedIn: false,
@@ -23,25 +24,26 @@ function App() {
     return (
       <div className="nav nav-tabs">
         <span
-          className={viewTab=="journal" ? "nav-link active" : "nav-link"}
+          className={viewTab == "journal" ? "nav-link active" : "nav-link"}
           onClick={() => displayTab("journal")}
         >
           Journal
         </span>
 
         <span
-          className={viewTab=="reminder" ? "nav-link active" : "nav-link"}
+          className={viewTab == "reminder" ? "nav-link active" : "nav-link"}
           onClick={() => displayTab("reminder")}
         >
           Reminders
         </span>
 
         <span
-          className={viewTab=="game" ? "nav-link active" : "nav-link"}
+          className={viewTab == "game" ? "nav-link active" : "nav-link"}
           onClick={() => displayTab("game")}
         >
           Memory Game
         </span>
+        <LogoutButton setAuthInfo={setAuthInfo} />
       </div>
     );
   };
@@ -62,9 +64,7 @@ function App() {
   );
 
   const renderItems = () => {
-    const newItems = reminderList.filter(
-      (item) => item.completed == viewTab
-    );
+    const newItems = reminderList.filter((item) => item.completed == viewTab);
 
     return newItems.map((item) => (
       <li
