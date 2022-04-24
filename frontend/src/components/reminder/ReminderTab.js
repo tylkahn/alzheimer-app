@@ -61,7 +61,7 @@ class ReminderTab extends React.Component {
         // console.log("entryList:",this.state.entryList);
 
         if (this.state.entryList.length == 1) {
-            axios.post("http://localhost:8000/api/reminders/list", [item]);
+            axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`, [item]);
         }
         else {
             this.updateList(this.state.entryList)
@@ -70,10 +70,10 @@ class ReminderTab extends React.Component {
 
     // post the list to the db
     updateList(l) {
-        axios.delete(`http://localhost:8000/api/reminders/list`);
+        axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`);
         const item = { list: l};
         axios
-        .post("http://localhost:8000/api/reminders/list", item);
+        .post(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`, item);
     }
 
     // TODO: Choose which aspect of a reminder to search for (ie: title, tagList, type, etc.)
@@ -110,7 +110,7 @@ class ReminderTab extends React.Component {
     // update list from the db
     getList = () => {
         axios
-            .get("http://localhost:8000/api/reminders/list")
+            .get(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`)
             .then((res) => this.setState({ entryList: res }))
             .catch((err) => console.log(err));
     };
