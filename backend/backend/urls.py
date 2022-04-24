@@ -20,7 +20,7 @@ from todo import views as todoViews
 from authentication import views as authViews
 
 router = routers.DefaultRouter()
-router.register(r'game', todoViews.GameView, 'game')
+router.register(r"game", todoViews.GameView, "game")
 router.register(r"journalentries", todoViews.JournalView, "journalentry")
 router.register(r"reminders", todoViews.ReminderView, "reminder")
 # router.register(r"users", authViews.UserViewSet, "user")
@@ -28,7 +28,9 @@ router.register(r"reminders", todoViews.ReminderView, "reminder")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", authViews.GetUser.as_view()),
+    path("logout/", authViews.LogoutUser.as_view()),
     path("signup/", authViews.CreateUser.as_view()),
+    path("get-current-user/", authViews.IsUserLoggedIn.as_view()),
     path("api/", include(router.urls)),
     # path("api-auth/", include("rest_framework.urls")),
     # path("test/", include("django.contrib.auth.urls")),

@@ -1,12 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm"; // TODO: maybe refactor and make the login form do both login and sign up
 
+axios.defaults.withCredentials = true;
+
 function AuthModule(props) {
   const { authInfo, setAuthInfo } = props;
   const [isActiveLoginForm, setIsActiveLoginForm] = useState(true);
+
+  // this only runs when the component is first rendered
+  useEffect(() => {
+    async function checkUser() {
+      // ask backend if a user is currently logged in
+      // if so, set isLoggedIn (in authInfo) to true
+      // this will bypass the login screen and immediately load the app
+      // TODO: should i set isLoggedIn to false otherwise?
+      const config = {
+        method: "GET",
+        baseURL: process.env.REACT_APP_SERVER_BASE_URL,
+        url: "get-current-user/",
+      };
+      let response = null;
+      try {
+        response = await axios.request(config);
+      } catch (err) {
+        if (err?.response?.status === 401) {
+          // console.log("no logged in user"); // eslint-disable-line no-console
+          setAuthInfo((prevAuthInfo) => ({
+            ...prevAuthInfo,
+            isLoggedIn: false,
+            username: "",
+          }));
+        } else {
+          console.error(err); // eslint-disable-line no-console
+        }
+      }
+      if (response != null) {
+        setAuthInfo((prevAuthInfo) => ({
+          ...prevAuthInfo,
+          isLoggedIn: true,
+          username: response.data.username,
+        }));
+      }
+    }
+    checkUser();
+  }, []);
 
   const toggleForm = () => {
     setIsActiveLoginForm(!isActiveLoginForm);
@@ -44,11 +84,14 @@ function AuthModule(props) {
     let response = null;
     try {
       response = await axios.request(config);
+      // debugger;
     } catch (err) {
       if (err?.response?.status === 404) {
         console.log("username or password is incorrect!"); // eslint-disable-line no-console
       } else {
         console.error(err); // eslint-disable-line no-console
+        // console.log(err.response);
+        // debugger;
       }
     }
     if (response == null) {
@@ -166,7 +209,8 @@ function AuthModule(props) {
 }
 AuthModule.propTypes = {
   authInfo: PropTypes.shape({
-    isAuthenticated: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
+    username: PropTypes.string,
   }).isRequired,
   setAuthInfo: PropTypes.func.isRequired,
 };

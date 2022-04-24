@@ -3,7 +3,10 @@ import axios from "axios";
 import Board from "./Board";
 import History from "./History";
 
-/*eslint-disable*/
+// const axiosInstance = axios.create({ withCredentials: true });
+// axios.defaults.withCredentials = true;
+
+/* eslint-disable */
 class Gametab extends React.Component {
   constructor(props) {
     super(props);
