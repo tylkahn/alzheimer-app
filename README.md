@@ -52,10 +52,7 @@
 
 
 # TODO list
-- come up with a standardized file hierarchy
-- figure out how to not use put/delete/update
 - Clean up code: remove unnecessary files and lines, add documentation
-- Immplement Reminder function/update Reminder display to include datetime
 
 
 # Troubleshooting
@@ -71,3 +68,11 @@
     - `python manage.py migrate <app> zero --fake`
     - `python manage.py migrate`
   - you may have to restart the backend to see the changes in the Django GUI
+
+--
+
+- I don't remember the exact error message, but django may complain about the django postgres user not having a password. If this happens, here's what you can do
+  - `psql postgres` (replace postgres with whatever your superuser is)
+  - `ALTER ROLE django WITH PASSWORD 'foo'` (replace foo with a memorable password)
+  - Then go into `backend/backend/settings.py`, find the password section in `DATABASES`, and replace the string with the new password you created for the django user
+  - There is a way to locally have your password get autofilled by psql, but I don't remember how (you'll make infosec people happy if you do this though)
