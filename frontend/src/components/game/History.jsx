@@ -71,12 +71,12 @@ class History extends React.Component {
             <tr>
               <th>Player</th>
               <th>
-                <button type="button" onClick={() => this.sortScore(0)}>
+                <button className="gamebutton" type="button" onClick={() => this.sortScore(0)}>
                   Score
                 </button>
               </th>
               <th>
-                <button type="button" onClick={() => this.sortScore(1)}>
+                <button className="gamebutton" type="button" onClick={() => this.sortScore(1)}>
                   Date
                 </button>
               </th>
@@ -84,7 +84,7 @@ class History extends React.Component {
           </thead>
           <tbody>{this.state.scores.map((entry) => this.formRow(entry))}</tbody>
         </table>
-        <button type="button" onClick={this.getScores}>
+        <button className="gamebutton" type="button" onClick={this.getScores}>
           Refresh
         </button>
       </div>

@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -41,10 +42,26 @@
   clear: both;
   content: "";
   display: table;
+  padding: 5px;
+}
+
+tr {
+  padding: 10px;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+.gamebutton {
+  background-color: #68ac6a;
 }
 
 .button {
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50;
+  /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -59,18 +76,18 @@
 }
 
 .gamecard {
-  background: #fff;
+  background: rgb(233, 198, 232);
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 44px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
+  line-height: 54px;
+  height: 54px;
+  margin-right: 5px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 54px;
 }
 
 .card:focus {
@@ -109,14 +126,13 @@
   background: #ebf785;
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 44px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
+  line-height: 54px;
+  height: 54px;
+  margin-right: 5px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 54px;
 }
-
