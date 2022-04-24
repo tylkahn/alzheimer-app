@@ -10,12 +10,8 @@ class ReminderTab extends React.Component {
         super(props);
         this.state = {
             entryList: [],
-<<<<<<< HEAD
             entryID: nanoid(4),
             /*{"id": "", "title": "", "reminderType": "", "date": "", 
-=======
-            /* {"id": "", "title": "", "reminderType": "", "date": "", 
->>>>>>> main
                 "repeating": "", "description": "", "images": [],
                 "lastUpdated": 0, "tagList": []} */
             activeEntry: '',
@@ -111,7 +107,6 @@ class ReminderTab extends React.Component {
         
     }
 
-<<<<<<< HEAD
     // update list from the db
     getList = () => {
         axios
@@ -121,9 +116,6 @@ class ReminderTab extends React.Component {
     };
 
     render = () =>{
-=======
-    render() {
->>>>>>> main
 
         return (
             <div>    
