@@ -36,6 +36,7 @@ class JournalTab extends React.Component {
                 tagList: [],
             }*/
             entryList: this.props.entries,
+            allTagsList: new Set(), //could initialize like entryList in app.jsx but idk why you would need to//////////////////////////////////
             entryTitle: '',
             entryDescription: '',
             searchText: '',
@@ -43,7 +44,6 @@ class JournalTab extends React.Component {
             display: 'entryList', //either entrylist or editEntry
             entryTag: '',
             tagList: new Set(), 
-            allTagsList: new Set(),
             selectedTags: new Set(),
             showPopup: false,
         };
@@ -51,8 +51,26 @@ class JournalTab extends React.Component {
  
     addTag = () => {
         if (this.state.entryTag.trim().length <= 0){ return; }
-        this.state.tagList.add(this.state.entryTag.trim());
-        this.state.allTagsList.add(this.state.entryTag.trim());
+        
+        //console.log("in addTag");
+        
+        this.state.tagList.add(this.state.entryTag.trim()); 
+        
+        /*console.log("TagList value: ");
+        console.log(this.state.tagList);
+
+        console.log("AllTagsList value before adding: ");
+        console.log(this.state.allTagsList);
+        */
+
+        this.state.allTagsList.add(this.state.entryTag.trim()); 
+
+        /*console.log("AllTagsList value after adding: ");
+        console.log(this.state.allTagsList); 
+        
+        console.log("Out of addTag\n");
+        */
+       
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -164,22 +182,36 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //on the first run of the page
+    //on the every opening of the journal page
     componentDidMount = () => {
+        console.log("In component did mount");
         const savedEntries = JSON.parse(localStorage.getItem('entryList-data'));
         //const savedAllTagsList = JSON.parse(localStorage.getItem('allTagsList-data'));
+        
         //if there exist items in the localStorage, save it as our state
-        if (savedEntries){ 
-            this.state.entryList = savedEntries; 
-            //this.state.allTagsList = savedAllTagsList; 
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        else{ this.state.entryList=[] }
+        //console.log("savedEntries value: "); console.log(savedEntries);
+        /*console.log("savedAllTagsList value: "); console.log(savedAllTagsList);
+        
+        if (savedAllTagsList){
+            this.state.allTagsList = savedAllTagsList;//the following work so savedAllTagsList isnt a list or a set: new Set([0,0,0]); new Set(new Set());///////////////////
+
+            console.log("allTagsList has item length: "); 
+            console.log(this.state.allTagsList.size);
         }
+        else{
+            this.state.allTagsList=new Set();
+            console.log("Initialized to empty");
+        }*/
+
         this.forceUpdate();
     }
 
     //on each change to the page
-    componentDidUpdate(){
+    componentWillUnmount(){
         localStorage.setItem('entryList-data', JSON.stringify(this.state.entryList));
-        //localStorage.setItem('allTagsList-data', JSON.stringify(this.state.allTagsList));
+        localStorage.setItem('allTagsList-data', JSON.stringify(this.state.allTagsList));
     }
 
     //change display mode to the editEntry page
@@ -249,7 +281,7 @@ class JournalTab extends React.Component {
 
     selectTag = (event) => {
         this.state.selectedTags.add(event.target.value);
-        console.log(this.state.selectedTags);
+        console.log("Selected Tags: "); console.log(this.state.selectedTags);
         this.forceUpdate();
     }
 
@@ -317,8 +349,7 @@ class JournalTab extends React.Component {
                             </div>Date
                         </label>
                         <div className = "tag-list">
-                            {/*console.log(this.state.allTagsList)*/}
-                            {Array.from(this.state.allTagsList.values()).map(tag => (
+                            {/*this.state.allTagsList.size > 0 && */Array.from(this.state.allTagsList.values()).map(tag => (
                                 <button 
                                     id = "tag-button"
                                     key={nanoid()}
