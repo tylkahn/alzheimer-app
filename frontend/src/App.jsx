@@ -51,7 +51,7 @@ function App() {
     <div className="tabs">
       {viewTab == "journal" && 
         <div className="journaltab">
-          <JournalTab entries={[]} />
+          <JournalTab/>
         </div>}
         {viewTab == "reminder" && <div className="remindertab">
           <ReminderTab />

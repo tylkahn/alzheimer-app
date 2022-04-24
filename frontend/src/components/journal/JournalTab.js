@@ -32,22 +32,15 @@ class JournalTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /* ENTRY Parameters {
-                id: nanoid(),
-                title: "",
-                description: "",
-                images: [],
-                tagList: [],
-            }*/
-            entryList: this.props.entries,
+            entryList: [],
+            allTagsList: new Set(), //must store as list in localstorage
             entryTitle: '',
             entryDescription: '',
             searchText: '',
             entryB64ImageList: [],
             display: 'entryList', //either entrylist or editEntry
             entryTag: '',
-            tagList: new Set(), 
-            allTagsList: new Set(),
+            tagList: new Set(),  //must store as list in localstorage
             selectedTags: new Set(),
             showPopup: false,
             showCheckboxes: false,
@@ -57,8 +50,11 @@ class JournalTab extends React.Component {
  
     addTag = () => {
         if (this.state.entryTag.trim().length <= 0){ return; }
-        this.state.tagList.add(this.state.entryTag.trim());
-        this.state.allTagsList.add(this.state.entryTag.trim());
+                
+        this.state.tagList.add(this.state.entryTag.trim()); 
+
+        this.state.allTagsList.add(this.state.entryTag.trim()); 
+
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -99,7 +95,7 @@ class JournalTab extends React.Component {
                 description: this.state.entryDescription,
                 date: new Date(),
                 images: this.state.entryB64ImageList,
-                tagList: this.state.tagList,
+                tagList: Array.from(this.state.tagList),
             });
         }
 
@@ -133,7 +129,7 @@ class JournalTab extends React.Component {
                 this.setState({
                     entryTitle: entry.title,
                     entryDescription: entry.description,
-                    tagList: entry.tagList,
+                    tagList: new Set(entry.tagList),
                     display: 'editEntry',
                     entryB64ImageList: entry.images,
                 });
@@ -176,22 +172,33 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //on the first run of the page
+    //on the every opening of the journal page
     componentDidMount = () => {
-        const savedEntries = JSON.parse(localStorage.getItem('entryList-data'));
-        //const savedAllTagsList = JSON.parse(localStorage.getItem('allTagsList-data'));
+        console.log(localStorage);
+
+        const savedEntries = JSON.parse(localStorage.getItem('entryList-data')); //receives a list
+        const savedAllTagsList = new Set(JSON.parse(localStorage.getItem('allTagsList-data'))); //receives a list and casts to set
+        console.log("savedAllTagsList: "); console.log(savedAllTagsList);
+
         //if there exist items in the localStorage, save it as our state
-        if (savedEntries){ 
-            this.state.entryList = savedEntries; 
-            //this.state.allTagsList = savedAllTagsList; 
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        else{ console.log("Initialized entrylist to empty"); this.state.entryList=[] }
+        
+        if (savedAllTagsList){
+            this.state.allTagsList = savedAllTagsList;
         }
+        else{
+            this.state.allTagsList=new Set();
+            console.log("Initialized allTagsList to empty");
+        }
+
         this.forceUpdate();
     }
 
     //on each change to the page
     componentDidUpdate(){
         localStorage.setItem('entryList-data', JSON.stringify(this.state.entryList));
-        //localStorage.setItem('allTagsList-data', JSON.stringify(this.state.allTagsList));
+        localStorage.setItem('allTagsList-data', JSON.stringify(Array.from(this.state.allTagsList))); //store as a list
     }
 
     //change display mode to the editEntry page
@@ -261,8 +268,7 @@ class JournalTab extends React.Component {
 
     selectTag = (event) => {
         this.state.selectedTags.add(event.target.value);
-        
-        console.log(this.state.selectedTags);
+        console.log("Selected Tags: "); console.log(this.state.selectedTags);
         this.forceUpdate();
     }
 
@@ -280,7 +286,7 @@ class JournalTab extends React.Component {
                 this.state.selectedTags.forEach((tag) => { //for each selected tag
                     //if the element has any of the selected tags, 
                         //then display it and skip the rest of the tags to not create duplicates
-                    if(!shouldSkip && entry.tagList.has(tag)){ 
+                    if(!shouldSkip && entry.tagList.includes(tag)){ 
                         taggedEntries.push(entry);
                         shouldSkip = true;
                     }
@@ -392,7 +398,7 @@ class JournalTab extends React.Component {
                                         title={entry.title}
                                         description={entry.description}
                                         images={entry.images}
-                                        tagList={entry.tagList}
+                                        tagList={Array.from(entry.tagList)}
                                         date={entry.date}
                                         key={nanoid(8)} //each entry needs a unique id for rendering
                                         handleDeleteEntry={this.deleteEntry}
@@ -493,7 +499,6 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
-    save tags to local storage
     check if we need to remove tags after deleting entries
     have a different color for tags that are selected
 
@@ -505,6 +510,6 @@ export default JournalTab;
     -------defaulting Entry Title #N and Entry Description N
         writing a title and then deleting wont remove it
     -------clicking multiple tags doesnt sort correctly
-
+    -------save tags to local storage
     
 */

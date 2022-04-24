@@ -62,6 +62,8 @@ code {
   border-radius: 15em;
   background-color: white;
   grid-gap: 1rem;
+  width: 50%;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
 }
 
 .entry-images img{
@@ -96,6 +98,7 @@ textarea.entry-tag{
   border: none;
   border-radius: 15em;
   margin-left: 4px;
+  background-color: transparent;
 }
 
 .save{

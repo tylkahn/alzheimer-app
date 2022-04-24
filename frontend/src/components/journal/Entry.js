@@ -15,7 +15,7 @@ class Entry extends React.Component {
             description: this.props.description,
             images: this.props.images,
             lastUpdated: 0,
-            tagList: this.props.tagList,
+            tagList: this.props.tagList, //list type in entry, set type in journal tab (for localstorage)
             date: this.props.date,
             handleDeleteEntry: this.props.handleDeleteEntry,
             handleEditEntry: this.props.handleEditEntry,
