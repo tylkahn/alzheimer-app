@@ -1,10 +1,8 @@
 import React from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import Board from "./Board";
 import History from "./History";
-
-// const axiosInstance = axios.create({ withCredentials: true });
-// axios.defaults.withCredentials = true;
 
 /* eslint-disable */
 class Gametab extends React.Component {
@@ -51,8 +49,15 @@ class Gametab extends React.Component {
 
   // post the score to the db
   submitScore(s) {
-    const item = { score: s };
-    axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }api/game/`, item);
+
+    const item = { score: s,
+    }; 
+    const config = { 
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+    };
+    axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }api/game/`, item, config);
   }
 
   // render the gametab, create the history and board components
