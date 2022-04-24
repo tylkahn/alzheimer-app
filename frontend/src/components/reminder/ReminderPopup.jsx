@@ -17,6 +17,7 @@ class ReminderPopup extends React.Component {
   // Used for exit button on reminder
   toggle() {
     this.setState( {toggle: !this.state.toggle} )
+    this.forceUpdate()
   }
 
   render() {

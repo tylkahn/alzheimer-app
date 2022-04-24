@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {nanoid} from 'nanoid';
+import axios from "axios";
 import Reminder from './Reminder';
 import ReminderModal from './ReminderModal'
 import ReminderPopup from './ReminderPopup';
@@ -9,7 +10,8 @@ class ReminderTab extends React.Component {
         super(props);
         this.state = {
             entryList: [],
-            /* {"id": "", "title": "", "reminderType": "", "date": "", 
+            entryID: nanoid(4),
+            /*{"id": "", "title": "", "reminderType": "", "date": "", 
                 "repeating": "", "description": "", "images": [],
                 "lastUpdated": 0, "tagList": []} */
             activeEntry: '',
@@ -30,6 +32,7 @@ class ReminderTab extends React.Component {
                 b = true;
             }
         }
+        this.updateList(this.state.entryList)
         this.forceUpdate();
     }
     
@@ -37,6 +40,7 @@ class ReminderTab extends React.Component {
     editEntry(entry){
         this.deleteEntry(entry);
         this.toggle();
+        this.updateList(this.state.entryList)
         this.forceUpdate();
     };
 
@@ -48,13 +52,29 @@ class ReminderTab extends React.Component {
     // Adds entry to list
     handleSubmit = (item) => {
         console.log("handleSubmit");
-        console.log("item:", item);
+        // console.log("item:", item);
+        const oldList = [...this.state.entryList];
 
         this.toggle();
 
         this.state.entryList.push(item);
-        console.log("entryList:",this.state.entryList);
+        // console.log("entryList:",this.state.entryList);
+
+        if (this.state.entryList.length == 1) {
+            axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`, [item]);
+        }
+        else {
+            this.updateList(this.state.entryList)
+        }
     };
+
+    // post the list to the db
+    updateList(l) {
+        axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`);
+        const item = { list: l};
+        axios
+        .post(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`, item);
+    }
 
     // TODO: Choose which aspect of a reminder to search for (ie: title, tagList, type, etc.)
     // handleSearchTypeChange(event) {
@@ -66,7 +86,7 @@ class ReminderTab extends React.Component {
         this.setState({
             searchText: event.target.value,
         });
-        console.log(this.state.searchText);
+        // console.log(this.state.searchText);
     }
 
     // Checks if a reminder is set within 10 minutes of the current time
@@ -87,7 +107,28 @@ class ReminderTab extends React.Component {
         
     }
 
-    render() {
+    // update list from the db
+    getList = () => {
+        axios
+            .get(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`)
+            .then((res) => this.setState({ entryList: res }))
+            .catch((err) => console.log(err));
+    };
+    
+    //on the first run of the page
+    componentDidMount = () => {
+        const savedEntries = JSON.parse(localStorage.getItem('react-reminder-data'));
+        //if there exist items in the localStorage, save it as our state
+        if (savedEntries){ this.state.entryList = savedEntries; }
+        this.forceUpdate();
+    }
+
+    //on each change to the page
+    componentDidUpdate(){
+        localStorage.setItem('react-reminder-data', JSON.stringify(this.state.entryList));
+    }
+
+    render = () =>{
 
         return (
             <div>    
@@ -135,6 +176,7 @@ class ReminderTab extends React.Component {
                     </div> <br/>
                     
                     {/* Loop through all reminders and display them */}
+                    {this.getList()}
                     {this.state.entryList.filter((e) => (e.title).toLowerCase().concat((e.reminderType).toLowerCase()).includes(this.state.searchText)).map(entry => (
                         <div className='reminder-entry'> 
                             <Reminder

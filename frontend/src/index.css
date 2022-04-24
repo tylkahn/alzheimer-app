@@ -180,6 +180,7 @@ textarea.entry-tag {
 
 .popup {
   background-color: #ffd9d9;
+  border-style: solid;
   border-color: #d35e5e;
   border-radius: 5px;
   padding: 2px 5px 2px 5px;
@@ -201,11 +202,18 @@ textarea.entry-tag {
   min-height: 170px;
 }
 
-.reminder-entry {
-  background-color: #e2e2e2;
+.reminder-entry{
+  background-color: white;
+  border-style: solid;
+  border-color: #7e5fa7;
   border-radius: 10px;
-  padding: 5px 10px 5px 10px;
+  padding: 1rem;
   min-height: 170px;
+
+  /*put the edit button to be in the very bottom*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .entry {
