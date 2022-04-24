@@ -95,7 +95,7 @@ textarea:focus{
 textarea.entry-tag{
   border: none;
   border-radius: 15em;
-  margin-left: 2px;
+  margin-left: 4px;
 }
 
 .save{
@@ -138,6 +138,30 @@ textarea.entry-tag{
 
 .tag-button:hover{
   background-color: #9d6fb7;
+  cursor: pointer;
+}
+
+.unselected-tag{
+  background-color: #E6D1F2;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.unselected-tag:hover{
+  background-color: #9d6fb7;
+  cursor: pointer;
+}
+
+.selected-tag{
+  background-color:aquamarine;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;  
+}
+
+.selected-tag:hover{
+  background-color: aquamarine;
   cursor: pointer;
 }
 
@@ -186,8 +210,7 @@ textarea.entry-tag{
 }
 .entry-title{
   font-size: 40px;
-  font-family: 'West VAR  ';
-  src: url('https://fontwerk.com/en/fonts/west') format('west');
+  font-family: sans-serif;
   font-weight: 125 950;
   font-stretch: 75% 125%;
   font-style: normal;
@@ -224,6 +247,18 @@ textarea.entry-tag{
 
 .search input:focus{
   outline: none;
+}
+
+.reset-tags {
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px; 
+}
+
+.reset-tags:hover {
+  background-color: #E6D1F2;
+  cursor: pointer;
 }
 
 .delete {
