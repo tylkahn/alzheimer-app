@@ -64,6 +64,7 @@ class JournalTab extends React.Component {
 
     deleteTag = (tag) => {
         this.state.tagList.delete(document.getElementById("delete-tag").value);
+        this.potentiallyRemoveTags();
         this.forceUpdate();
     }
   
@@ -97,6 +98,9 @@ class JournalTab extends React.Component {
                 images: this.state.entryB64ImageList,
                 tagList: Array.from(this.state.tagList),
             });
+            for (let i = 0; i < Array.from(this.state.tagList).length; i++){
+                this.state.allTagsList.add(Array.from(this.state.tagList)[i]);
+            }   
         }
 
         //empty out the current state because it was saved
@@ -111,10 +115,42 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
+    potentiallyRemoveTags = (entry) => {
+        let stillUsedTags = new Set();
+
+        //for every still-existing entry, add all of its tags into stillUsedTags
+        for (let i = 0; i < this.state.entryList.length; i++){
+            for (let j = 0; j < this.state.entryList[i].tagList.length; j++){
+                stillUsedTags.add(this.state.entryList[i].tagList[j]);
+            }
+        }
+        for (let i = 0; i < Array.from(this.state.tagList).length; i++){
+            stillUsedTags.add(Array.from(this.state.tagList)[i]);
+        }
+
+        this.state.allTagsList = stillUsedTags;
+        this.forceUpdate(); 
+    }
+
     //remove an entry given its id
     deleteEntry = (id) => {
-        const newEntries = this.state.entryList.filter((e) => e.id !== id);
-        this.state.entryList = newEntries;
+        let remainingEntries = [];
+        let removedEntry;
+        for (let i = 0; i < this.state.entryList.length; i++){
+            if (this.state.entryList[i].id === id){
+                //we found the one entry we shouldnt add
+                removedEntry = this.state.entryList[i];
+            }
+            else{
+                remainingEntries.push(this.state.entryList[i]);
+            }
+        }
+        //const remainingEntries = this.state.entryList.filter((e) => e.id !== id);
+        this.state.entryList = remainingEntries;
+
+        //potentially remove tags of the entry thats being removed
+        this.potentiallyRemoveTags(removedEntry);
+
         this.forceUpdate();
     }
 
@@ -135,7 +171,8 @@ class JournalTab extends React.Component {
                 });
 
                 //remove the entry being edited, to add the new entry
-                this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
+                //this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
+                this.deleteEntry(id);
             }
         })
         this.forceUpdate();
@@ -174,22 +211,18 @@ class JournalTab extends React.Component {
 
     //on the every opening of the journal page
     componentDidMount = () => {
-        console.log(localStorage);
-
         const savedEntries = JSON.parse(localStorage.getItem('entryList-data')); //receives a list
         const savedAllTagsList = new Set(JSON.parse(localStorage.getItem('allTagsList-data'))); //receives a list and casts to set
-        console.log("savedAllTagsList: "); console.log(savedAllTagsList);
 
         //if there exist items in the localStorage, save it as our state
         if (savedEntries){ this.state.entryList = savedEntries; }
-        else{ console.log("Initialized entrylist to empty"); this.state.entryList=[] }
+        else{ this.state.entryList=[] }
         
         if (savedAllTagsList){
             this.state.allTagsList = savedAllTagsList;
         }
         else{
             this.state.allTagsList=new Set();
-            console.log("Initialized allTagsList to empty");
         }
 
         this.forceUpdate();
@@ -268,13 +301,10 @@ class JournalTab extends React.Component {
 
     selectTag = (event) => {
         this.state.selectedTags.add(event.target.value);
-        console.log("Selected Tags: "); console.log(this.state.selectedTags);
         this.forceUpdate();
     }
 
     filterByTag = (searchFilteredEntries) => {
-        console.log("hi");
-        console.log(this.state.selectedTags);
         let taggedEntries = [];
         let shouldSkip = false;
         if(this.state.selectedTags.size === 0){
@@ -400,7 +430,7 @@ class JournalTab extends React.Component {
                                         images={entry.images}
                                         tagList={Array.from(entry.tagList)}
                                         date={entry.date}
-                                        key={nanoid(8)} //each entry needs a unique id for rendering
+                                        key={nanoid()} //each entry needs a unique id for rendering
                                         handleDeleteEntry={this.deleteEntry}
                                         handleEditEntry={this.editEntry}
                                     />
@@ -505,7 +535,10 @@ export default JournalTab;
 
 /* NOTES/Stuff to do
     check if we need to remove tags after deleting entries
-    have a different color for tags that are selected
+        usually in just adding and deleting entries the tags behave as expected, but in the edit mode
+        it messes up the displayed alltagslist until it saves
+
+    put refresh button by the alltagslist
 
     disable all the compilation warnings from the linter (before the demo)
     
@@ -516,5 +549,6 @@ export default JournalTab;
         writing a title and then deleting wont remove it
     -------clicking multiple tags doesnt sort correctly
     -------save tags to local storage
+    -------have a different color for tags that are selected
     
 */
