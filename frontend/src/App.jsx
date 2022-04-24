@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-<<<<<<< HEAD
-import Gametab from "./components/game/Gametab";
-import "./App.css";
-import ReminderTab from "./components/reminder/ReminderTab";
-import JournalTab from "./components/journal/JournalTab";
-=======
 import Gametab from "./components/game/Gametab"
 import './App.css';
 import ReminderTab from './components/reminder/ReminderTab';
 import JournalTab from './components/journal/JournalTab';
 import { nanoid } from 'nanoid';
->>>>>>> main
 import AuthModule from "./components/auth/AuthModule";
 
 function App() {
