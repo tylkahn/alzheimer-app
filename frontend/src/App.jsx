@@ -51,13 +51,11 @@ function App() {
   // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab == "journal" && (
-        <div className="journaltab">
-          <JournalTab entries={[]} />
-        </div>
-      )}
-      {viewTab == "reminder" && (
-        <div className="remindertab">
+      {viewTab == "journal" && ( <div className="journaltab">
+          <JournalTab/>
+        </div>)}
+        
+        {viewTab == "reminder" && (<div className="remindertab">
           <ReminderTab />
         </div>
       )}
@@ -98,7 +96,7 @@ function App() {
 
   return (
     <main className="container">
-      <h1 className="text-black text-uppercase text-center my-4">
+      <h1 className="alzheimers-title">
         Alzheimer's Assistance App
       </h1>
       {authInfo.isLoggedIn ? (
