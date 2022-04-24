@@ -42,6 +42,7 @@ class JournalTab extends React.Component {
             entryTag: '',
             tagList: new Set(),  //must store as list in localstorage
             selectedTags: new Set(),
+            unselectedTags: new Set(),
             showPopup: false,
             showCheckboxes: false,
 
@@ -53,7 +54,9 @@ class JournalTab extends React.Component {
                 
         this.state.tagList.add(this.state.entryTag.trim()); 
 
-        this.state.allTagsList.add(this.state.entryTag.trim()); 
+        //this.state.allTagsList.add(this.state.entryTag.trim()); 
+
+        
 
         this.setState({
             entryTag: '',
@@ -392,7 +395,7 @@ class JournalTab extends React.Component {
                                         className = "selected-tag"
                                         value = {tag}
                                         key={nanoid()}
-                                        //onClick={this.selectTag}   
+                                        onClick={this.selectTag}   
                                     >
                                         {tag}
                                     </button>
