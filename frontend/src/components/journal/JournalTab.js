@@ -53,11 +53,7 @@ class JournalTab extends React.Component {
         if (this.state.entryTag.trim().length <= 0){ return; }
                 
         this.state.tagList.add(this.state.entryTag.trim()); 
-
-        //this.state.allTagsList.add(this.state.entryTag.trim()); 
-
         
-
         this.setState({
             entryTag: '',
             showPopup: !this.state.showPopup,
@@ -103,6 +99,7 @@ class JournalTab extends React.Component {
             });
             for (let i = 0; i < Array.from(this.state.tagList).length; i++){
                 this.state.allTagsList.add(Array.from(this.state.tagList)[i]);
+                this.state.unselectedTags.add(Array.from(this.state.tagList)[i]);
             }   
         }
 
