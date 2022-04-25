@@ -11,6 +11,7 @@ import {
   Label,
 } from "reactstrap";
 import {nanoid} from 'nanoid';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Modal interactive popup used to create a new Reminder object
 export default function CustomModal(props) {
@@ -103,7 +104,7 @@ export default function CustomModal(props) {
           <FormGroup>
             <Label for="reminder-description">Description</Label>
             <Input
-              type="text"
+              type="textarea"
               id="reminder-description"
               name="description"
               value={activeItem.description}
@@ -115,10 +116,10 @@ export default function CustomModal(props) {
       </ModalBody>
       <ModalFooter>
         <Button
-          color="success"
+          color='white'
           onClick={() => onSave(activeItem)}
         >
-          Save
+          <FontAwesomeIcon icon="floppy-disk" />
         </Button>
       </ModalFooter>
     </Modal>

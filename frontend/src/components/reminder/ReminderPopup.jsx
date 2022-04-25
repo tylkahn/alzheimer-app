@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Popup reminds users of reminders within 10 minutes of their specified time
 class ReminderPopup extends React.Component {
@@ -26,12 +27,12 @@ class ReminderPopup extends React.Component {
         {this.state.toggle ? (
           <div className='popup'>
             <div className='popup-title'>
-              {this.state.title} 
-              &nbsp;&nbsp;<button className="btn btn-danger" onClick={this.toggle}> x </button> <br/>
-              <div className='popup-date'>
+              {this.state.title}  
+              <button className='popup-delete' onClick={this.toggle}> <FontAwesomeIcon icon="trash-can" /> </button>
+            </div> 
+            <div className='popup-date'>
                 {new Date(this.state.date).toString()}
               </div>
-            </div> 
           </div>
         ) : null }
       </div>

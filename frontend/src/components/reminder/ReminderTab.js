@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {nanoid} from 'nanoid';
 import axios from "axios";
 import Reminder from './Reminder';
 import ReminderModal from './ReminderModal'
 import ReminderPopup from './ReminderPopup';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class ReminderTab extends React.Component {
     constructor(props) {
@@ -33,6 +34,7 @@ class ReminderTab extends React.Component {
             }
         }
         this.updateList(this.state.entryList)
+        this.sortByDate();
         this.forceUpdate();
     }
     
@@ -41,6 +43,7 @@ class ReminderTab extends React.Component {
         this.deleteEntry(entry);
         this.toggle();
         this.updateList(this.state.entryList)
+        this.sortByDate();
         this.forceUpdate();
     };
 
@@ -66,6 +69,8 @@ class ReminderTab extends React.Component {
         else {
             this.updateList(this.state.entryList)
         }
+        
+        this.sortByDate();
     };
 
     // post the list to the db
@@ -127,6 +132,14 @@ class ReminderTab extends React.Component {
     componentDidUpdate(){
         localStorage.setItem('react-reminder-data', JSON.stringify(this.state.entryList));
     }
+    
+    //sort entryList by date (most recent to least recent)
+    sortByDate = () => {
+        this.setState({
+            entryList: this.state.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)
+        });
+        this.forceUpdate();
+    }
 
     render = () =>{
 
@@ -155,17 +168,17 @@ class ReminderTab extends React.Component {
                         </select>
                     </div> */}
                     <div /> <br/>
-                    {/* Search bar */}
-                    <div className='search'>
-                        <input onChange={this.Search} type="text" placeholder='type to search...'/>
-                    </div>
+                        <div className='search'>
+                            <FontAwesomeIcon icon="magnifying-glass" />
+                            <input onChange={this.Search} type="text"/>
+                        </div>
                     {/* Button to add task, if pressed, modal pops up */}
                     <div className="container">
                         <button
-                            className="btn btn-primary"
+                            className="delete"
                             onClick={this.toggle}
                         >
-                            Add task
+                        <FontAwesomeIcon icon="square-plus" />
                         </button>
                         {this.state.modal ? (
                         <ReminderModal
@@ -190,16 +203,14 @@ class ReminderTab extends React.Component {
                             /><br/>
                             <span>
                             <button
-                                className="btn btn-secondary mr-2"
                                 onClick={() => this.editEntry(entry)}
-                            >
-                                Edit
+                                className='edit' >
+                                <FontAwesomeIcon icon="pen-to-square" />
                             </button>
                             <button
-                                className="btn btn-danger"
                                 onClick={() => this.deleteEntry(entry)}
-                            >
-                                Delete
+                                className='delete' >
+                                <FontAwesomeIcon icon="trash-can" />
                             </button>
                             </span>
                         </div>
