@@ -344,7 +344,7 @@ class JournalTab extends React.Component {
                 <div className='row'>
                     <div className='column'>
                         <div className='search'>
-                            <FontAwesomeIcon icon="magnifying-glass" />
+                            <FontAwesomeIcon icon="magnifying-glass"/>
                             <input onChange={this.search} type="text"/>
                         </div>
                         {this.state.display == "entryList" && (
@@ -360,13 +360,6 @@ class JournalTab extends React.Component {
                                     onClick={() => {this.toggleCheckboxes()}}
                                     className='delete' >
                                     <FontAwesomeIcon icon="arrow-down-wide-short" />
-                                </button>
-
-                                <button 
-                                    className= "reset-tags"
-                                    key={nanoid()}
-                                    onClick={this.resetAllTagsList}
-                                    ><FontAwesomeIcon icon="arrows-rotate" />
                                 </button>
                             </div>
                         )}
@@ -393,6 +386,12 @@ class JournalTab extends React.Component {
                         )}
                             
                         <div className = "tag-list">
+                            <button 
+                                className= "reset-tags"
+                                key={nanoid()}
+                                onClick={this.resetAllTagsList}
+                                ><FontAwesomeIcon icon="arrows-rotate" />
+                            </button>
                             {Array.from(this.state.selectedTags.values()).map(tag => (
                                 <div>
                                     <button 
@@ -407,21 +406,23 @@ class JournalTab extends React.Component {
                                 </div>
                                 ),
                             )}
+                        </div>
+                        <div className = "tag-list">
                             {Array.from(this.state.allTagsList.values()).map(tag => (
-                                <div>
-                                    <button 
-                                        id = "select-tag"
-                                        value = {tag}
-                                        key={nanoid()}
-                                        className = "unselected-tag"
-                                        onClick={this.selectTag}   
-                                    >
-                                        {tag}
-                                    </button>
-                                    
-                                </div>
-                                ),
-                            )}
+                            <div>
+                                <button 
+                                    id = "select-tag"
+                                    value = {tag}
+                                    key={nanoid()}
+                                    className = "unselected-tag"
+                                    onClick={this.selectTag}   
+                                >
+                                    {tag}
+                                </button>
+                                
+                            </div>
+                            ),
+                        )}
                         </div>
                         
                     </div>
@@ -452,7 +453,7 @@ class JournalTab extends React.Component {
                                     <textarea className= "entry-title"
                                         rows='1'
                                         cols = '10'
-                                        //placeholder='Enter title...'
+                                        placeholder='Enter title...'
                                         onChange={this.handleTitleChange}
                                         value={this.state.entryTitle}
                                     />
@@ -460,7 +461,7 @@ class JournalTab extends React.Component {
                                     <textarea className= "entry-description"
                                         rows='4'
                                         cols = '10'
-                                        //placeholder='Type to create the Journal Entry...'
+                                        placeholder='Type to fill in the Journal Entry...'
                                         onChange={this.handleDescriptionChange}
                                         value={this.state.entryDescription}
                                     />
@@ -473,18 +474,22 @@ class JournalTab extends React.Component {
                                     
                                     {this.state.showPopup == true && (
                                         <div className = "tag-pop-up">
-                                            <textarea className= "entry-tag"
-                                                rows='1'
-                                                cols = '16'
-                                                placeholder='tag...'
-                                                onChange={this.handleTagChange}
-                                            />
 
-                                            <button 
-                                                onClick={this.addTag}
-                                                className='add-tag' >
-                                                <FontAwesomeIcon icon="plus" />
-                                            </button>
+                                            <div>
+                                                <textarea className= "entry-tag"
+                                                    rows='1'
+                                                    cols = '16'
+                                                    placeholder='tag...'
+                                                    onChange={this.handleTagChange}
+                                                />
+                                            </div>
+                                            <div>
+                                                <button 
+                                                    onClick={this.addTag}
+                                                    className='add-tag' >
+                                                    <FontAwesomeIcon icon="plus" />
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
                                     <div className = "tag-list">
@@ -502,29 +507,28 @@ class JournalTab extends React.Component {
                                         )}
                                     </div>   
                                     <div className="entry-footer">
-                                        <button 
-                                            onClick={() => {{this.togglePopup()}}} 
-                                            className='add-tag' >
-                                            <FontAwesomeIcon icon="tag" />
-                                        </button>
                                         <div>
-                                        <label for="img-upload"> my name is rasya maybe
-                                        </label>
-                                        <input type="file"
-                                            id="img-upload" 
-                                            name="img-upload"
-                                          
-                                            accept="image/png, image/jpeg"
-                                            onChange={this.imageUpload}
-                                            multiple="multiple"
-                                        />
+                                            <button 
+                                                onClick={() => {{this.togglePopup()}}} 
+                                                className='add-tag' >
+                                                <FontAwesomeIcon icon="tag" />
+                                            </button>
                                         </div>
-
-                                        <button 
-                                            onClick={() => {this.onSave()}} 
-                                            className='save' >
-                                            <FontAwesomeIcon icon="floppy-disk" />
-                                        </button>
+                                        <div>
+                                            <input type="file"
+                                                id="img-upload" name="img-upload"
+                                                accept="image/png, image/jpeg"
+                                                onChange={this.imageUpload}
+                                                multiple="multiple"
+                                            />
+                                        </div>
+                                        <div>
+                                            <button 
+                                                onClick={() => {this.onSave()}} 
+                                                className='save' >
+                                                <FontAwesomeIcon icon="floppy-disk" />
+                                            </button>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -541,15 +545,9 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
-    PRESSING THE DELETE BUTTON ON A TAG JUST REMOVES THE FIRST TAG IN THE TAGLIST, NOT THE CORRECT TAG
-
-    check if we need to remove tags after deleting entries
-        usually in just adding and deleting entries the tags behave as expected, but in the edit mode
-        it messes up the displayed alltagslist until it saves
 
     put refresh button by the alltagslist
-
-    disable all the compilation warnings from the linter (before the demo)
+    extend the text area of the search bar tp be the whole way
     
     -------gotta scale the inputted images to not be massive
     -------edit mode deletes all tags
@@ -559,5 +557,7 @@ export default JournalTab;
     -------clicking multiple tags doesnt sort correctly
     -------save tags to local storage
     -------have a different color for tags that are selected
+    -------check if we need to remove tags after deleting entries
+
     
 */
