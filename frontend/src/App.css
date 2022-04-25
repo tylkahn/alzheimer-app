@@ -1,3 +1,11 @@
+.nav.nav-tabs{
+  justify-content: space-between;
+}
+
+.features{
+  display: inline-flex;
+}
+
 .App {
   text-align: center;
 }
