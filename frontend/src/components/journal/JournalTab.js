@@ -100,7 +100,7 @@ class JournalTab extends React.Component {
                 id: nanoid(4), 
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
-                date: new Date(),
+                date: (new Date()).getTime(),
                 images: this.state.entryB64ImageList,
                 tagList: Array.from(this.state.tagList),
             });
@@ -249,7 +249,7 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //sort entryList by title reverse alphabetically
+    //sort entryList by title reverse alphabetically (doesnt handle ties)
     sortByTitle = () => {
         this.setState({
             entryList: this.state.entryList.sort((a, b) => 
