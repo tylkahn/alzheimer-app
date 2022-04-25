@@ -302,7 +302,7 @@ class JournalTab extends React.Component {
 
     filterBySearch = () => {
         return (
-            this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText))
+            this.state.entryList.filter((e) => (e.title).toLowerCase().includes(this.state.searchText.toLowerCase()))
         );
     }
 
