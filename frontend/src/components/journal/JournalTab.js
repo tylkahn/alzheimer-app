@@ -62,11 +62,17 @@ class JournalTab extends React.Component {
     }
 
     deleteTag = (tag) => {
-        this.state.tagList.delete(document.getElementById("delete-tag").value);
+        console.log(tag);
+        for (let i = 0; i < Array.from(this.state.tagList).length; i++){
+            if (Array.from(this.state.tagList)[i] === tag){
+                this.state.tagList.delete(Array.from(this.state.tagList)[i]);
+                break;
+            }
+        }
         this.potentiallyRemoveTags();
         this.forceUpdate();
     }
-  
+
     togglePopup() {
         this.setState({
           showPopup: !this.state.showPopup
@@ -93,7 +99,7 @@ class JournalTab extends React.Component {
                 id: nanoid(4), 
                 title: this.state.entryTitle,
                 description: this.state.entryDescription,
-                date: new Date(),
+                date: (new Date()).getTime(),
                 images: this.state.entryB64ImageList,
                 tagList: Array.from(this.state.tagList),
             });
@@ -133,7 +139,7 @@ class JournalTab extends React.Component {
     }
 
     //remove an entry given its id
-    deleteEntry = (id) => {
+    deleteEntry = (id, inEdit=false) => {
         let remainingEntries = [];
         let removedEntry;
         for (let i = 0; i < this.state.entryList.length; i++){
@@ -149,7 +155,7 @@ class JournalTab extends React.Component {
         this.state.entryList = remainingEntries;
 
         //potentially remove tags of the entry thats being removed
-        this.potentiallyRemoveTags(removedEntry);
+        if (!inEdit){ this.potentiallyRemoveTags(removedEntry); }
 
         this.forceUpdate();
     }
@@ -172,7 +178,8 @@ class JournalTab extends React.Component {
 
                 //remove the entry being edited, to add the new entry
                 //this.state.entryList = this.state.entryList.filter(entry => entry.id != id); 
-                this.deleteEntry(id);
+                this.deleteEntry(id, true);
+                this.forceUpdate();
             }
         })
         this.forceUpdate();
@@ -242,7 +249,7 @@ class JournalTab extends React.Component {
         this.forceUpdate();
     }
 
-    //sort entryList by title reverse alphabetically
+    //sort entryList by title reverse alphabetically (doesnt handle ties)
     sortByTitle = () => {
         this.setState({
             entryList: this.state.entryList.sort((a, b) => 
@@ -484,12 +491,12 @@ class JournalTab extends React.Component {
                                         {Array.from(this.state.tagList).map(tag => (
                                             <button 
                                                 className="tag-button"
-                                                id = "delete-tag"
+                                                id = {nanoid()}
                                                 value = {tag}
-                                                key={nanoid()}
-                                            >    
+                                                key={nanoid()} >
+
                                                 {tag}
-                                                <FontAwesomeIcon icon="xmark" onClick={this.deleteTag} />
+                                                <FontAwesomeIcon key={nanoid()} id={nanoid()} icon="xmark" onClick={() => this.deleteTag(tag)}/>
                                             </button>
                                             ),
                                         )}
@@ -534,6 +541,8 @@ export default JournalTab;
 
 
 /* NOTES/Stuff to do
+    PRESSING THE DELETE BUTTON ON A TAG JUST REMOVES THE FIRST TAG IN THE TAGLIST, NOT THE CORRECT TAG
+
     check if we need to remove tags after deleting entries
         usually in just adding and deleting entries the tags behave as expected, but in the edit mode
         it messes up the displayed alltagslist until it saves
