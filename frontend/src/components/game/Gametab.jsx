@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import Board from "./Board";
 import History from "./History";
 
-/* eslint-disable */
 class Gametab extends React.Component {
   constructor(props) {
     super(props);
@@ -35,9 +34,9 @@ class Gametab extends React.Component {
   // toggle the difficulty based on user input
   handleChange(event) {
     let d = 2;
-    if (event.target.value == "Easy") {
+    if (event.target.value === "Easy") {
       d = 2;
-    } else if (event.target.value == "Medium") {
+    } else if (event.target.value === "Medium") {
       d = 3;
     } else {
       d = 4;
@@ -48,29 +47,34 @@ class Gametab extends React.Component {
   }
 
   // post the score to the db
+  // eslint-disable-next-line class-methods-use-this
   submitScore(s) {
-
-    const item = { score: s,
-    }; 
-    const config = { 
+    const item = { score: s };
+    const config = {
       headers: {
         "X-CSRFToken": Cookies.get("csrftoken"),
       },
     };
-    axios.post(`${process.env.REACT_APP_SERVER_BASE_URL  }api/game/`, item, config);
+    axios.post(
+      `${process.env.REACT_APP_SERVER_BASE_URL}api/game/`,
+      item,
+      config
+    );
   }
 
   // render the gametab, create the history and board components
   render() {
+    const { difficulty, isGameMode } = this.state;
     return (
       <div className="game">
-        {!this.state.isGameMode && (
+        {!isGameMode && (
           <div className="game-init">
             <form onSubmit={this.handleStartGame}>
-              <label>
+              <label htmlFor="gameDifficulty">
                 Select Difficulty:&nbsp;
                 <select
-                  difficulty={this.state.difficulty}
+                  id="gameDifficulty"
+                  difficulty={difficulty}
                   onChange={this.handleChange}
                 >
                   <option difficulty="easy">Easy</option>
@@ -84,11 +88,11 @@ class Gametab extends React.Component {
             <History />
           </div>
         )}
-        {this.state.isGameMode && (
+        {isGameMode && (
           <div className="game-board">
             <Board
               onEnd={this.handleEndGame}
-              size={this.state.difficulty}
+              size={difficulty}
               submit={this.submitScore}
             />
           </div>
