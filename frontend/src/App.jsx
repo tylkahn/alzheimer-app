@@ -72,38 +72,6 @@ function App() {
     </div>
   );
 
-  // TODO: can this be safely deleted?
-  // const renderItems = () => {
-  //   const newItems = reminderList.filter((item) => item.completed == viewTab);
-
-  //   return newItems.map((item) => (
-  //     <li
-  //       key={item.id}
-  //       className="list-group-item d-flex justify-content-between align-items-center"
-  //     >
-  //       <span
-  //         className={`reminder-title mr-2 ${
-  //           viewTab ? "completed-reminder" : ""
-  //         }`}
-  //         title={item.description}
-  //       >
-  //         {item.title}
-  //       </span>
-  //       <span>
-  //         <button
-  //           className="btn btn-secondary mr-2"
-  //           onClick={() => editItem(item)}
-  //         >
-  //           Edit
-  //         </button>
-  //         <button className="btn btn-danger" onClick={() => deleteItem(item)}>
-  //           Delete
-  //         </button>
-  //       </span>
-  //     </li>
-  //   ));
-  // };
-
   return (
     <main className="container">
       <h1 className="text-black text-uppercase text-center my-4">
