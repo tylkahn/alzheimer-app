@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   Modal,
@@ -10,16 +10,17 @@ import {
   FormGroup,
   Input,
   Label,
-} from 'reactstrap';
+} from "reactstrap";
 
 export default function CustomModal(props) {
   const { initActiveItem } = props;
   const [activeItem, setActiveItem] = useState(initActiveItem);
 
   const handleChange = (e) => {
-    let { name, value } = e.target;
+    const { name } = e.target;
+    let { value } = e.target;
 
-    if (e.target.type === 'checkbox') {
+    if (e.target.type === "checkbox") {
       value = e.target.checked;
     }
 
@@ -28,9 +29,9 @@ export default function CustomModal(props) {
 
   const { toggle, onSave } = props;
 
-  useEffect(() => {
-    console.log(props, activeItem);
-  }, [props, activeItem]);
+  // useEffect(() => {
+  // console.log(props, activeItem);
+  // }, [props, activeItem]);
 
   return (
     <Modal isOpen toggle={toggle}>
