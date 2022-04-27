@@ -111,7 +111,12 @@ export default function CustomModal(props) {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="white" onClick={() => onSave(activeItem)}>
+        <Button
+          color="white"
+          onClick={() => onSave(activeItem)}
+          // DEPENDENCY INJECTION DESIGN PATTERN: ReminderModal, the injector class,
+          // injects ReminderTab with the reminder information (Service)
+        >
           <FontAwesomeIcon icon="floppy-disk" />
         </Button>
       </ModalFooter>
