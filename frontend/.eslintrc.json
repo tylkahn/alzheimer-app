@@ -9,6 +9,13 @@
     "airbnb",
     "prettier" // should be last
   ],
+  "overrides": [
+    {
+      "files": ["*.test.js", "*.test.jsx"],
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended"]
+    }
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
