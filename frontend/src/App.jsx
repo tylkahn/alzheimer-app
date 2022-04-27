@@ -23,27 +23,32 @@ function App() {
   const renderTabList = () => {
     return (
       <div className="nav nav-tabs">
-        <span
-          className={viewTab == "journal" ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("journal")}
-        >
-          Journal
-        </span>
+        <div className= "features">
+          <span
+            className={viewTab == "journal" ? "nav-link active" : "nav-link"}
+            onClick={() => displayTab("journal")}
+          >
+            Journal
+          </span>
 
-        <span
-          className={viewTab == "reminder" ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("reminder")}
-        >
-          Reminders
-        </span>
+          <span
+            className={viewTab == "reminder" ? "nav-link active" : "nav-link"}
+            onClick={() => displayTab("reminder")}
+          >
+            Reminders
+          </span>
 
-        <span
-          className={viewTab == "game" ? "nav-link active" : "nav-link"}
-          onClick={() => displayTab("game")}
-        >
-          Memory Game
-        </span>
-        <LogoutButton setAuthInfo={setAuthInfo} />
+          <span
+            className={viewTab == "game" ? "nav-link active" : "nav-link"}
+            onClick={() => displayTab("game")}
+          >
+            Memory Game
+          </span>
+        </div>
+        <div>
+          <span className="logout-button"><LogoutButton setAuthInfo={setAuthInfo} /></span>
+        </div>
+        
       </div>
     );
   };
