@@ -18,47 +18,53 @@ function App() {
     setViewTab(tabName);
   };
 
-  const renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <div className= "features">
-          <span
-            className={viewTab === "journal" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("journal")}
-          >
-            Journal
-          </span>
+  // TODO: does changing the == to === affect anything?
+  const renderTabList = () => (
+    <div className="nav nav-tabs">
+      <div className="features">
+        <button
+          type="button"
+          className={viewTab === "journal" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("journal")}
+        >
+          Journal
+        </button>
 
-          <span
-            className={viewTab === "reminder" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("reminder")}
-          >
-            Reminders
-          </span>
+        <button
+          type="button"
+          className={viewTab === "reminder" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("reminder")}
+        >
+          Reminders
+        </button>
 
-          <span
-            className={viewTab === "game" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("game")}
-          >
-            Memory Game
-          </span>
-        </div>
-        <div>
-          <span className="logout-button"><LogoutButton setAuthInfo={setAuthInfo} /></span>
-        </div>
-        
+        <button
+          type="button"
+          className={viewTab === "game" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("game")}
+        >
+          Memory Game
+        </button>
       </div>
-    );
-  };
+      <div>
+        <span className="logout-button">
+          <LogoutButton setAuthInfo={setAuthInfo} />
+        </span>
+      </div>
+    </div>
+  );
 
   // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab === "journal" && ( <div className="journaltab">
-          <JournalTab/>
-        </div>)}
-        
-        {viewTab === "reminder" && (<div className="remindertab">
+      {viewTab === "journal" && (
+        <div className="journaltab">
+          <JournalTab />
+        </div>
+      )}
+
+      {viewTab === "reminder" && (
+        <div className="remindertab">
           <ReminderTab />
         </div>
       )}
@@ -69,7 +75,7 @@ function App() {
   return (
     <main className="container">
       <h1 className="text-black text-uppercase text-center my-4">
-        Alzheimer's Assistance App
+        Alzheimer&apos;s Assistance App
       </h1>
       {authInfo.isLoggedIn ? (
         <div className="row">
