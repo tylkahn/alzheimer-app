@@ -55,7 +55,6 @@
 - come up with a standardized file hierarchy
 - figure out how to not use put/delete/update
 - Clean up code: remove unnecessary files and lines, add documentation
-- Immplement Reminder function/update Reminder display to include datetime
 
 
 # Troubleshooting
