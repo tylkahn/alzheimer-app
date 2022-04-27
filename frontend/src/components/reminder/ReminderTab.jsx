@@ -124,7 +124,7 @@ class ReminderTab extends React.Component {
     }
 
     render(){
-
+        // FACADE DESIGN PATTERN: ReminderTab (facade) shows an interface for clients to interact with
         return (
             <div>    
                 <div>
@@ -136,6 +136,7 @@ class ReminderTab extends React.Component {
                                 title={entry.title}
                                 date={entry.date}
                                 key={nanoid(8)}
+                                // FACADE DESIGN PATTERN: ReminderTab interacts with ReminderPopup subsystem to display reminder popups
                             />
                         </div> 
                         ),
@@ -158,6 +159,8 @@ class ReminderTab extends React.Component {
                         <FontAwesomeIcon icon="square-plus" />
                         </button>
                         {this.state.modal ? (
+                        // DEPENDENCY INJECTION DESIGN PATTERN: ReminderTab calls on the Injector Class ReminderModal
+                        // FACADE DESIGN PATTERN: ReminderTab interacts with ReminderModal subsystem to create a new reminder
                         <ReminderModal
                             toggle={this.toggle}
                             onSave={this.handleSubmit}
@@ -177,6 +180,7 @@ class ReminderTab extends React.Component {
                                 repeating={entry.repeating}
                                 description={entry.description}
                                 key={nanoid(8)} // each entry needs a unique id for rendering, not just db
+                                // FACADE DESIGN PATTERN: ReminderTab interacts with Reminder subsytem to display reminders
                             /><br/>
                             <span>
                             <button
