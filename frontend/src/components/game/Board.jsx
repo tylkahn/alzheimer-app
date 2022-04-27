@@ -1,7 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Card from "./Card";
 
-/* eslint-disable */
+/* eslint-disable react/destructuring-assignment */
+
+// check if all cards are matched (the game is done)
+function isComplete(matched) {
+  for (let i = 0; i < matched.length; i += 1) {
+    if (!matched[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -16,24 +28,22 @@ class Board extends React.Component {
     this.promptNext = this.promptNext.bind(this);
   }
 
-  // check if the two active cards are matching
-  checkMatch() {
-    return (
-      this.state.cards[this.state.active1] % (this.size / 2) ==
-      this.state.cards[this.state.active2] % (this.size / 2)
-    );
-  }
-
   // handle the user clicking on a card, update the state
   handleClick(i) {
     if (this.state.active1 === i || this.state.matched[i]) {
+      // do nothing
     } else if (this.state.active1 != null && this.state.active2 != null) {
       if (this.checkMatch()) {
-        const newState = [...this.state.matched];
-        newState[this.state.active1] = true;
-        newState[this.state.active2] = true;
-        this.setState({
-          matched: newState,
+        // const newState = [...this.state.matched];
+        // newState[this.state.active1] = true;
+        // newState[this.state.active2] = true;
+        this.setState((prevState) => {
+          const newState = [...prevState.matched];
+          newState[prevState.active1] = true;
+          newState[prevState.active2] = true;
+          return {
+            matched: newState,
+          };
         });
       }
       this.setState({
@@ -44,20 +54,35 @@ class Board extends React.Component {
       this.setState({
         active2: i,
       });
-      this.state.score++;
+      this.state.score += 1;
     } else {
       this.setState({
         active1: i,
       });
-      this.state.score++;
+      this.state.score += 1;
     }
+  }
+
+  // check if the two active cards are matching
+  checkMatch() {
+    return (
+      this.state.cards[this.state.active1] % (this.size / 2) ===
+      this.state.cards[this.state.active2] % (this.size / 2)
+    );
+  }
+
+  // run the endgame
+  promptNext() {
+    const finalScore = (5 - this.props.size) * this.state.score;
+    this.props.submit(finalScore);
+    this.props.onEnd();
   }
 
   // render a specific card
   renderSquare(i) {
     const val =
-      this.state.active1 == i ||
-      this.state.active2 == i ||
+      this.state.active1 === i ||
+      this.state.active2 === i ||
       this.state.matched[i]
         ? this.state.cards[i] % (this.size / 2)
         : "?";
@@ -71,16 +96,9 @@ class Board extends React.Component {
     );
   }
 
-  // run the endgame
-  promptNext() {
-    const finalScore = (5 - this.props.size) * this.state.score;
-    this.props.submit(finalScore);
-    this.props.onEnd();
-  }
-
   // render a single row of cards
   renderRow(v) {
-    let i = v * 6;
+    const i = v * 6;
     return (
       <div className="board-row">
         {this.renderSquare(i)}
@@ -97,14 +115,14 @@ class Board extends React.Component {
   render() {
     const completed = isComplete(this.state.matched);
     const finalScore = (5 - this.props.size) * this.state.score;
-    console.log(completed);
+    // console.log(completed);
     return (
       <div className="gameBoard">
         {completed && (
           <div>
             <h1>Congratualations</h1>
             <h2>Your final score was {finalScore}</h2>
-            <button className="button" onClick={this.promptNext}>
+            <button type="button" className="button" onClick={this.promptNext}>
               Return
             </button>
           </div>
@@ -113,7 +131,7 @@ class Board extends React.Component {
           <div>
             Flips: {this.state.score} (lower is better)
             {[...Array(this.props.size)].map((_, i) => this.renderRow(i))}
-            <button className="button" onClick={this.props.onEnd}>
+            <button type="button" className="button" onClick={this.props.onEnd}>
               End Game
             </button>
           </div>
@@ -122,15 +140,10 @@ class Board extends React.Component {
     );
   }
 }
-
-// check if all cards are matched (the game is done)
-function isComplete(matched) {
-  for (let i = 0; i < matched.length; i++) {
-    if (!matched[i]) {
-      return false;
-    }
-  }
-  return true;
-}
+Board.propTypes = {
+  size: PropTypes.number.isRequired,
+  submit: PropTypes.func.isRequired,
+  onEnd: PropTypes.func.isRequired,
+};
 
 export default Board;
