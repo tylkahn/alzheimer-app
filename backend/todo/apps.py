@@ -5,6 +5,7 @@ from django.apps import AppConfig
 #     default_auto_field = 'django.db.models.BigAutoField'
 #     name = 'todo'
 
+
 class ReminderConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'todo'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "todo"

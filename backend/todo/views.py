@@ -1,11 +1,12 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import viewsets
 from .models import JournalEntries, Reminder, GameHistory
 from .serializers import JournalSerializer, ReminderSerializer, GameSerializer
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+
 # from django.shortcuts import render
 
 
@@ -37,6 +38,7 @@ class ReminderView(viewsets.ModelViewSet):
     serializer_class = ReminderSerializer
     queryset = Reminder.objects.all()
 
+
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class GameView(viewsets.ModelViewSet):
     serializer_class = GameSerializer
@@ -48,6 +50,6 @@ class GameView(viewsets.ModelViewSet):
         else:
             query_set = queryset
         return query_set
-    
+
     def perform_create(self, serializer):
         serializer.save(player=self.request.user)
