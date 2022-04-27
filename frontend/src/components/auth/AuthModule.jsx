@@ -27,7 +27,6 @@ function AuthModule(props) {
         response = await axios.request(config);
       } catch (err) {
         if (err?.response?.status === 401) {
-          // console.log("no logged in user"); // eslint-disable-line no-console
           setAuthInfo((prevAuthInfo) => ({
             ...prevAuthInfo,
             isLoggedIn: false,
@@ -84,14 +83,11 @@ function AuthModule(props) {
     let response = null;
     try {
       response = await axios.request(config);
-      // debugger;
     } catch (err) {
       if (err?.response?.status === 404) {
         console.log("username or password is incorrect!"); // eslint-disable-line no-console
       } else {
         console.error(err); // eslint-disable-line no-console
-        // console.log(err.response);
-        // debugger;
       }
     }
     if (response == null) {
