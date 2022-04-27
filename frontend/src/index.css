@@ -181,9 +181,9 @@ textarea.entry-tag {
 }
 
 .popup {
-  background-color: #ffd9d9;
+  background-color: #f2d1d1;
   border-style: solid;
-  border-color: #d35e5e;
+  border-color: #c88585;
   border-radius: 5px;
   padding: 2px 5px 2px 5px;
   min-height: 70px;
@@ -191,6 +191,10 @@ textarea.entry-tag {
 
 .popup-title {
   font-size: 30px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .popup-date {
@@ -207,7 +211,7 @@ textarea.entry-tag {
 .reminder-entry{
   background-color: white;
   border-style: solid;
-  border-color: #7e5fa7;
+  border-color: #a285c8;
   border-radius: 10px;
   padding: 1rem;
   min-height: 170px;
@@ -294,6 +298,19 @@ textarea.entry-tag {
 
 .delete:hover {
   background-color: #e6d1f2;
+  cursor: pointer;
+}
+
+.popup-delete {
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 10px 5px 10px;
+  text-align: right;
+}
+
+.popup-delete:hover {
+  background-color: #c8858577;
   cursor: pointer;
 }
 
