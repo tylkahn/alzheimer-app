@@ -39,15 +39,7 @@ class ReminderTab extends React.Component {
         this.setState( prevState => ({entryList: prevState.entryList.sort((a, b) => (a.date > b.date) ? 1 : -1)}));
         this.forceUpdate();
     }
-    
-    // // TODO: update list from the db
-    // getList = () => {
-    //     axios
-    //         .get(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`)
-    //         .then((res) => this.setState({ entryList: res }))
-    //         .catch((err) => console.log(err));
-    // };
-    
+
     // Updates search text
     Search = (event) => {
         this.setState({
@@ -113,11 +105,6 @@ class ReminderTab extends React.Component {
         .post(`${process.env.REACT_APP_SERVER_BASE_URL  }/api/reminders/list`, item);
     }
 
-    // TODO: Choose which aspect of a reminder to search for (ie: title, tagList, type, etc.)
-    // handleSearchTypeChange(event) {
-    //     this.setState({searchType: event.target.value});
-    // }
-
     // Checks if a reminder is set within 10 minutes of the current time
     isValidPopup(popup) {
         const currentDate = new Date();
@@ -156,12 +143,6 @@ class ReminderTab extends React.Component {
                     )}
                 </div>          
                 <div className="reminder">
-                    {/* TODO: <div className='search-type'>
-                        <select value={this.state.searchType} onChange={this.handleSearchTypeChange}>
-                            <option value="title"> Title </option>
-                            <option value="reminderType"> Type </option>
-                        </select>
-                    </div> */}
                     <div /> <br/>
                         <div className='search'>
                             <FontAwesomeIcon icon="magnifying-glass" />
