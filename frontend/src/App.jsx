@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Gametab from "./components/game/Gametab";
 import "./App.css";
 import ReminderTab from "./components/reminder/ReminderTab";
 import JournalTab from "./components/journal/JournalTab";
-import { nanoid } from "nanoid";
 import AuthModule from "./components/auth/AuthModule";
 import LogoutButton from "./components/auth/LogoutButton";
 
@@ -20,89 +18,96 @@ function App() {
     setViewTab(tabName);
   };
 
-  const renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <div className= "features">
-          <span
-            className={viewTab == "journal" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("journal")}
-          >
-            Journal
-          </span>
+  // TODO: does changing the == to === affect anything?
+  const renderTabList = () => (
+    <div className="nav nav-tabs">
+      <div className="features">
+        <button
+          type="button"
+          className={viewTab === "journal" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("journal")}
+        >
+          Journal
+        </button>
 
-          <span
-            className={viewTab == "reminder" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("reminder")}
-          >
-            Reminders
-          </span>
+        <button
+          type="button"
+          className={viewTab === "reminder" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("reminder")}
+        >
+          Reminders
+        </button>
 
-          <span
-            className={viewTab == "game" ? "nav-link active" : "nav-link"}
-            onClick={() => displayTab("game")}
-          >
-            Memory Game
-          </span>
-        </div>
-        <div>
-          <span className="logout-button"><LogoutButton setAuthInfo={setAuthInfo} /></span>
-        </div>
-        
+        <button
+          type="button"
+          className={viewTab === "game" ? "nav-link active" : "nav-link"}
+          onClick={() => displayTab("game")}
+        >
+          Memory Game
+        </button>
       </div>
-    );
-  };
+      <div>
+        <span className="logout-button">
+          <LogoutButton setAuthInfo={setAuthInfo} />
+        </span>
+      </div>
+    </div>
+  );
 
   // If a tab is clicked, displays that tab
   const renderTab = () => (
     <div className="tabs">
-      {viewTab == "journal" && ( <div className="journaltab">
-          <JournalTab/>
-        </div>)}
-        
-        {viewTab == "reminder" && (<div className="remindertab">
+      {viewTab === "journal" && (
+        <div className="journaltab">
+          <JournalTab />
+        </div>
+      )}
+
+      {viewTab === "reminder" && (
+        <div className="remindertab">
           <ReminderTab />
         </div>
       )}
-      {viewTab == "game" && <Gametab />}
+      {viewTab === "game" && <Gametab />}
     </div>
   );
 
-  const renderItems = () => {
-    const newItems = reminderList.filter((item) => item.completed == viewTab);
+  // TODO: can this be safely deleted?
+  // const renderItems = () => {
+  //   const newItems = reminderList.filter((item) => item.completed == viewTab);
 
-    return newItems.map((item) => (
-      <li
-        key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <span
-          className={`reminder-title mr-2 ${
-            viewTab ? "completed-reminder" : ""
-          }`}
-          title={item.description}
-        >
-          {item.title}
-        </span>
-        <span>
-          <button
-            className="btn btn-secondary mr-2"
-            onClick={() => editItem(item)}
-          >
-            Edit
-          </button>
-          <button className="btn btn-danger" onClick={() => deleteItem(item)}>
-            Delete
-          </button>
-        </span>
-      </li>
-    ));
-  };
+  //   return newItems.map((item) => (
+  //     <li
+  //       key={item.id}
+  //       className="list-group-item d-flex justify-content-between align-items-center"
+  //     >
+  //       <span
+  //         className={`reminder-title mr-2 ${
+  //           viewTab ? "completed-reminder" : ""
+  //         }`}
+  //         title={item.description}
+  //       >
+  //         {item.title}
+  //       </span>
+  //       <span>
+  //         <button
+  //           className="btn btn-secondary mr-2"
+  //           onClick={() => editItem(item)}
+  //         >
+  //           Edit
+  //         </button>
+  //         <button className="btn btn-danger" onClick={() => deleteItem(item)}>
+  //           Delete
+  //         </button>
+  //       </span>
+  //     </li>
+  //   ));
+  // };
 
   return (
     <main className="container">
       <h1 className="text-black text-uppercase text-center my-4">
-        Alzheimer's Assistance App
+        Alzheimer&apos;s Assistance App
       </h1>
       {authInfo.isLoggedIn ? (
         <div className="row">
