@@ -12,12 +12,12 @@ class ReminderPopup extends React.Component {
       toggle: true,
     }
     this.toggle = this.toggle.bind(this)
-    console.log("ReminderPopup:", this.state);
+    // console.log("ReminderPopup:", this.state);
   };
 
   // Used for exit button on reminder
   toggle() {
-    this.setState( {toggle: !this.state.toggle} )
+    this.setState( prevState => ({toggle: !prevState.toggle}))
     this.forceUpdate()
   }
 
@@ -28,7 +28,7 @@ class ReminderPopup extends React.Component {
           <div className='popup'>
             <div className='popup-title'>
               {this.state.title}  
-              <button className='popup-delete' onClick={this.toggle}> <FontAwesomeIcon icon="trash-can" /> </button>
+              <button className='popup-delete' onClick={this.toggle} type='submit'> <FontAwesomeIcon icon="trash-can" /> </button>
             </div> 
             <div className='popup-date'>
                 {new Date(this.state.date).toString()}

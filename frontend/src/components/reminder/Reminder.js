@@ -20,7 +20,7 @@ class Reminder extends Entry {
         this.setDate = this.setDate.bind(this);
         this.setRepeating = this.setRepeating.bind(this);
         this.setDescription = this.setDescription.bind(this);
-        console.log("Reminder:", this.state);
+        // console.log("Reminder:", this.state);
     }
   
     // Getter functions

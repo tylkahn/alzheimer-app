@@ -39,14 +39,14 @@ export default function CustomModal(props) {
   };
 
   useEffect(() => {
-    console.log(props, activeItem)
+    // console.log(props, activeItem)
   }, [props, activeItem]);
 
   return (
     <Modal isOpen toggle={toggle}>
       <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
       <ModalBody>
-        <Form onSubmit={() => onSave(tempActiveItem)}>
+        <Form onSubmit={() => onSave(activeItem)}>
           <FormGroup>
             <Label for="reminder-title">Title</Label>
             <Input

@@ -7,30 +7,39 @@ class Entry extends React.Component {
             id: "0",
             title: "The Title",
             description: "The description",
-            images: [],
-            lastUpdated: 0,
-            tagList: [],
         };
     }
 
-    // getID() = () = { return this.state.id; }
+    getID(){ 
+      const {id} = this.state;
+      return id;
+    }
 
-    // getTitle(){ return this.state.title; }
+    getTitle(){ 
+      const {title} = this.state;
+      return title; 
+    }
 
-    // getDescription(){ return this.state.description; }
-
-    // getImages(){ return this.state.images; }
-    
-    // getLastUpdated(){ return this.state.lastUpdated; }
-    
-    // getTagList(){ return this.state.tagList; }
+    getDescription(){ 
+      const {description} = this.state;
+      return description; 
+    }
 
     render() {
-        return (
-          <div className="entry">
-            Entry
+      return (
+        <div className="entry">
+          Entry
+          <div>
+            {this.getTitle()}
           </div>
-        );
+          <div>
+            id: {this.getID()}
+          </div>
+          <div>
+            description: {this.getDescription()}
+          </div>
+        </div>
+      );
       }
 }
 
