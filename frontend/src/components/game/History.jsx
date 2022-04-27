@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-/* eslint-disable */
 class History extends React.Component {
   constructor(props) {
     super(props);
@@ -20,12 +19,13 @@ class History extends React.Component {
   // update scores from the db
   getScores = () => {
     axios
-      .get(process.env.REACT_APP_SERVER_BASE_URL + "api/game/")
+      .get(`${process.env.REACT_APP_SERVER_BASE_URL}api/game/`)
       .then((res) => this.setState({ scores: res.data }))
       .catch((err) => console.log(err));
   };
 
   // return a single row populated with a score entry
+  // eslint-disable-next-line class-methods-use-this
   formRow(entry) {
     const d = new Date(entry.date);
     const day = d.getDate();
@@ -44,26 +44,30 @@ class History extends React.Component {
 
   // sort the scores list by the desired property
   sortScore(k) {
-    console.log(this.state);
+    // console.log(this.state);
+    const { scores, asc } = this.state;
     let newScores;
+    // TODO: can this be safely changed to === ?
+    // eslint-disable-next-line eqeqeq
     if (k == 0) {
-      newScores = this.state.scores.sort((a, b) => a.score - b.score);
+      newScores = scores.sort((a, b) => a.score - b.score);
     } else {
-      newScores = this.state.scores.sort(
+      newScores = scores.sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       );
     }
-    if (this.state.asc) {
+    if (asc) {
       newScores.reverse();
     }
-    this.setState({
+    this.setState((prevState) => ({
       scores: newScores,
-      asc: !this.state.asc,
-    });
+      asc: !prevState.asc,
+    }));
   }
 
   // render the scores table
   render() {
+    const { scores } = this.state;
     return (
       <div>
         <table>
@@ -71,18 +75,26 @@ class History extends React.Component {
             <tr>
               <th>Player</th>
               <th>
-                <button className="gamebutton" type="button" onClick={() => this.sortScore(0)}>
+                <button
+                  className="gamebutton"
+                  type="button"
+                  onClick={() => this.sortScore(0)}
+                >
                   Score
                 </button>
               </th>
               <th>
-                <button className="gamebutton" type="button" onClick={() => this.sortScore(1)}>
+                <button
+                  className="gamebutton"
+                  type="button"
+                  onClick={() => this.sortScore(1)}
+                >
                   Date
                 </button>
               </th>
             </tr>
           </thead>
-          <tbody>{this.state.scores.map((entry) => this.formRow(entry))}</tbody>
+          <tbody>{scores.map((entry) => this.formRow(entry))}</tbody>
         </table>
         <button className="gamebutton" type="button" onClick={this.getScores}>
           Refresh
