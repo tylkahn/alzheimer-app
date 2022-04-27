@@ -38,10 +38,6 @@ export default function CustomModal(props) {
     setActiveItem({ ...activeItem, [name]: value });
   };
 
-  useEffect(() => {
-    // console.log(props, activeItem)
-  }, [props, activeItem]);
-
   return (
     <Modal isOpen toggle={toggle}>
       <ModalHeader toggle={toggle}>Reminder Item</ModalHeader>
