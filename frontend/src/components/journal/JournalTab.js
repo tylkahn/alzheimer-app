@@ -100,10 +100,10 @@ class JournalTab extends React.Component {
 
     this.state.tagList.add(this.state.entryTag.trim());
 
-    this.setState({
+    this.setState((prevState) => ({
       entryTag: "",
-      showPopup: !this.state.showPopup,
-    });
+      showPopup: !prevState.showPopup,
+    }));
     this.forceUpdate();
   };
 
@@ -119,20 +119,7 @@ class JournalTab extends React.Component {
     this.forceUpdate();
   };
 
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup,
-    });
-  }
-
-  toggleCheckboxes() {
-    this.setState({
-      showCheckboxes: !this.state.showCheckboxes,
-    });
-    this.forceUpdate();
-  }
-
-  // occurs either when creating a new entry or when finished editting one
+  // occurs either when creating a new entry or when finished editing one
   onSave = () => {
     // empty title box so default it
     if (!this.state.entryTitle || this.state.entryTitle.trim().length === 0) {
@@ -167,7 +154,7 @@ class JournalTab extends React.Component {
     this.forceUpdate();
   };
 
-  potentiallyRemoveTags = (entry) => {
+  potentiallyRemoveTags = () => {
     const stillUsedTags = new Set();
 
     // for every still-existing entry, add all of its tags into stillUsedTags
@@ -210,8 +197,9 @@ class JournalTab extends React.Component {
   // edit an entry given its id
   editEntry = (id) => {
     const entries = this.state.entryList;
-    entries.map((entry) => {
+    entries.forEach((entry) => {
       if (entry.id === id) {
+        // TODO: wouldn't this get overridden by the setState call below it?
         if (!entry.title || entry.title.trim().length === 0) {
           this.state.entryTitle = "Untitled";
         }
@@ -273,24 +261,23 @@ class JournalTab extends React.Component {
 
   // sort entryList by title reverse alphabetically (doesnt handle ties)
   sortByTitle = () => {
-    this.setState({
-      entryList: this.state.entryList.sort((a, b) =>
+    this.setState((prevState) => ({
+      entryList: prevState.entryList.sort((a, b) =>
         a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
       ),
-    });
+    }));
     this.forceUpdate();
   };
 
   // sort entryList by date (most recent to least recent)
   sortByDate = () => {
-    this.setState({
-      entryList: this.state.entryList.sort((a, b) =>
-        a.date > b.date ? 1 : -1
-      ),
-    });
+    this.setState((prevState) => ({
+      entryList: prevState.entryList.sort((a, b) => (a.date > b.date ? 1 : -1)),
+    }));
     this.forceUpdate();
   };
 
+  // eslint-disable-next-line class-methods-use-this
   checkOnlyOne = (checkBox) => {
     // falsify all checkboxes and then check off the correct one
     document.getElementById("titleCheckbox").checked = false;
@@ -322,10 +309,15 @@ class JournalTab extends React.Component {
 
   imageUpload = async (e) => {
     const fileList = e.target.files;
+    const tempArr = [];
     for (let i = 0; i < fileList.length; i += 1) {
-      const base64 = await getBase64(fileList[i]);
-      this.state.entryB64ImageList.push(base64);
+      // const base64 = await getBase64(fileList[i]);
+      tempArr.push(getBase64(fileList[i]));
     }
+    // wait for all calls to getBase64() to resolve
+    await Promise.all(tempArr);
+    // this is javascript's equivalent to list.extend(list)
+    this.state.entryB64ImageList.push(...tempArr);
     this.forceUpdate();
   };
 
@@ -345,7 +337,7 @@ class JournalTab extends React.Component {
     if (this.state.selectedTags.size === 0) {
       return searchFilteredEntries;
     }
-    searchFilteredEntries.map(
+    searchFilteredEntries.forEach(
       (
         entry // for each element in the search-filtered list
       ) => {
@@ -369,6 +361,19 @@ class JournalTab extends React.Component {
       selectedTags: new Set(),
     });
   };
+
+  togglePopup() {
+    this.setState((prevState) => ({
+      showPopup: !prevState.showPopup,
+    }));
+  }
+
+  toggleCheckboxes() {
+    this.setState((prevState) => ({
+      showCheckboxes: !prevState.showCheckboxes,
+    }));
+    this.forceUpdate();
+  }
 
   render() {
     return (
@@ -403,26 +408,26 @@ class JournalTab extends React.Component {
               </div>
             )}
             {this.state.showCheckboxes === true && (
-              <label className="checkboxes">
-                <div>
+              <div className="checkboxes">
+                <label htmlFor="titleCheckbox" className="form-label">
                   <Input
                     id="titleCheckbox"
                     type="checkbox"
                     name="title"
                     onClick={this.handleTitleCheckChange}
                   />
-                </div>
-                Title
-                <div>
+                  Title
+                </label>
+                <label htmlFor="dateCheckbox" className="form-label">
                   <Input
                     id="dateCheckbox"
                     type="checkbox"
                     name="date"
                     onClick={this.handleDateCheckChange}
                   />
-                </div>
-                Date
-              </label>
+                  Date
+                </label>
+              </div>
             )}
 
             <div className="tag-list">
