@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from "react";
 import {
   Button,
   Modal,
@@ -10,28 +10,28 @@ import {
   Input,
   Label,
 } from "reactstrap";
-import {nanoid} from 'nanoid';
+import { nanoid } from "nanoid";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Modal interactive popup used to create a new Reminder object
 export default function CustomModal(props) {
-  const [activeItem, setActiveItem] = useState(
-    {
-      id: nanoid(),
-      title: "",
-      reminderType: "",
-      date: "",
-      repeating: "",
-      description: "",
-    }
-  );
+  const [activeItem, setActiveItem] = useState({
+    id: nanoid(),
+    title: "",
+    reminderType: "",
+    date: "",
+    repeating: "",
+    description: "",
+  });
   const { toggle, onSave } = props;
 
   // Saves information into activeItem
   const handleChange = (e) => {
-    let { name, value } = e.target;
+    const { name } = e.target;
+    let { value } = e.target;
 
-    if (e.target.type === 'checkbox') {
+    if (e.target.type === "checkbox") {
       value = e.target.checked;
     }
 
@@ -63,7 +63,7 @@ export default function CustomModal(props) {
               value={activeItem.reminderType}
               onChange={handleChange}
             >
-              <option>  </option>
+              <option> </option>
               <option> Medicine </option>
               <option> Appointment </option>
               <option> Other </option>
@@ -111,13 +111,14 @@ export default function CustomModal(props) {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button
-          color='white'
-          onClick={() => onSave(activeItem)}
-        >
+        <Button color="white" onClick={() => onSave(activeItem)}>
           <FontAwesomeIcon icon="floppy-disk" />
         </Button>
       </ModalFooter>
     </Modal>
   );
+}
+CustomModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
