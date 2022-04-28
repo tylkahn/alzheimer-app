@@ -21,6 +21,8 @@ note: all `cd` commands are assumed to be executed from the project root (`alzhe
 - Install postgres v14 (see [postgres documentation](https://www.postgresql.org/docs/14/install-binaries.html) for more details)
 - Be sure to install command line tools if using a GUI installer
 - Superuser name/password can be whatever, just make sure you remember it
+- If the port that the postgres service is listening for is **NOT** 5432:
+  - Go into `backend/backend/settings.py`, find the DATABASES entry, and change the port number
 - Test that your postgres installation is working by running `psql --version` and then `psql postgres`
 - In psql, run
   - `CREATE USER django CREATEDB;`
