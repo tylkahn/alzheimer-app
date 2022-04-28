@@ -315,9 +315,9 @@ class JournalTab extends React.Component {
       tempArr.push(getBase64(fileList[i]));
     }
     // wait for all calls to getBase64() to resolve
-    await Promise.all(tempArr);
+    const res = await Promise.all(tempArr);
     // this is javascript's equivalent to list.extend(list)
-    this.state.entryB64ImageList.push(...tempArr);
+    this.state.entryB64ImageList.push(...res);
     this.forceUpdate();
   };
 
